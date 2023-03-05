@@ -1,0 +1,30 @@
+name: Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: Bogdanp/setup-racket@v1.9
+        with:
+          architecture: x64
+          distribution: full
+          variant: CS
+          version: 8.7
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/racket
+            ~/.local/share/racket
+          key: ${{ runner.os }}-racket
+
+      - run: raco pkg install --no-docs --skip-installed --auto --name reader
+      - run: raco test -x -p reader
