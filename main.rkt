@@ -1,3 +1,3 @@
 #lang racket/base
 
-(displayln "Starting app...")
+(displayln "ok")

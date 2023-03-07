@@ -1,6 +1,7 @@
+*.db
 *~
-\#*
-.\#*
 .DS_Store
-compiled/
+.\#*
 /doc/
+\#*
+compiled/
