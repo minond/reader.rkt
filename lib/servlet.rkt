@@ -1,7 +1,7 @@
 #lang racket/base
 
 (require web-server/servlet-env
-         reader/lib/app/parameters)
+         reader/lib/parameters)
 
 (provide start-servlet)
 

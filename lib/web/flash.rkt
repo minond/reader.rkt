@@ -6,8 +6,8 @@
 
 (require racket/match
          gregor
-         reader/lib/web/session
-         reader/lib/web/parameters)
+         reader/lib/parameters
+         reader/lib/web/session)
 
 (provide current-flash
          read-flash

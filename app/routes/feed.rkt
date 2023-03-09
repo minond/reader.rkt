@@ -10,7 +10,7 @@
          reader/app/models
          ; reader/app/workers
          ; reader/lib/crypto)
-         reader/lib/app/parameters
+         reader/lib/parameters
          reader/lib/web)
 
 (provide /feeds

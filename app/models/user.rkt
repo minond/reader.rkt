@@ -5,7 +5,7 @@
          gregor
          deta
 
-         reader/lib/app/parameters)
+         reader/lib/parameters)
 
 (provide (struct-out user)
          make-user)

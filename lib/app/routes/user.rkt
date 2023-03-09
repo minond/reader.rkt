@@ -4,7 +4,7 @@
          web-server/servlet
 
          reader/lib/app/components/user
-         reader/lib/app/parameters
+         reader/lib/parameters
          reader/lib/web
          reader/lib/crypto)
 

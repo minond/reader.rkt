@@ -4,8 +4,8 @@
          web-server/servlet
 
          reader/lib/app/components/session
-         reader/lib/app/parameters
          reader/lib/app/models/user
+         reader/lib/parameters
          reader/lib/web
          reader/lib/crypto)
 

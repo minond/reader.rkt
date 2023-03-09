@@ -4,7 +4,7 @@
          web-server/servlet
          web-server/http/id-cookie
 
-         reader/lib/web/parameters
+         reader/lib/parameters
          reader/lib/format
          reader/lib/random)
 

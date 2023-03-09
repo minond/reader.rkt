@@ -2,8 +2,7 @@
 
 (require reader/app/components/layout
          reader/app/dispatch
-         reader/lib/app/parameters
-         reader/lib/web/parameters
+         reader/lib/parameters
          reader/lib/logger
          reader/lib/servlet)
 

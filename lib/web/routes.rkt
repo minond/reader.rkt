@@ -5,9 +5,9 @@
          (prefix-in : scribble/html/xml)
          (prefix-in : scribble/html/html)
 
+         reader/lib/parameters
          reader/lib/web/response
-         reader/lib/web/session
-         reader/lib/web/parameters)
+         reader/lib/web/session)
 
 (provide authenticated-route
          route

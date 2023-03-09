@@ -9,8 +9,8 @@
          (prefix-in : scribble/html/xml)
          (prefix-in : scribble/html/extra)
 
-         reader/lib/web/session
-         reader/lib/web/parameters)
+         reader/lib/parameters
+         reader/lib/web/session)
 
 (provide render
          redirect

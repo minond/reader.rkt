@@ -4,7 +4,7 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
-         reader/lib/app/parameters)
+         reader/lib/parameters)
 
 (provide :session/form)
 

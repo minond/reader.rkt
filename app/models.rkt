@@ -8,7 +8,7 @@
          reader/app/models/feed
          ; reader/app/models/job
          reader/app/models/user
-         reader/lib/app/parameters)
+         reader/lib/parameters)
 
 (provide (all-from-out reader/app/models/article)
          (all-from-out reader/app/models/feed)
