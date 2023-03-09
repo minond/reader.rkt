@@ -6,7 +6,8 @@
          model-user-salt
          model-user-id
          component-session/form
-         component-user/form)
+         component-user/form
+         servlet-app-dispatch)
 
 (define current-database-connection (make-parameter #f))
 
@@ -17,3 +18,5 @@
 
 (define component-session/form (make-parameter #f))
 (define component-user/form (make-parameter #f))
+
+(define servlet-app-dispatch (make-parameter #f))

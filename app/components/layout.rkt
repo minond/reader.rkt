@@ -7,8 +7,9 @@
          (prefix-in : scribble/html/extra)
 
          reader/lib/web/flash
-         reader/lib/web/parameters
          reader/lib/web/session)
+
+(provide layout)
 
 (define (layout content)
   (:xml->string
@@ -42,8 +43,6 @@
 (define (:flash kind text)
   (:div 'class: (format "flash ~a" kind)
         (:div 'class: "flash-text" text)))
-
-(default-layout layout)
 
 (define font-styles-url
   "https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap")

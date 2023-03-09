@@ -1,12 +1,12 @@
 #lang racket/base
 
 (require web-server/servlet-env
-         reader/app/dispatch)
+         reader/lib/app/parameters)
 
 (provide start-servlet)
 
 (define (start-servlet)
-  (serve/servlet app-dispatch
+  (serve/servlet (servlet-app-dispatch)
                  #:launch-browser? #f
                  #:servlet-path "/"
                  #:port 8000
