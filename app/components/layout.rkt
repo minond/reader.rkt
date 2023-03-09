@@ -6,7 +6,7 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
-         reader/lib/web/flash
+         reader/lib/app/components/flash
          reader/lib/web/session)
 
 (provide layout)
@@ -27,10 +27,7 @@
               (:tr
                (:td
                 (:a 'href: "/" "Reader")
-                (let ([alert (read-flash 'alert)]
-                      [notice (read-flash 'notice)])
-                  (list (and alert (:flash 'alert alert))
-                        (and notice (:flash 'notice notice)))))
+                (:flash))
               (:td 'class: "actions"
                    (if (authenticated?)
                        (list (:a 'href: "/feeds/new" "Add feed")
@@ -39,10 +36,6 @@
                        null)))))
            (:div 'class: "separator")
            (:main content)))))))
-
-(define (:flash kind text)
-  (:div 'class: (format "flash ~a" kind)
-        (:div 'class: "flash-text" text)))
 
 (define font-styles-url
   "https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap")
