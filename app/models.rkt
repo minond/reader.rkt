@@ -6,12 +6,13 @@
 
          reader/app/models/article
          reader/app/models/feed
+         ; reader/app/models/job
          reader/app/models/user
          reader/lib/app/parameters)
 
 (provide (all-from-out reader/app/models/article)
          (all-from-out reader/app/models/feed)
-         (all-from-out reader/app/models/job)
+         ; (all-from-out reader/app/models/job)
          (all-from-out reader/app/models/user))
 
 ; For interactive mode
@@ -27,4 +28,4 @@
 (create-table! (current-database-connection) 'article)
 (create-table! (current-database-connection) 'feed)
 (create-table! (current-database-connection) 'user)
-(create-table! (current-database-connection) 'job)
+; (create-table! (current-database-connection) 'job)
