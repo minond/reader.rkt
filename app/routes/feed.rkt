@@ -7,7 +7,7 @@
 
          ; reader/app/commands
          reader/app/components/feed
-         reader/app/models
+         reader/app/models/feed
          ; reader/app/workers
          ; reader/lib/crypto)
          reader/lib/parameters
