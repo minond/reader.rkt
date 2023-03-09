@@ -4,7 +4,7 @@
 
          reader/lib/app/routes/session
          reader/lib/app/routes/user
-         reader/app/routes
+         reader/app/routes/feed
          reader/lib/web)
 
 (provide app-dispatch app-url)
