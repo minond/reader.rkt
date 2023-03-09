@@ -2,7 +2,9 @@
 
 (require (prefix-in : scribble/html/xml)
          (prefix-in : scribble/html/html)
-         (prefix-in : scribble/html/extra))
+         (prefix-in : scribble/html/extra)
+
+         reader/lib/app/parameters)
 
 (provide :session/form)
 
@@ -24,3 +26,5 @@
                  'value: "Login")
          (:a 'href: "/users/new"
              "or register instead")))
+
+(component-session/form :session/form)

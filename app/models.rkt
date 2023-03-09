@@ -4,11 +4,11 @@
          deta
          deta/reflect
 
-         reader/app/parameters
          reader/app/models/article
          reader/app/models/feed
          reader/app/models/job
-         reader/app/models/user)
+         reader/app/models/user
+         reader/lib/app/parameters)
 
 (provide (all-from-out reader/app/models/article)
          (all-from-out reader/app/models/feed)

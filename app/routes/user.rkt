@@ -3,9 +3,9 @@
 (require deta
          web-server/servlet
 
-         reader/app/parameters
          reader/app/components
          reader/app/models
+         reader/lib/app/parameters
          reader/lib/web
          reader/lib/crypto)
 

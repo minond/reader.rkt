@@ -3,31 +3,38 @@
 (require deta
          web-server/servlet
 
-         reader/app/parameters
-         reader/app/components
-         reader/app/models
+         reader/lib/app/components/session
+         reader/lib/app/parameters
+         reader/lib/app/models/user
          reader/lib/web
          reader/lib/crypto)
 
-(provide /sessions/new
+(provide session-routes
+         /sessions/new
          /sessions/create
          /sessions/destroy)
 
+(define (session-routes [prefix "sessions"])
+  `([(,prefix "new") (route /sessions/new)]
+    [(,prefix "create") #:method "post" (route /sessions/create)]
+    [(,prefix "destroy") #:method "delete"  (route /sessions/destroy)]
+    [(,prefix "destroy") (route /sessions/destroy)]))
+
 (define (/sessions/new req)
   (let* ([email (parameter 'email req)])
-    (render (:session/form email))))
+    (render ((component-session/form) email))))
 
 (define (/sessions/create req)
   (let* ([email (parameter 'email req)]
          [password (parameter 'password req)]
          [user (lookup (current-database-connection) (find-user-by-email email))])
     (if (and user (check-password #:unencrypted password
-                                  #:encrypted (user-encrypted-password user)
-                                  #:salt (user-salt user)))
+                                  #:encrypted ((model-user-encrypted-password) user)
+                                  #:salt ((model-user-salt) user)))
         (redirect-to "/" permanently
                      #:headers (list
                                 (cookie->header
-                                 (create-session+cookie #:user-id (user-id user)))))
+                                 (create-session+cookie #:user-id ((model-user-id) user)))))
         (with-flash #:notice "Invalid credentials, please try again."
           (redirect (format "/sessions/new?email=~a" email))))))
 

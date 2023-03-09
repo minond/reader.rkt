@@ -5,12 +5,12 @@
          deta
          db
 
-         reader/app/parameters
          ; reader/app/commands
          reader/app/components
          reader/app/models
          ; reader/app/workers
          ; reader/lib/crypto)
+         reader/lib/app/parameters
          reader/lib/web)
 
 (provide /feeds

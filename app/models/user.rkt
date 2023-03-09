@@ -3,11 +3,12 @@
 (require racket/string
          threading
          gregor
-         deta)
+         deta
+
+         reader/lib/app/parameters)
 
 (provide (struct-out user)
-         make-user
-         find-user-by-email)
+         make-user)
 
 (define-schema user
   ([id id/f #:primary-key #:auto-increment]
@@ -16,7 +17,6 @@
    [salt binary/f]
    [(created-at (now/utc)) datetime/f]))
 
-(define (find-user-by-email email)
-  (~> (from user #:as u)
-      (where (= email ,email))
-      (limit 1)))
+(model-user-encrypted-password user-encrypted-password)
+(model-user-salt user-salt)
+(model-user-id user-id)
