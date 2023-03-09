@@ -1,6 +1,6 @@
 #lang racket/base
 
-(require reader/app/logger
+(require reader/lib/logger
          reader/app/components
          reader/app/servlet)
 
