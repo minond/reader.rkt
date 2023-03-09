@@ -17,6 +17,7 @@
    [salt binary/f]
    [(created-at (now/utc)) datetime/f]))
 
+(model-make-user make-user)
 (model-user-encrypted-password user-encrypted-password)
 (model-user-salt user-salt)
 (model-user-id user-id)

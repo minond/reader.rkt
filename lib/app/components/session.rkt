@@ -8,6 +8,7 @@
 
 (provide :session/form)
 
+;; TODO URLs need to be dynamic
 (define (:session/form [email null])
   (:form 'action: "/sessions/create"
          'method: "post"

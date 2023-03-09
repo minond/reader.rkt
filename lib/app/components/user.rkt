@@ -2,10 +2,13 @@
 
 (require (prefix-in : scribble/html/xml)
          (prefix-in : scribble/html/html)
-         (prefix-in : scribble/html/extra))
+         (prefix-in : scribble/html/extra)
+
+         reader/lib/app/parameters)
 
 (provide :user/form)
 
+;; TODO URLs need to be dynamic
 (define (:user/form [email null])
   (:form 'action: "/users/create"
          'method: "post"
@@ -28,3 +31,5 @@
                  'value: "Register")
          (:a 'href: "/sessions/new"
              "or login instead")))
+
+(component-user/form :user/form)

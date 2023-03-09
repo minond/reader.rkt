@@ -3,6 +3,7 @@
 (require web-server/servlet
 
          reader/lib/app/routes/session
+         reader/lib/app/routes/user
          reader/app/routes
          reader/lib/web)
 
@@ -21,9 +22,8 @@
      [("") (authenticated-route /index)]
 
      ,@(session-routes)
+     ,@(user-routes)
 
-     [("users" "new") (route /users/new)]
-     [("users" "create") #:method "post" (route /users/create)]
      [("feeds") (authenticated-route /feeds)]
      [("feeds" "new") (authenticated-route /feeds/new)]
      [("feeds" "create") #:method "post" (authenticated-route /feeds/create)]

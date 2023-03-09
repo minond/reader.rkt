@@ -3,14 +3,18 @@
 (require deta
          web-server/servlet
 
-         reader/app/components
-         reader/app/models
+         reader/lib/app/components/user
          reader/lib/app/parameters
          reader/lib/web
          reader/lib/crypto)
 
-(provide /users/new
+(provide user-routes
+         /users/new
          /users/create)
+
+(define (user-routes [prefix "users"])
+  `([(,prefix "new") (route /users/new)]
+    [(,prefix "create") #:method "post" (route /users/create)]))
 
 (define (/users/new req)
   (let* ([email (parameter 'email req)])
@@ -26,11 +30,11 @@
         (let-values ([(encrypted-password salt) (make-password password)])
           (define user
             (insert-one! (current-database-connection)
-                         (make-user #:email email
-                                    #:salt salt
-                                    #:encrypted-password encrypted-password)))
+                         ((model-make-user) #:email email
+                                            #:salt salt
+                                            #:encrypted-password encrypted-password)))
           (define session-cookie
-            (create-session+cookie #:user-id (user-id user)))
+            (create-session+cookie #:user-id ((model-user-id) user)))
           (redirect-to "/feeds/new" permanently
                        #:headers (list
                                   (cookie->header session-cookie)))))))
