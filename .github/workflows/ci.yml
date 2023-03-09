@@ -19,12 +19,12 @@ jobs:
           variant: CS
           version: 8.7
 
-      # - uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       ~/.cache/racket
-      #       ~/.local/share/racket
-      #     key: ${{ runner.os }}-racket
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/racket
+            ~/.local/share/racket
+          key: ${{ runner.os }}-racket
 
       - run: raco pkg install --no-docs --skip-installed --auto --name reader
       - run: raco test -x -p reader
