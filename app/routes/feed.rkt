@@ -6,7 +6,7 @@
          db
 
          ; reader/app/commands
-         reader/app/components
+         reader/app/components/feed
          reader/app/models
          ; reader/app/workers
          ; reader/lib/crypto)
