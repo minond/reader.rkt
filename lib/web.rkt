@@ -1,9 +1,15 @@
 #lang racket/base
 
-(require reader/lib/web/routes
+(require reader/lib/web/flash
+         reader/lib/web/routes
+         reader/lib/web/request
          reader/lib/web/response
+         reader/lib/web/session
          reader/lib/web/parameters)
 
-(provide (all-from-out reader/lib/web/routes)
+(provide (all-from-out reader/lib/web/flash)
+         (all-from-out reader/lib/web/routes)
+         (all-from-out reader/lib/web/request)
          (all-from-out reader/lib/web/response)
+         (all-from-out reader/lib/web/session)
          (all-from-out reader/lib/web/parameters))

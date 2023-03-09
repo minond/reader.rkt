@@ -6,7 +6,9 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
-         reader/lib/web/parameters)
+         reader/lib/web/flash
+         reader/lib/web/parameters
+         reader/lib/web/session)
 
 (define (layout content)
   (:xml->string
@@ -23,10 +25,23 @@
              (:table
               (:tr
                (:td
-                (:a 'href: "/" "Reader"))
-               (:td 'class: "actions"))))
-            (:div 'class: "separator")
-            (:main content)))))))
+                (:a 'href: "/" "Reader")
+                (let ([alert (read-flash 'alert)]
+                      [notice (read-flash 'notice)])
+                  (list (and alert (:flash 'alert alert))
+                        (and notice (:flash 'notice notice)))))
+              (:td 'class: "actions"
+                   (if (authenticated?)
+                       (list (:a 'href: "/feeds/new" "Add feed")
+                             (:a 'href: "/feeds" "Manage feeds")
+                             (:a 'href: "/sessions/destroy" "Sign out"))
+                       null)))))
+           (:div 'class: "separator")
+           (:main content)))))))
+
+(define (:flash kind text)
+  (:div 'class: (format "flash ~a" kind)
+        (:div 'class: "flash-text" text)))
 
 (default-layout layout)
 
