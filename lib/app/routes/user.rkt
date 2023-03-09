@@ -8,13 +8,8 @@
          reader/lib/web
          reader/lib/crypto)
 
-(provide user-routes
-         /users/new
+(provide /users/new
          /users/create)
-
-(define (user-routes [prefix "users"])
-  `([(,prefix "new") (route /users/new)]
-    [(,prefix "create") #:method "post" (route /users/create)]))
 
 (define (/users/new req)
   (let* ([email (parameter 'email req)])

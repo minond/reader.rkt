@@ -9,16 +9,9 @@
          reader/lib/web
          reader/lib/crypto)
 
-(provide session-routes
-         /sessions/new
+(provide /sessions/new
          /sessions/create
          /sessions/destroy)
-
-(define (session-routes [prefix "sessions"])
-  `([(,prefix "new") (route /sessions/new)]
-    [(,prefix "create") #:method "post" (route /sessions/create)]
-    [(,prefix "destroy") #:method "delete"  (route /sessions/destroy)]
-    [(,prefix "destroy") (route /sessions/destroy)]))
 
 (define (/sessions/new req)
   (let* ([email (parameter 'email req)])
