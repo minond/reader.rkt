@@ -9,7 +9,7 @@
          (prefix-in : scribble/html/extra)
 
          reader/app/models/feed
-         reader/app/components/shared)
+         reader/lib/app/components/spacer)
 
 (provide :feed/list
          :feed/form)
