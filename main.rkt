@@ -15,23 +15,18 @@
          reader/lib/logger
          reader/lib/servlet)
 
-; For interactive mode
-(schema-registry-allow-conflicts? #t)
+(let ([pool (connection-pool
+             (lambda ()
+               (sqlite3-connect #:database "data.db" #:mode 'create)))])
+  (current-database-connection (connection-pool-lease pool)))
 
-(define pool
-  (connection-pool
-   (lambda ()
-     (sqlite3-connect #:database "data.db" #:mode 'create))))
+(parameterize ([schema-registry-allow-conflicts? #t])
+  (create-table! (current-database-connection) 'article)
+  (create-table! (current-database-connection) 'feed)
+  (create-table! (current-database-connection) 'user)
+  (create-table! (current-database-connection) 'job))
 
-(current-database-connection (connection-pool-lease pool))
-
-(create-table! (current-database-connection) 'article)
-(create-table! (current-database-connection) 'feed)
-(create-table! (current-database-connection) 'user)
-(create-table! (current-database-connection) 'job)
-
-(servlet-app-dispatch app-dispatch)
-(default-layout layout)
-
-(parameterize ([current-logger application-logger])
+(parameterize ([current-logger application-logger]
+               [servlet-app-dispatch app-dispatch]
+               [default-layout layout])
   (start-servlet))
