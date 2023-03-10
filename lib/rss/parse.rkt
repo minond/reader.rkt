@@ -5,8 +5,8 @@
          xml
 
          reader/lib/rss/data
-         reader/lib/rss/format-atom
-         reader/lib/rss/format-rss)
+         reader/lib/rss/parse-atom
+         reader/lib/rss/parse-rss)
 
 (provide fetch
          (all-from-out reader/lib/rss/data))
