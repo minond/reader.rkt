@@ -10,6 +10,7 @@
          reader/app/components/layout
          reader/app/dispatch
 
+         reader/lib/app/models/job
          reader/lib/parameters
          reader/lib/logger
          reader/lib/servlet)
@@ -27,6 +28,7 @@
 (create-table! (current-database-connection) 'article)
 (create-table! (current-database-connection) 'feed)
 (create-table! (current-database-connection) 'user)
+(create-table! (current-database-connection) 'job)
 
 (servlet-app-dispatch app-dispatch)
 (default-layout layout)
