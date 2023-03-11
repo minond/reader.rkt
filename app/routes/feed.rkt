@@ -8,7 +8,8 @@
          reader/app/components/feed
          reader/app/models/feed
          reader/lib/parameters
-         reader/lib/web)
+         reader/lib/web
+         (prefix-in rss- reader/lib/rss/parse))
 
 (provide /feeds
          /feeds/new
@@ -33,13 +34,14 @@
   (let* ([url (parameter 'url req)]
          [exists (lookup (current-database-connection)
                          (find-feed-by-feed-url #:user-id (current-user-id)
-                                           #:feed-url url))])
-    ; (unless exists
-    ;   (schedule-user-feed-sync (create-feed (current-user-id) url)
-    ;                            (session-key (current-session))))
-    (with-flash #:alert (and (not exists) "Downloading feed data and articles.")
-      #:notice (and exists "This feed already exists.")
-      (redirect (if exists "/articles" "/articles?scheduled=1")))))
+                                                #:feed-url url))])
+
+    (if exists
+        (with-flash #:notice (and exists "This feed already exists.")
+          (redirect "/articles"))
+        (with-flash #:alert "Downloading feed data and articles."
+          (fetch-new-feed url (current-user-id))
+          (redirect "/articles?scheduled=1")))))
 
 (define (/feeds/<id>/subscribe req id)
   (query (current-database-connection) (subscribe-to-feed #:id id
@@ -76,3 +78,21 @@
   ;                          (session-key (current-session)))
   (with-flash #:alert "Syncing feed"
     (redirect-back)))
+
+(define (fetch-new-feed feed-url user-id)
+  (let/cc return
+    (define feed-data (rss-fetch feed-url))
+    (unless feed-data
+      (return #f))
+
+    (define feed-record
+      (insert-one! (current-database-connection)
+                   (make-feed #:user-id user-id
+                              #:feed-url feed-url
+                              #:link (rss-feed-link feed-data)
+                              #:title (rss-feed-title feed-data))))
+
+    (displayln feed-record)
+
+    (for ([article (rss-feed-articles feed-data)])
+      (displayln article))))
