@@ -20,7 +20,10 @@
           (extract-media doc url)))
 
 (define (download url)
-  (let* ([res (get url)]
-         [bod (http-response-body res)]
-         [doc (h:read-html-as-xml (open-input-string bod))])
-    doc))
+  (define res (get url))
+  (define headers (http-response-headers res))
+
+  (if (and (equal? 301 (http-response-code res))
+           (hash-has-key? headers "Location"))
+      (download (string->url (hash-ref headers "Location")))
+      (h:read-html-as-xml (open-input-string (http-response-body res)))))
