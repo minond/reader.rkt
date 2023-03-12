@@ -5,11 +5,11 @@
 
          threading
          net/url-string
-         (prefix-in x: xml)
 
          reader/lib/extractor/attribute
          reader/lib/extractor/url
-         reader/lib/extractor/query)
+         reader/lib/extractor/query
+         (prefix-in html- reader/lib/extractor/html))
 
 (provide extract-media
          (struct-out media)
@@ -33,17 +33,17 @@
   '("icon" "shortcut icon" "apple-touch-icon" "apple-touch-icon-precomposed" "mask-icon"))
 
 (define (extract-media doc base-url)
-  (let* ([metatags (find-elements 'meta doc)]
-         [linktags (find-elements 'link doc)]
-         [titletag (find-element 'title doc)]
-         [attrgroups (map x:element-attributes (append metatags linktags))]
+  (let* ([metatags (find*/list doc #:tag 'meta)]
+         [linktags (find*/list doc #:tag 'link)]
+         [titletag (find* doc #:tag 'title)]
+         [attrgroups (map html-element-attributes (append metatags linktags))]
          [media (make-media empty empty)])
     (for* ([attributes attrgroups])
-      (match (list (or (attr 'name attributes) (attr 'property attributes))
-                   (attr 'content attributes)
-                   (attr 'rel attributes)
-                   (attr 'href attributes)
-                   (attr 'charset attributes))
+      (match (list (or (read-attribute attributes 'name) (read-attribute attributes 'property))
+                   (read-attribute attributes 'content)
+                   (read-attribute attributes 'rel)
+                   (read-attribute attributes 'href)
+                   (read-attribute attributes 'charset))
         [(list _ _ (? (lambda~> (member metadata-icon-rels)) type) url _)
          (set-media-images!
           media

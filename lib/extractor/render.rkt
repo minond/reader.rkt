@@ -80,5 +80,4 @@
         [(text text)
          text]
         [else
-         ; (printf "[error] unimplemented ~a\n" elem-or-lst)
-         ""])))
+         (error "[error] unimplemented" elem-or-lst)])))

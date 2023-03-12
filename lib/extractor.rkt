@@ -1,15 +1,15 @@
 #lang racket/base
 
 (require request/param
+
          net/url-string
-         (prefix-in h: html)
 
          reader/lib/extractor/content
          reader/lib/extractor/metadata
-         reader/lib/extractor/media)
+         reader/lib/extractor/media
+         (prefix-in html- reader/lib/extractor/html))
 
-(provide extract
-         download)
+(provide extract)
 
 (define (extract url-string)
   (define url (string->url url-string))
@@ -26,4 +26,4 @@
   (if (and (equal? 301 (http-response-code res))
            (hash-has-key? headers "Location"))
       (download (string->url (hash-ref headers "Location")))
-      (h:read-html-as-xml (open-input-string (http-response-body res)))))
+      (html-parse (http-response-body res))))

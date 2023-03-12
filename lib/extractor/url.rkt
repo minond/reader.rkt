@@ -9,7 +9,8 @@
 
          reader/lib/string
          reader/lib/extractor/attribute
-         reader/lib/extractor/query)
+         reader/lib/extractor/query
+         (prefix-in html- reader/lib/extractor/html))
 
 (provide extract-base-url
          extract-feed-url
@@ -38,8 +39,8 @@
     (define urls
       (map (lambda (el)
              (define attributes (x:element-attributes el))
-             (or (attr 'content attributes)
-                 (attr 'href attributes)))
+             (or (read-attribute attributes 'content)
+                 (read-attribute attributes 'href)))
            els))
     (when (not (empty? urls))
       (return (absolute-url base-url (car urls) #:convert #f)))
@@ -60,14 +61,14 @@
 ;; feed URL, or (2) anchor tags that link to the feed.
 (define (extract-feed-url doc base-url)
   (let/cc return
-    (define link-els (find-elements 'link doc))
+    (define link-els (find*/list doc #:tag 'link))
     (define alternative-link
       (findf string?
              (map (lambda (el)
                     (let* ([attributes (x:element-attributes el)]
-                           [rel (attr 'rel attributes)]
-                           [type (attr 'type attributes)]
-                           [href (attr 'href attributes)])
+                           [rel (read-attribute attributes 'rel)]
+                           [type (read-attribute attributes 'type)]
+                           [href (read-attribute attributes 'href)])
                       (and rel type href
                            (or (string-contains? type "rss")
                                (string-contains? type "atom"))
@@ -76,11 +77,11 @@
     (when alternative-link
       (return (absolute-url base-url alternative-link #:convert #f)))
 
-    (define anchor-els (find-elements 'a doc))
+    (define anchor-els (find*/list doc #:tag 'a))
     (define rss-link
       (findf string?
              (map (lambda (el)
-                    (define href (attr 'href (x:element-attributes el)))
+                    (define href (read-attribute (html-element-attributes el) 'href ))
                     (and (string? href)
                          (or (string-contains? href "rss")
                              (string-contains? href "atom"))

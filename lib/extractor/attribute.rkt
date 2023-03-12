@@ -1,20 +1,17 @@
 #lang racket/base
 
-(require (prefix-in x: xml))
+(require (prefix-in html- reader/lib/extractor/html))
 
-(provide attr
-         find-attr
-         read-attr)
+(provide find-attribute
+         read-attribute)
 
-(define (attr name lst #:default [default #f])
-  (read-attr (find-attr name lst) default))
-
-(define (find-attr name lst)
-  (findf (lambda (attr)
-           (equal? name (x:attribute-name attr)))
-         lst))
-
-(define (read-attr attr [default #f])
-  (if (x:attribute? attr)
-      (x:attribute-value attr)
+(define (read-attribute lst name #:default [default #f])
+  (define attr (find-attribute lst name))
+  (if attr
+      (html-attribute-value attr)
       default))
+
+(define (find-attribute lst name)
+  (findf (lambda (attr)
+           (equal? name (html-attribute-name attr)))
+         lst))

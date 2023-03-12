@@ -4,11 +4,11 @@
          racket/string
 
          net/url-string
-         (prefix-in x: xml)
 
          reader/lib/string
          reader/lib/extractor/attribute
-         reader/lib/extractor/query)
+         reader/lib/extractor/query
+         (prefix-in html- reader/lib/extractor/html))
 
 (provide extract-metadata
          (struct-out metadata))
@@ -19,19 +19,19 @@
   #:prefab)
 
 (define (extract-metadata doc base-url)
-  (let* ([metatags (find-elements 'meta doc)]
-         [linktags (find-elements 'link doc)]
-         [titletag (find-element 'title doc)]
-         [attrgroups (map x:element-attributes (append metatags linktags))]
+  (let* ([metatags (find*/list doc #:tag 'meta)]
+         [linktags (find*/list doc #:tag 'link)]
+         [titletag (find* doc #:tag 'title)]
+         [attrgroups (map html-element-attributes (append metatags linktags))]
          [metadata (make-metadata (url->string base-url) #f #f
                                   (and titletag (element-string titletag))
                                   #f #f)])
     (for* ([attributes attrgroups])
-      (match (list (or (attr 'name attributes) (attr 'property attributes))
-                   (attr 'content attributes)
-                   (attr 'rel attributes)
-                   (attr 'href attributes)
-                   (attr 'charset attributes))
+      (match (list (or (read-attribute attributes 'name) (read-attribute attributes 'property))
+                   (read-attribute attributes 'content)
+                   (read-attribute attributes 'rel)
+                   (read-attribute attributes 'href)
+                   (read-attribute attributes 'charset))
         [(list _ _ "canonical" url _)
          (set-metadata-canonical-url! metadata url)]
         [(list _ _ _ _ (? string? charset))
@@ -51,15 +51,15 @@
 (define (element-string el)
   (define (element-string-aux el [acc ""])
     (cond
-      [(x:pcdata? el)
-       (string-append acc (x:pcdata-string el))]
-      [(x:entity? el)
-       (let ([value (x:entity-text el)])
+      [(html-text? el)
+       (string-append acc (html-text-text el))]
+      [(html-entity? el)
+       (let ([value (html-entity-id el)])
          (if (integer? value)
              (string (integer->char value))
              ""))]
-      [(x:element? el)
-       (let* ([content (x:element-content el)]
+      [(html-element? el)
+       (let* ([content (html-element-children el)]
               [strings (map element-string-aux content)])
          (string-append* (cons acc strings)))]))
   (string-strip (element-string-aux el)))
