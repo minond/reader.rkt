@@ -20,3 +20,9 @@
   (~> string
       (regexp-replace* #px"^\\s+|\\s+$" _ "")
       (regexp-replace* #px"\\s+" _ " ")))
+
+(define (string-strip-margin str [margin #px"^\\| "])
+  (string-append*
+   (map (lambda~> (string-strip)
+                  (regexp-replace margin _ ""))
+        (string-split str #px"\n+"))))
