@@ -1,0 +1,111 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Same (ADT) type, different meaning</title><meta name="og:title" content="Same (ADT) type, different meaning"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="og:description" content="There are instances where the semantics of distinct types overlap. Through ADTs and OOP, it is possible to represent this using different sets of types, while still being able to work with the set unions and intersections in a way that is type safe."><meta name="description" content="There are instances where the semantics of distinct types overlap. Through ADTs and OOP, it is possible to represent this using different sets of types, while still being able to work with the set unions and intersections in a way that is type safe."><link rel="stylesheet" href="/css/tachyons.min.css"><link rel="stylesheet" href="/css/site.css?1"><link rel="stylesheet" href="/css/post.css?1"></head><body><div class="content"><!-- THIS DOCUMENT IS AUTO GENERATED. DO NOT EDIT. --><!-- THIS DOCUMENT IS AUTO GENERATED. DO NOT EDIT. --><!-- THIS DOCUMENT IS AUTO GENERATED. DO NOT EDIT. --><h1>Same (ADT) type, different meaning</h1><h5>July 08, 2018</h5><p>There are instances where the semantics of distinct types overlap. Through ADTs and OOP, it is possible to represent this using different sets of types, while still being able to work with the set unions and intersections in a way that is type safe.</p><h2>Introduction</h2><p><a href="https://en.wikipedia.org/wiki/Algebraic_data_type">ADTs (algebraic data types)</a> is a feature that many functional programming languages have. An ADT is an abstract type made up of concrete types. The concrete types act as the constructors for the top-level type, meaning they are needed in order to create a value of the top-level type. Many of these same languages support a feature called <a href="https://en.wikipedia.org/wiki/Pattern_matching">pattern matching</a>, which is a form of checking and matching the pattern of a given value.</p><p>Languages like Scala, Standard ML, and OCaml are able to check for the exhaustiveness of a pattern match, meaning they are able to check that the patterns in a pattern match expression account for all possible values of the input. For example, in Scala there exists an <code>Option[T]</code> <a href="https://en.wikipedia.org/wiki/Tagged_union">sum type</a> which is made up of two types: <code>None</code> and <code>Some[T]</code>. When matching a value of type <code>Option[T]</code>, the Scala compiler is able to check for the existence of patterns matching both of the possible values (and any additional matching ensuring <code>T</code> in <code>Some</code> is accounted for as well.)</p><p>Exhaustive checking acts as a safety net that ensures that all possible values are handled, and there are no runtime errors due to unhandled values.</p><p>Scala&rsquo;s support for OOP makes for some really interesting uses of distinct ADTs with inheritance. A good example to show this off is a small interpreter with shared data structures for the lexing, parsing, and evaluation steps.</p><p>Let&rsquo;s say we have a language that supports only arithmetic expressions:</p><pre><code class="language-ebnf">expr  ::= num | arith ;
+arith ::= expr op expr ;
+op    ::= '+' | '-' | '*' ;
+num   ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;
+</code></pre><p>It&rsquo;s a simple grammar but it&rsquo;s one that demonstrates the usefulness of ADTs plus OOP.</p><h2>Data Structures</h2><p>Finding yourself in a situation where you have to model this as tokens, an AST, or runtime data, you may opt for a solution like the following:</p><pre><code class="language-scala">sealed trait Token
+
+sealed trait Operator extends Token
+case object Plus extends Operator
+case object Minus extends Operator
+case object Mult extends Operator
+
+sealed trait Expr
+case class Number(num: Double) extends Token with Expr
+case class Arithmetic(lhs: Expr, op: Operator, rhs: Expr) extends Expr
+</code></pre><p>Notice the top-level <code>Token</code> type, with it&rsquo;s two children <code>Operator</code> and <code>Number</code>, and <code>Expr</code> with <code>Arithmetic</code> and <code>Number</code> as well. <code>Operator</code> and <code>Number</code> are special, since they are both separate types and of type <code>Token</code> as well &ndash; this will be useful later on when we start treating certain tokens as valid expressions. Let&rsquo;s see this hierarchy in a more visual form:</p><p><img src="/posts/1531094894-adt-type-meaning.svg" alt="Class diagram"></p><p>With the diagram it&rsquo;s easier to see that when we are working with a <code>Token</code> type, we have to know how to handle both <code>Number</code>, a type constructor, and <code>Operator</code>, a sum type.</p><p>Another way of thinking about this is using sets:</p><pre><code>Token        = {Number, Operator}
+Expr         = {Number, Arithmetic}
+Operator     = {Plus, Minus, Mult}
+
+where Number = Expr ∩ Token
+</code></pre><p>With this, we are able to define three functions which act as the full interpreter for our language:</p><ul><li><code>tokenize</code>, which is defined as <code>String =&gt; list of Token</code>,</li><li><code>parse</code>, which is defined as <code>list of Token =&gt; Expr</code>, and</li><li><code>eval</code>, which is defined as <code>Expr =&gt; Expr</code>.</li></ul><p>This leaves us with a flow of data that goes from a strings, to tokens, to finally expressions. Since <code>Number</code> is both a <code>Token</code> and an <code>Expr</code>, we will see it in use in all three functions, all in a type safe way which ensures any pattern matching is exhaustive.</p><h2>Implementation</h2><p>We can bring this full circle by building our interpreter. Starting with <code>tokenize</code> and a helper:</p><pre><code class="language-scala">def tokenize(input: String): Iterator[Token] = {
+  val chars = input.toIterator.buffered
+  for (c &lt;- chars.toIterator.buffered if !c.isWhitespace)
+    yield c match {
+      case '+' =&gt; Plus
+      case '-' =&gt; Minus
+      case '*' =&gt; Mult
+
+      case n if n.isDigit =&gt;
+        Number((n + takeWhile[Char](chars, { _.isDigit }).mkString).toDouble)
+    }
+}
+
+def takeWhile[T](src: BufferedIterator[T], predicate: (T) =&gt; Boolean): List[T] =
+  if (src.isEmpty)
+    Nil
+  else if (!predicate(src.head))
+    Nil
+  else
+    src.next :: takeWhile(src, predicate)
+</code></pre><p>Here is the first use of <code>Number</code>, a valid <code>Token</code>. To test things are working as expected:</p><pre><code class="language-text">scala&gt; tokenize(&quot;123&quot;).toList
+res32: List[Token] = List(Number(123))
+
+scala&gt; tokenize(&quot;1+2&quot;).toList
+res33: List[Token] = List(Number(1), Operator(+), Number(2))
+</code></pre><p>Now we can move on to <code>parse</code>, which we previously defined as <code>list of Token =&gt; Expr</code>. Below is an incomplete implementation since it doesn&rsquo;t parse arithmetic expressions yet, but it is complete in the sense that it handles every possible input. A list of tokens could only be made up of <code>Operator</code>&rsquo;s and <code>Number</code>&rsquo;s, both of which are checked for in the code below.</p><pre><code class="language-scala">def parse(tokens: List[Token]): Either[String, Expr] =
+  tokens match {
+    case Nil                   =&gt; Left(&quot;invalid: empty input&quot;)
+    case (_: Operator) :: _    =&gt; Left(&quot;invalid: cannot start expression with operator&quot;)
+    case (token : Number) :: _ =&gt; Right(token)
+  }
+</code></pre><p>Note that since we&rsquo;re working with lists we have to pattern match the list itself before we can get to the values it holds. You can read the matching above as follows: first matching <code>Nil</code>, which represents an empty <code>List</code>, then match a list with an <code>Operator</code> as the first element and anything else (including an empty list) afterwards, finally do the same but for lists with a <code>Number</code> as the first element in the list.</p><p>If we wanted to test out the exhaustive checks provided by the compiler, we could comment out any of those cases and the results would be a warning (or error) such as:</p><pre><code class="language-text">&lt;pastie&gt;:18: warning: match may not be exhaustive.
+It would fail on the following input: List(Number(_))
+  tokens match {
+  ^
+</code></pre><p>For an implementation that is able to parse arithmetic expressions, we could do something like:</p><pre><code class="language-scala">def parse(tokens: Iterator[Token]): Either[String, Expr] =
+  parse(tokens.toList)
+
+def parse(tokens: List[Token]): Either[String, Expr] =
+  tokens match {
+    // Valid expressions
+    case (num : Number) :: Nil =&gt;
+      Right(num)
+    case (lhs : Number) :: (op : Operator) :: (rhs : Number) :: Nil =&gt;
+      Right(Arithmetic(lhs, op, rhs))
+    case (lhs1 : Number) :: (op1 : Operator) :: (rhs1 : Number) :: (op2 : Operator) :: t =&gt;
+      val rhs2 = parse(t).fold(err =&gt; return Left(err), ok =&gt; ok)
+      Right(Arithmetic(Arithmetic(lhs1, op1, rhs1), op2, rhs2))
+
+    // Invalid expressions
+    case Nil =&gt; Left(&quot;syntax error: empty input&quot;)
+    case _   =&gt; Left(&quot;syntax error: expressions are binary expressions or single numbers&quot;)
+  }
+</code></pre><p><em>We overload <code>parse</code> to take an <code>Iterator</code>, making it easier to work with the rest of the code.</em></p><p>There are more matches in this expression but they operate on the list of <code>Token</code>s in the same way that the previous example does &ndash; all we are doing is peeking at the values at the start of the list and ignoring what ever values may come afterwards.</p><p>At this point we&rsquo;re handling all possible inputs and outputs in the parsing phase. We can now follow similar patterns for implementing the <code>eval</code> function, which converts expressions into simpler representations. For the first take, we implementing a version which only handles numbers and arithmetic expressions without nested expressions:</p><pre><code class="language-scala">def eval(expr: Expr): Either[String, Expr] =
+  expr match {
+    case num : Number =&gt; Right(num)
+    case Arithmetic(Number(lhs), op, Number(rhs)) =&gt;
+      op match {
+        case Plus  =&gt; Right(Number(lhs + rhs))
+        case Minus =&gt; Right(Number(lhs - rhs))
+        case Mult  =&gt; Right(Number(lhs * rhs))
+      }
+  }
+</code></pre><p>Since the only constructors for <code>Expr</code> are <code>Number</code> and <code>Arithmetic</code>, this is an exhaustive match of all possible inputs. Let&rsquo;s try it out to make sure things work:</p><pre><code class="language-text">scala&gt; parse(tokenize(&quot;40 + 2&quot;)).flatMap(eval)
+res27: scala.util.Either[String,Expr] = Right(Number(42.0))
+</code></pre><p>And now for the second take where we handle nested expressions:</p><pre><code class="language-scala">def eval(expr: Expr): Either[String, Number] =
+  expr match {
+    case num : Number =&gt; Right(num)
+    case Arithmetic(lhsExpr, op, rhsExpr) =&gt;
+      (eval(lhsExpr), eval(rhsExpr)) match {
+        case (Left(err), _) =&gt; Left(err)
+        case (_, Left(err)) =&gt; Left(err)
+
+        case (Right(Number(lhs)), Right(Number(rhs))) =&gt;
+          op match {
+            case Plus  =&gt; Right(Number(lhs + rhs))
+            case Minus =&gt; Right(Number(lhs - rhs))
+            case Mult  =&gt; Right(Number(lhs * rhs))
+          }
+      }
+  }
+</code></pre><p>The second implementation is needed since <code>Arithmetic</code> is able to hold <code>Expr</code> values on the left or right hand side. And since these values have yet to be evaluated, we do so before completing the evaluation of the first expression:</p><pre><code class="language-text">scala&gt; parse(tokenize(&quot;10 * 4 + 2&quot;)).flatMap(eval)
+res3: scala.util.Either[String,Number] = Right(Number(42.0))
+</code></pre><p>Notice the continuous use of the <code>Number</code> type constructor. Because <code>Number</code> is both a <code>Token</code> and an <code>Expr</code>, we are able to use it throughout the whole process of evaluation, and all in a way where the compiler is there to help us.</p><h2>Conclusion</h2><p>Class hierarchies and ADTs are nothing new. We could represent the very same hierarchy in another language, and keep most of our signatures the same as well. The same could be said about ADTs. What&rsquo;s distinguishing about this is the combination of the two, allowing us to able to represent the flow of data as data structures and do so in a way where the type system has the ability to ensure we&rsquo;re handling all of the possible cases.</p><p>In addition, we are able to reuse types where it makes sense to do so. The <code>Number</code> type is a valid return value for a tokenizer, a parser, and an evaluator, and we can convey this by making it both a <code>Token</code> and an <code>Expr</code> at the same time. If our language were bigger, perhaps the same could be said about other scalar types.</p><p>And like with anything else, reusability can be taken too far. Once the use or meaning of a type (or value) starts to change an increase in scope, it makes less sense to continue using the same type. For example, if our language had typing information that we needed to pass around, the data structures used in the parsing phase will not be enough during the type checking phase. And extending the types so that they could be used in the type checker would expand the scope too much, leaving you with the information that you need but completely stripping the constructors of their ergonomics.</p><p>With that in mind, there are many instances where types and their semantics overlap, and there is a need to represent the distinct sets, their union, and their intersections. When this is the case, OOP and ADTs are a great mix.</p><p><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.8/build/styles/ascetic.min.css"><script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.8/build/highlight.min.js"></script><script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.8/build/languages/scala.min.js"></script><script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.8/build/languages/ebnf.min.js"></script></p></div><script>if ("hljs" in window) {
+  document.querySelectorAll("pre").forEach((el) => {
+    if (el.children[0]) {
+      el.children[0].className = el.children[0].className.replace("language-", "");
+      el.className = el.children[0].className;
+    }
+    hljs.highlightBlock(el)
+  })
+}</script><footer class="bt ph3 ph3-m ph5-ns mt1 mt4-ns b--light-gray spectral pv1"><div class="container"><p class="lh-copy w-50-ns">~ <a href="/" class="link red dim">Marcos Minond</a></p></div></footer></body></html>
