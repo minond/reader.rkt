@@ -28,14 +28,14 @@
                (:td
                 (:a 'href: "/" "Reader")
                 (:flash))
-              (:td 'class: "actions"
-                   (if (authenticated?)
-                       (list (:a 'href: "/feeds/new" "Add feed")
-                             (:a 'href: "/feeds" "Manage feeds")
-                             (:a 'href: "/sessions/destroy" "Sign out"))
-                       null)))))
-           (:div 'class: "separator")
-           (:main content)))))))
+               (:td 'class: "actions"
+                    (if (authenticated?)
+                        (list (:a 'href: "/feeds/new" "Add feed")
+                              (:a 'href: "/feeds" "Manage feeds")
+                              (:a 'href: "/sessions/destroy" "Sign out"))
+                        null)))))
+            (:div 'class: "separator")
+            (:main content)))))))
 
 (define font-styles-url
   "https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap")
