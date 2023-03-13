@@ -5,7 +5,9 @@
          deta
          db
 
+         reader/app/components/article
          reader/app/components/feed
+         reader/app/models/article
          reader/app/models/feed
          reader/app/commands/save-new-feed
          reader/app/commands/fetch-feed-articles
@@ -17,7 +19,7 @@
          /feeds/create
          /feeds/<id>/subscribe
          /feeds/<id>/unsubscribe
-         ; /feeds/<id>/articles
+         /feeds/<id>/articles
          /feeds/<id>/sync)
 
 (define page-size 50)
@@ -56,23 +58,23 @@
   (with-flash #:alert "Unsubscribed from feed."
     (redirect-back)))
 
-; (define (/feeds/<id>/articles req id)
-;   (let* ([current-page (or (string->number (parameter 'page req)) 1)]
-;          [page-count (ceiling (/ (lookup (current-database-connection)
-;                                          (count-articles-by-feed #:feed-id id
-;                                                                  #:user-id (current-user-id)))
-;                                  page-size))]
-;          [offset (* (- current-page 1) page-size)]
-;          [feed (lookup (current-database-connection)
-;                        (find-feed-by-id #:id id
-;                                         #:user-id (current-user-id)))]
-;          [articles (sequence->list
-;                     (in-entities (current-database-connection)
-;                                  (select-articles-by-feed #:feed-id id
-;                                                           #:user-id (current-user-id)
-;                                                           #:limit page-size
-;                                                           #:offset offset)))])
-;     (render (:article-list feed articles current-page page-count))))
+(define (/feeds/<id>/articles req id)
+  (let* ([current-page (or (string->number (parameter 'page req #:default "")) 1)]
+         [page-count (ceiling (/ (lookup (current-database-connection)
+                                         (count-articles-by-feed #:feed-id id
+                                                                 #:user-id (current-user-id)))
+                                 page-size))]
+         [offset (* (- current-page 1) page-size)]
+         [feed (lookup (current-database-connection)
+                       (find-feed-by-id #:id id
+                                        #:user-id (current-user-id)))]
+         [articles (sequence->list
+                    (in-entities (current-database-connection)
+                                 (select-articles-by-feed #:feed-id id
+                                                          #:user-id (current-user-id)
+                                                          #:limit page-size
+                                                          #:offset offset)))])
+    (render (:article/list feed articles current-page page-count))))
 
 (define (/feeds/<id>/sync req id)
   (fetch-feed-articles (current-user-id) id)
