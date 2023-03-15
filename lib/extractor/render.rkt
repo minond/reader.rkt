@@ -75,6 +75,11 @@
          (eval `(,:img ,@(attributes-arguments attributes)
                        'src: ,src
                        'alt: ,alt))]
+        [(object attributes type data content)
+         (eval `(,:object ,@(attributes-arguments attributes)
+                          'type: ,type
+                          'data: ,data
+                          ',(render-content content)))]
         [(entity id)
          (:entity id)]
         [(text text)

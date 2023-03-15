@@ -28,6 +28,7 @@
          (struct-out entity)
          (struct-out image)
          (struct-out video)
+         (struct-out object)
          (struct-out link)
          (struct-out separator)
          (struct-out line-break)
@@ -48,6 +49,7 @@
 (struct entity (id) #:prefab)
 (struct image (attributes src alt) #:prefab)
 (struct video (attributes src) #:prefab)
+(struct object (attributes type data content) #:prefab)
 (struct link (attributes href content) #:prefab)
 (struct separator () #:prefab)
 (struct line-break () #:prefab)
@@ -114,17 +116,22 @@
                 [src (read-attribute attributes 'src)])
            (video (extract-attributes el)
                   (and src (absolute-url base-url src))))]
-        [(scored-element 'text _ _ _ el)
-         (let ([str (html-text-text el)])
-           (and str (text str)))]
-        [(scored-element 'entity _ _ _ el)
-         (let ([id (html-entity-id el)])
-           (entity id))]
-        [(scored-element 'a children _ _ el)
-         (let* ([attributes (html-element-attributes el)]
-                [href (read-attribute attributes 'href)]
-                [content (element-content/list children base-url)])
-           (link (extract-attributes el)
+        [(scored-element 'object children _ _ (html-element _ attributes _))
+         (let ([type (read-attribute attributes 'type)]
+               [data (read-attribute attributes 'data)]
+               [content (element-content/list children base-url)])
+           (object (extract-attributes attributes)
+                   type
+                   (and data (absolute-url base-url data))
+                   content))]
+        [(scored-element 'text _ _ _ (html-text value))
+         (and value (text value))]
+        [(scored-element 'entity _ _ _ (html-entity id))
+         (entity id)]
+        [(scored-element 'a children _ _ (html-element _ attributes _))
+         (let ([href (read-attribute attributes 'href)]
+               [content (element-content/list children base-url)])
+           (link (extract-attributes attributes)
                  (and href (absolute-url base-url href))
                  content))]
         [(scored-element 'hr _ _ _ _)
@@ -190,8 +197,10 @@
            (map (lambda~>
                  (element-content base-url)) lst))))
 
-(define (extract-attributes el)
-  (let* ([attributes (html-element-attributes el)]
+(define (extract-attributes el-or-attributes)
+  (let* ([attributes (if (html-element? el-or-attributes)
+                         (html-element-attributes el-or-attributes)
+                         el-or-attributes)]
          [id-value (read-attribute attributes 'id)])
     (filter identity
             (list (and id-value (id id-value))))))
