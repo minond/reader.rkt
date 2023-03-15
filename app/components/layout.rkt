@@ -90,8 +90,6 @@
             #:padding (.5em 1em)
             [a #:color initial
                #:text-decoration none]
-            [table #:width 100%
-                   #:border-collapse collapse]
             [.actions #:text-align right
                       [a #:font-size 0.8em
                          #:margin-left 1.5em
@@ -101,15 +99,20 @@
             #:margin (0 auto)
             #:max-width ,@content-max-width]
 
-    [main #:padding 1em
-          [table #:width 100%
-                 #:border-collapse collapse
-                 [td th
-                     #:padding 0.75em
-                     #:margin 0]]
-          [th #:text-align left
-              #:font-weight 900]
-          [td #:border-top (1px solid ,@border-color-light)]]
+    [main #:padding 1em]
+
+    [table #:width 100%
+           #:border-collapse collapse
+           [td #:vertical-align top]
+           [(> td p) #:margin-top 0]]
+
+    [.table-content
+     [td th
+         #:padding 0.75em
+         #:margin 0]
+     [th #:text-align left
+         #:font-weight 900]
+     [td #:border-top (1px solid ,@border-color-light)]]
 
     [a #:color ,@link-color-normal
        #:text-decoration none]
@@ -157,10 +160,12 @@
               [pre #:overflow scroll
                    #:border (1px solid ,@code-color-border)
                    #:padding (4px 12px)
-                   #:background-color ,@code-color-background]]
-    [(> (.reading article) object) #:margin (0 auto)
-                                   #:display block
-                                   #:min-height 20px]
+                   #:background-color ,@code-color-background]
+              [td #:max-width ,@article-max-width]]
+    [(> (.reading article) object)
+     (> (.reading article) img) #:margin (0 auto)
+     #:display block
+     #:min-height 20px]
 
     [.system-error #:color ,@failure-color-dark
                    #:text-align center

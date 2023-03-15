@@ -53,6 +53,12 @@
          (render-element :ul attributes content)]
         [(list-item attributes content)
          (render-element :li attributes content)]
+        [(table attributes content)
+         (render-element :table attributes content)]
+        [(table-row attributes content)
+         (render-element :tr attributes content)]
+        [(table-cell attributes content)
+         (render-element :td attributes content)]
         [(blockquote attributes content)
          (render-element :blockquote attributes content)]
         [(superscript attributes content)

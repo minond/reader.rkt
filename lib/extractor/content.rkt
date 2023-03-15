@@ -24,6 +24,9 @@
          (struct-out ordered-list)
          (struct-out unordered-list)
          (struct-out list-item)
+         (struct-out table)
+         (struct-out table-row)
+         (struct-out table-cell)
          (struct-out text)
          (struct-out entity)
          (struct-out image)
@@ -45,6 +48,9 @@
 (struct ordered-list (attributes items) #:prefab)
 (struct unordered-list (attributes items) #:prefab)
 (struct list-item (attributes content) #:prefab)
+(struct table (attributes content) #:prefab)
+(struct table-row (attributes content) #:prefab)
+(struct table-cell (attributes content) #:prefab)
 (struct text (text) #:prefab)
 (struct entity (id) #:prefab)
 (struct image (attributes src alt) #:prefab)
@@ -139,6 +145,15 @@
         [(scored-element 'ol children _ _ el)
          (ordered-list (extract-attributes el)
                        (element-content/list children base-url))]
+        [(scored-element 'table children _ _ el)
+         (table (extract-attributes el)
+                (element-content/list children base-url))]
+        [(scored-element 'tr children _ _ el)
+         (table-row (extract-attributes el)
+                    (element-content/list children base-url))]
+        [(scored-element 'td children _ _ el)
+         (table-cell (extract-attributes el)
+                     (element-content/list children base-url))]
         [(scored-element 'ul children _ _ el)
          (unordered-list (extract-attributes el)
                          (element-content/list children base-url))]

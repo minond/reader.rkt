@@ -36,7 +36,7 @@
 (define (:article/list feed articles current-page page-count)
   (list
    (:spacer #:direction vertical #:size small)
-   (:table
+   (:table 'class: "table-content"
     (:thead
      (:th)
      (:th "Title")
