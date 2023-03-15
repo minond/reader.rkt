@@ -160,9 +160,13 @@
                    #:max-width 100%
                    #:max-height 90vh]
               [pre #:overflow scroll
+                   #:border (1px solid ,@code-color-border)
                    #:padding (4px 12px)
                    #:background-color ,@code-color-background]
-              [td #:max-width ,@article-max-width]]
+              [td #:max-width ,@article-max-width
+                  #:padding (10px 0)]
+              [(: tr (apply not (: first-child)))
+               [td #:border-top (1px solid ,@border-color-light)]]]
     [(> (.reading article) object)
      (> (.reading article) img) #:margin (0 auto)
      #:display block
