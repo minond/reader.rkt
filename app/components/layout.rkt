@@ -35,7 +35,18 @@
                               (:a 'href: "/sessions/destroy" "Sign out"))
                         null)))))
             (:div 'class: "separator")
-            (:main content)))))))
+            (:main content)
+            (:script
+             'type: "text/javascript"
+             'src: "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
+            (:script
+             "MathJax.Hub.Config({
+               TeX: { equationNumbers: { autoNumber: 'AMS' } },
+               CommonHTML: { linebreaks: { automatic: true } },
+               'HTML-CSS': { linebreaks: { automatic: true } },
+               SVG: { linebreaks: { automatic: true } }
+             });")
+            ))))))
 
 (define font-styles-url
   "https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap")
@@ -55,7 +66,11 @@
 (define text-color-light (css-expr (apply rgb 83 83 83)))
 (define text-color-lighter (css-expr (apply rgb 136 136 136)))
 
+(define code-color-border (css-expr (apply rgb 215 215 215)))
+(define code-color-background (css-expr (apply rgb 250 250 250)))
+
 (define content-max-width (css-expr 80em))
+(define article-max-width (css-expr 45em))
 
 (define css
   (css-expr->css
@@ -70,7 +85,7 @@
           #:font-size 16px
           #:color |#444|
           #:padding 0]
-    [main #:padding 1em]
+
     [header #:font-weight bold
             #:padding (.5em 1em)
             [a #:color initial
@@ -85,24 +100,24 @@
     [header main
             #:margin (0 auto)
             #:max-width ,@content-max-width]
-    [main
-     [table #:width 100%
-            #:border-collapse collapse
-            [td th
-                #:padding 0.75em
-                #:margin 0]]
-     [th #:text-align left
-         #:font-weight 900]
-     [td #:border-top (1px solid ,@border-color-light)]]
+
+    [main #:padding 1em
+          [table #:width 100%
+                 #:border-collapse collapse
+                 [td th
+                     #:padding 0.75em
+                     #:margin 0]]
+          [th #:text-align left
+              #:font-weight 900]
+          [td #:border-top (1px solid ,@border-color-light)]]
+
     [a #:color ,@link-color-normal
        #:text-decoration none]
-    [h1 h2 h3
-        #:line-height 1.2]
-    [h3 h4 h5
-        #:margin (0 0 1em 0)]
-    [h1 h2 h3 h4 h5
+    [h1 h2 h3 h4 h5 h6
+        #:line-height 1.2
         #:color initial
         [a #:color initial]]
+
     [form #:margin (3em auto)
           #:max-width 40em
           [(attribute input (= type "url"))
@@ -126,33 +141,38 @@
            #:margin-top 0.5em
            #:margin-right 0.5em]
           [a #:font-size 0.8em]]
-    [article
-     [time .action
-           #:font-size 0.75em
-           #:color ,@text-color-light]
-     [img
-      iframe
-      pre
-      #:max-width 100%
-      #:max-height 90vh]
-     [pre #:overflow scroll]]
+
+    [.reading #:max-width ,@article-max-width
+              #:margin (0 auto)
+              [h1 h2 h3
+                  #:margin (1em 0)]
+              [h3 h4 h5 h6
+                  #:margin (0.6em 0)]
+              [time .action
+                    #:font-size 0.75em
+                    #:color ,@text-color-light]
+              [img iframe pre
+                   #:max-width 100%
+                   #:max-height 90vh]
+              [pre #:overflow scroll
+                   #:border (1px solid ,@code-color-border)
+                   #:padding (4px 12px)
+                   #:background-color ,@code-color-background]]
 
     [.system-error #:color ,@failure-color-dark
                    #:text-align center
                    #:font-size 1.25em
                    #:margin-top 2em]
 
-    [@keyframes
-     fadein
-     [from #:opacity 0]
-     [to #:opacity 1]]
+    [@keyframes fadein
+                [from #:opacity 0]
+                [to #:opacity 1]]
 
-    [@keyframes
-     fadeout
-     [from #:opacity 1
-           #:left 0]
-     [to #:opacity 0
-         #:left 10px]]
+    [@keyframes fadeout
+                [from #:opacity 1
+                      #:left 0]
+                [to #:opacity 0
+                    #:left 10px]]
 
     [.flash #:display inline-block
             #:animation (fadein .15s linear 0s) (fadeout .3s linear forwards 5s)

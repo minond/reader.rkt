@@ -23,13 +23,15 @@
 (define (:article/full feed article)
   (let ([datetime (~t (article-date article) "y-M-d HH:mm:ss")]
         [humandate (~t (article-date article) "MMMM d, yyyy")])
-    (:article
-     (:h2 (:a 'href: (article-link article)
+    (:div 'class: "reading"
+     (:h1 (:a 'href: (article-link article)
               'target: '_blank
               (article-title article)))
-     (:h4 (feed-title feed))
      (:time 'datetime: datetime humandate)
-     (:p (:literal (article-content-html article))))))
+     (:spacer #:direction horizontal #:size small)
+     (:article
+      ; (:h4 (feed-title feed))
+      (:literal (article-content-html article))))))
 
 (define (:article/list feed articles current-page page-count)
   (list
