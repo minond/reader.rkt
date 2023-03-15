@@ -158,6 +158,9 @@
                    #:border (1px solid ,@code-color-border)
                    #:padding (4px 12px)
                    #:background-color ,@code-color-background]]
+    [(> (.reading article) object) #:margin (0 auto)
+                                   #:display block
+                                   #:min-height 20px]
 
     [.system-error #:color ,@failure-color-dark
                    #:text-align center

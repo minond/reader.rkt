@@ -20,11 +20,12 @@
                (sqlite3-connect #:database "data.db" #:mode 'create)))])
   (current-database-connection (connection-pool-lease pool)))
 
-(parameterize ([schema-registry-allow-conflicts? #t])
-  (create-table! (current-database-connection) 'article)
-  (create-table! (current-database-connection) 'feed)
-  (create-table! (current-database-connection) 'user)
-  (create-table! (current-database-connection) 'job))
+(schema-registry-allow-conflicts? #t)
+
+(create-table! (current-database-connection) 'article)
+(create-table! (current-database-connection) 'feed)
+(create-table! (current-database-connection) 'user)
+(create-table! (current-database-connection) 'job)
 
 (parameterize ([current-logger application-logger]
                [servlet-app-dispatch app-dispatch]

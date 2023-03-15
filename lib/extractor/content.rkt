@@ -103,18 +103,16 @@
   (if (ignorable-element? elem)
       #f
       (match elem
-        [(scored-element 'img _ _ _ el)
-         (let* ([attributes (html-element-attributes el)]
-                [data (read-attribute attributes 'data-src)]
-                [src (read-attribute attributes 'src)]
-                [alt (read-attribute attributes 'alt)])
-           (image (extract-attributes el)
+        [(scored-element 'img _ _ _ (html-element _ attributes _))
+         (let ([data (read-attribute attributes 'data-src)]
+               [src (read-attribute attributes 'src)]
+               [alt (read-attribute attributes 'alt)])
+           (image (extract-attributes attributes)
                   (or (and src (absolute-url base-url src)) data)
                   alt))]
-        [(scored-element 'video _ _ _ el)
-         (let* ([attributes (html-element-attributes el)]
-                [src (read-attribute attributes 'src)])
-           (video (extract-attributes el)
+        [(scored-element 'video _ _ _ (html-element _ attributes _))
+         (let ([src (read-attribute attributes 'src)])
+           (video (extract-attributes attributes)
                   (and src (absolute-url base-url src))))]
         [(scored-element 'object children _ _ (html-element _ attributes _))
          (let ([type (read-attribute attributes 'type)]
