@@ -36,11 +36,11 @@
                         null)))))
             (:div 'class: "separator")
             (:main content)
-            (:script
-             'type: "text/javascript"
-             'src: "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
-            (:script
-             "MathJax.Hub.Config({
+            #;(:script
+               'type: "text/javascript"
+               'src: "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
+            #;(:script
+               "MathJax.Hub.Config({
                TeX: { equationNumbers: { autoNumber: 'AMS' } },
                CommonHTML: { linebreaks: { automatic: true } },
                'HTML-CSS': { linebreaks: { automatic: true } },
