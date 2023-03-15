@@ -24,8 +24,8 @@
          [user-id (current-user-id)]
          [json? (wants-json? request)]
          [content-type (if json?
-                           #"application/json; charset=utf-8"
-                           #"text/html; charset=utf-8")])
+                           APPLICATION/JSON-MIME-TYPE
+                           TEXT/HTML-MIME-TYPE)])
     (response/output
      #:code code
      #:headers (list (header #"Content-Type" content-type))
