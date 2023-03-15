@@ -103,7 +103,8 @@
 
     [table #:width 100%
            #:border-collapse collapse
-           [td #:vertical-align top]
+           [td #:vertical-align top
+               #:padding 0]
            [(> td p) #:margin-top 0]]
 
     [.table-content
@@ -147,6 +148,7 @@
 
     [.reading #:max-width ,@article-max-width
               #:margin (0 auto)
+              #:overflow hidden
               [h1 h2 h3
                   #:margin (1em 0)]
               [h3 h4 h5 h6
@@ -158,7 +160,6 @@
                    #:max-width 100%
                    #:max-height 90vh]
               [pre #:overflow scroll
-                   #:border (1px solid ,@code-color-border)
                    #:padding (4px 12px)
                    #:background-color ,@code-color-background]
               [td #:max-width ,@article-max-width]]
