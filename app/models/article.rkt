@@ -12,7 +12,7 @@
          select-articles
          select-articles-by-feed
          find-article-by-id
-         find-article-by-link
+         find-article-by-feed-and-link
          archive-article-by-id
          unarchive-article-by-id)
 
@@ -80,9 +80,12 @@
                   (= a.user-id ,user-id)))
       (limit 1)))
 
-(define (find-article-by-link #:user-id user-id #:link link)
+(define (find-article-by-feed-and-link #:user-id user-id
+                                       #:feed-id feed-id
+                                       #:link link)
   (~> (from article #:as a)
       (where (and (= a.user-id ,user-id)
+                  (= a.feed-id ,feed-id)
                   (= a.link ,link)))
       (limit 1)))
 
