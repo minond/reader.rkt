@@ -70,10 +70,12 @@
 (define hs-worth (make-parameter 3))
 (define article-worth (make-parameter 11))
 (define main-worth (make-parameter 2))
+(define dldddt-worth (make-parameter -5))
 (define worths `((,p-worth (p))
                  (,lista-worth (ul ol))
                  (,hs-worth (h1 h2 h3 h4 h5 h6))
                  (,main-worth (main))
+                 (,dldddt-worth (dl dd dt))
                  (,article-worth (article))))
 
 (struct scored-element (tag children score percentage ref)
@@ -230,7 +232,7 @@
               (cons 0 null)
               (html-element-children el)))
      (define parent-score
-       (+ children-score-total (calculate-element-score el)))
+       (+ (max children-score-total 0) (calculate-element-score el)))
      (unless (zero? parent-score)
        (for ([el children])
          (let ([percentage
@@ -265,6 +267,7 @@
          [id (read-attribute attributes 'id #:default "")]
          [class (read-attribute attributes 'class #:default "")])
     (or
+     (string-contains? id "comments") ; steve-yegge.blogspot.com
      (string-contains? id "sidebar") ; Lambda the Ultimate
      (string-contains? id "footer") ; Lambda the Ultimate
      (string-contains? class "breadcrumb") ; Lambda the Ultimate
@@ -273,6 +276,7 @@
      (string-contains? class "sidebar")
      (string-contains? class "noprint")
      (string-contains? class "navbar")
+     (string-contains? class "footer") ; steve-yegge.blogspot.com
      (string-contains? class "dpsp-networks-btns-share") ; WP plugin
      (string-contains? class "owl-carousel") ; WP plugin
      (string-contains? class "mw-editsection") ; Wikimedia edit links
