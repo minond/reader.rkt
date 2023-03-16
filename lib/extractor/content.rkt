@@ -13,6 +13,8 @@
          (prefix-in html- reader/lib/extractor/html))
 
 (provide extract-content
+         (struct-out childless-element)
+         (struct-out container-element)
          (struct-out heading)
          (struct-out paragraph)
          (struct-out pre)
@@ -36,39 +38,49 @@
          (struct-out link)
          (struct-out separator)
          (struct-out line-break)
+         (struct-out element-attribute)
          (struct-out id)
          (struct-out height)
          (struct-out width)
          (struct-out name))
 
-(struct heading (attributes level content) #:prefab)
-(struct paragraph (attributes content) #:prefab)
-(struct pre (attributes content) #:prefab)
-(struct code (attributes content) #:prefab)
-(struct bold (attributes content) #:prefab)
-(struct italic (attributes content) #:prefab)
-(struct blockquote (attributes content) #:prefab)
-(struct superscript (attributes content) #:prefab)
-(struct ordered-list (attributes items) #:prefab)
-(struct unordered-list (attributes items) #:prefab)
-(struct list-item (attributes content) #:prefab)
-(struct table (attributes content) #:prefab)
-(struct table-row (attributes content) #:prefab)
-(struct table-cell (attributes content) #:prefab)
-(struct text (text) #:prefab)
-(struct entity (id) #:prefab)
-(struct image (attributes src alt) #:prefab)
-(struct video (attributes src) #:prefab)
-(struct iframe (attributes src) #:prefab)
-(struct object (attributes type data content) #:prefab)
-(struct link (attributes href content) #:prefab)
+(struct childless-element (attributes) #:prefab)
+(struct container-element (attributes content) #:prefab)
+
+(struct heading container-element (level) #:prefab)
+(struct paragraph container-element () #:prefab)
+(struct pre container-element () #:prefab)
+(struct code container-element () #:prefab)
+(struct bold container-element () #:prefab)
+(struct italic container-element () #:prefab)
+(struct blockquote container-element () #:prefab)
+(struct superscript container-element () #:prefab)
+(struct ordered-list container-element () #:prefab)
+(struct unordered-list container-element () #:prefab)
+(struct list-item container-element () #:prefab)
+(struct table container-element () #:prefab)
+(struct table-row container-element () #:prefab)
+(struct table-cell container-element () #:prefab)
+(struct link container-element (href) #:prefab)
+(struct object container-element (type data) #:prefab)
+
+(struct image childless-element (src alt) #:prefab)
+(struct video childless-element (src) #:prefab)
+(struct iframe childless-element (src) #:prefab)
+
 (struct separator () #:prefab)
 (struct line-break () #:prefab)
 
-(struct id (value) #:prefab)
-(struct height (value) #:prefab)
-(struct width (value) #:prefab)
-(struct name (value) #:prefab)
+(struct text (text) #:prefab)
+(struct entity (id) #:prefab)
+
+
+(struct element-attribute (value) #:prefab)
+
+(struct id element-attribute () #:prefab)
+(struct height element-attribute () #:prefab)
+(struct width element-attribute () #:prefab)
+(struct name element-attribute () #:prefab)
 
 (define (extract-content doc url)
   (element-content (find-article-root doc) url))
@@ -136,22 +148,20 @@
                    (and src (absolute-url base-url src))))]
         [(scored-element 'object children _ _ (html-element _ attributes _))
          (let ([type (read-attribute attributes 'type)]
-               [data (read-attribute attributes 'data)]
-               [content (element-content/list children base-url)])
+               [data (read-attribute attributes 'data)])
            (object (extract-attributes attributes)
+                   (element-content/list children base-url)
                    type
-                   (and data (absolute-url base-url data))
-                   content))]
+                   (and data (absolute-url base-url data))))]
         [(scored-element 'text _ _ _ (html-text value))
          (and value (text value))]
         [(scored-element 'entity _ _ _ (html-entity id))
          (entity id)]
         [(scored-element 'a children _ _ (html-element _ attributes _))
-         (let ([href (read-attribute attributes 'href)]
-               [content (element-content/list children base-url)])
+         (let ([href (read-attribute attributes 'href)])
            (link (extract-attributes attributes)
-                 (and href (absolute-url base-url href))
-                 content))]
+                 (element-content/list children base-url)
+                 (and href (absolute-url base-url href))))]
         [(scored-element 'hr _ _ _ _)
          (separator)]
         [(scored-element 'br _ _ _ _)
@@ -197,22 +207,22 @@
                     (element-content/list children base-url))]
         [(scored-element 'h1 children _ _ el)
          (heading (extract-attributes el)
-                  1 (element-content/list children base-url))]
+                  (element-content/list children base-url) 1)]
         [(scored-element 'h2 children _ _ el)
          (heading (extract-attributes el)
-                  2 (element-content/list children base-url))]
+                  (element-content/list children base-url) 2)]
         [(scored-element 'h3 children _ _ el)
          (heading (extract-attributes el)
-                  3 (element-content/list children base-url))]
+                  (element-content/list children base-url) 3)]
         [(scored-element 'h4 children _ _ el)
          (heading (extract-attributes el)
-                  4 (element-content/list children base-url))]
+                  (element-content/list children base-url) 4)]
         [(scored-element 'h5 children _ _ el)
          (heading (extract-attributes el)
-                  5 (element-content/list children base-url))]
+                  (element-content/list children base-url) 5)]
         [(scored-element 'h6 children _ _ el)
          (heading (extract-attributes el)
-                  6 (element-content/list children base-url))]
+                  (element-content/list children base-url) 6)]
         [(scored-element tag children _ _ (? html-element?))
          (and (not (member tag ignorable-tags))
               (element-content/list children base-url))]

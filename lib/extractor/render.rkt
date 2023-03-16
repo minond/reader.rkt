@@ -25,10 +25,10 @@
         [width (findf width? attributes)]
         [name (findf name? attributes)])
     (append
-      (if id `('id: ,(id-value id)) empty)
-      (if height `('height: ,(height-value height)) empty)
-      (if width `('width: ,(width-value width)) empty)
-      (if name `('name: ,(name-value name)) empty)
+      (if id `('id: ,(element-attribute-value id)) empty)
+      (if height `('height: ,(element-attribute-value height)) empty)
+      (if width `('width: ,(element-attribute-value width)) empty)
+      (if name `('name: ,(element-attribute-value name)) empty)
       empty)))
 
 (define (render-element tagf attributes content)
@@ -40,12 +40,12 @@
       (for/list ([elem elem-or-lst])
         (render-content elem))
       (match elem-or-lst
-        [(heading attributes level content)
+        [(heading attributes content level)
          ((hash-ref headings-by-level level)
           (render-content content))]
         [(paragraph attributes content)
          (render-element :p attributes content)]
-        [(link attributes href content)
+        [(link attributes content href)
          (eval `(,:a ,@(attributes-arguments attributes)
                      'href: ,href
                      ',(render-content content)))]
