@@ -6,6 +6,7 @@
          net/url-string
 
          reader/lib/string
+         reader/lib/html
          reader/lib/extractor/attribute
          reader/lib/extractor/query
          (prefix-in html- reader/lib/extractor/html))
@@ -55,9 +56,7 @@
        (string-append acc (html-text-text el))]
       [(html-entity? el)
        (let ([value (html-entity-id el)])
-         (if (integer? value)
-             (string (integer->char value))
-             ""))]
+         (html-entity->string value))]
       [(html-element? el)
        (let* ([content (html-element-children el)]
               [strings (map element-string-aux content)])
