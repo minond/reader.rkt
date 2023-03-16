@@ -1,6 +1,9 @@
 #lang racket/base
 
-(require deta
+(require racket/function
+
+         deta
+         gregor
          (prefix-in : scribble/html/xml)
 
          reader/app/models/article
@@ -33,12 +36,25 @@
                                      feed-url
                                      user-id)))
 
+  (update-one! (current-database-connection)
+               (update-feed-last-sync-attempted-at
+                feed-record (const (now/utc))))
+
+  (log-info "saving new articles for feed-id: ~a" feed-id)
+  (save-new-articles user-id feed-id feed-data)
+  (log-info "done saving new articles for feed-id: ~a" feed-id)
+
+  (update-one! (current-database-connection)
+               (update-feed-last-sync-completed-at
+                feed-record (const (now/utc)))))
+
+(define (save-new-articles user-id feed-id feed-data)
   (for ([article-data (rss-feed-articles feed-data)])
     (define link (rss-article-link article-data))
     (unless (lookup (current-database-connection)
                     (find-article-by-feed-and-link #:user-id user-id
-                                          #:feed-id feed-id
-                                          #:link link))
+                                                   #:feed-id feed-id
+                                                   #:link link))
       (log-info "extracting content for ~a" link)
       (define-values (content metadata media) (extract link))
 
