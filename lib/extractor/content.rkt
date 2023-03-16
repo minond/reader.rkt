@@ -36,7 +36,10 @@
          (struct-out link)
          (struct-out separator)
          (struct-out line-break)
-         (struct-out id))
+         (struct-out id)
+         (struct-out height)
+         (struct-out width)
+         (struct-out name))
 
 (struct heading (attributes level content) #:prefab)
 (struct paragraph (attributes content) #:prefab)
@@ -63,6 +66,9 @@
 (struct line-break () #:prefab)
 
 (struct id (value) #:prefab)
+(struct height (value) #:prefab)
+(struct width (value) #:prefab)
+(struct name (value) #:prefab)
 
 (define (extract-content doc url)
   (element-content (find-article-root doc) url))
@@ -222,9 +228,15 @@
   (let* ([attributes (if (html-element? el-or-attributes)
                          (html-element-attributes el-or-attributes)
                          el-or-attributes)]
-         [id-value (read-attribute attributes 'id)])
+         [id-value (read-attribute attributes 'id)]
+         [height-value (read-attribute attributes 'height)]
+         [width-value (read-attribute attributes 'width)]
+         [name-value (read-attribute attributes 'name)])
     (filter identity
-            (list (and id-value (id id-value))))))
+            (list (and id-value (id id-value))
+                  (and height-value (height height-value))
+                  (and width-value (width width-value))
+                  (and name-value (name name-value))))))
 
 (define (score-element el)
   (cond

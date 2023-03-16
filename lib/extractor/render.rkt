@@ -20,8 +20,16 @@
    6 :h6))
 
 (define (attributes-arguments attributes)
-  (let ([id (findf id? attributes)])
-    (if id `('id: ,(id-value id)) empty)))
+  (let ([id (findf id? attributes)]
+        [height (findf height? attributes)]
+        [width (findf width? attributes)]
+        [name (findf name? attributes)])
+    (append
+      (if id `('id: ,(id-value id)) empty)
+      (if height `('height: ,(height-value height)) empty)
+      (if width `('width: ,(width-value width)) empty)
+      (if name `('name: ,(name-value name)) empty)
+      empty)))
 
 (define (render-element tagf attributes content)
   (eval `(,tagf ,@(attributes-arguments attributes)
