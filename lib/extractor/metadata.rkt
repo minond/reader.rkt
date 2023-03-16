@@ -19,12 +19,12 @@
   #:mutable
   #:prefab)
 
-(define (extract-metadata doc base-url)
+(define (extract-metadata doc url)
   (let* ([metatags (find*/list doc #:tag 'meta)]
          [linktags (find*/list doc #:tag 'link)]
          [titletag (find* doc #:tag 'title)]
          [attrgroups (map html-element-attributes (append metatags linktags))]
-         [metadata (make-metadata (url->string base-url) #f #f
+         [metadata (make-metadata (url->string url) #f #f
                                   (and titletag (element-string titletag))
                                   #f #f)])
     (for* ([attributes attrgroups])

@@ -10,7 +10,8 @@
          reader/lib/extractor/media
          (prefix-in html- reader/lib/extractor/html))
 
-(provide extract)
+(provide extract
+         download)
 
 (define (extract url-string)
   (define url (string->url url-string))
