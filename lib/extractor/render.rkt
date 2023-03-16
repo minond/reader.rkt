@@ -77,6 +77,9 @@
                            'muted: "true"
                            'loop: "true"
                            '(#f)))]
+        [(iframe attributes src)
+         (eval `(,:iframe ,@(attributes-arguments attributes)
+                          'src: ,src))]
         [(image attributes src alt)
          (eval `(,:img ,@(attributes-arguments attributes)
                        'src: ,src

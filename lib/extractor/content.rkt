@@ -31,6 +31,7 @@
          (struct-out entity)
          (struct-out image)
          (struct-out video)
+         (struct-out iframe)
          (struct-out object)
          (struct-out link)
          (struct-out separator)
@@ -55,6 +56,7 @@
 (struct entity (id) #:prefab)
 (struct image (attributes src alt) #:prefab)
 (struct video (attributes src) #:prefab)
+(struct iframe (attributes src) #:prefab)
 (struct object (attributes type data content) #:prefab)
 (struct link (attributes href content) #:prefab)
 (struct separator () #:prefab)
@@ -122,6 +124,10 @@
          (let ([src (read-attribute attributes 'src)])
            (video (extract-attributes attributes)
                   (and src (absolute-url base-url src))))]
+        [(scored-element 'iframe _ _ _ (html-element _ attributes _))
+         (let ([src (read-attribute attributes 'src)])
+           (iframe (extract-attributes attributes)
+                   (and src (absolute-url base-url src))))]
         [(scored-element 'object children _ _ (html-element _ attributes _))
          (let ([type (read-attribute attributes 'type)]
                [data (read-attribute attributes 'data)]
