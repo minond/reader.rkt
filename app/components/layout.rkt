@@ -156,7 +156,7 @@
               [time .action
                     #:font-size 0.75em
                     #:color ,@text-color-light]
-              [img iframe pre
+              [img iframe
                    #:max-width 100%
                    #:max-height 90vh]
               [pre #:overflow scroll
