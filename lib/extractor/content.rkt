@@ -283,3 +283,23 @@
      (string-contains? class "mw-indicators") ; Wikimedia
      (string-contains? class "navigation-not-searchable") ; Wikimedia
      (equal? "navigation" (read-attribute attributes 'role #:default "")))))
+
+(define (show elem [level 0])
+  (define padding (string-append* (make-list level " ")))
+  (match elem
+    [(scored-element tag children score percentage
+                     (html-element _ attributes _))
+     (printf "~a~a (~a = ~a%) ~a {\n"
+             padding tag score percentage
+             (map (lambda (attr)
+                    (format "~a=\"~a\""
+                            (html-attribute-name attr)
+                            (html-attribute-value attr))) attributes))
+             ; attributes)
+     (map (lambda~> (show (add1 level))) children)]
+    [(scored-element tag children score percentage _)
+     (printf "~a~a (~a = ~a%) {\n"
+             padding tag score percentage)
+     (map (lambda~> (show (add1 level))) children)])
+  (printf "~a}\n"
+          padding))
