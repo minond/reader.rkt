@@ -2,20 +2,13 @@
 
 (require web-server/servlet
 
-         reader/lib/app/routes/session
-         reader/lib/app/routes/user
          reader/app/routes/article
          reader/app/routes/feed
-         reader/lib/web)
+         reader/lib/app/routes/session
+         reader/lib/app/routes/user
+         reader/lib/web/routes)
 
 (provide app-dispatch app-url)
-
-(require (prefix-in : scribble/html/xml)
-         (prefix-in : scribble/html/html)
-         (prefix-in : scribble/html/extra))
-
-(define (/index req)
-  (render (:h1 "Welcome")))
 
 (define-values (app-dispatch app-url)
   (dispatch-rules
