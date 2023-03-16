@@ -55,18 +55,20 @@
                     (find-article-by-feed-and-link #:user-id user-id
                                                    #:feed-id feed-id
                                                    #:link link))
-      (log-info "extracting content for ~a" link)
-      (define-values (content metadata media) (extract link))
+      (with-handlers ([exn:fail? (lambda (e)
+                                   (log-error (exn-message e)))])
+        (log-info "extracting content for ~a" link)
+        (define-values (content metadata media) (extract link))
 
-      (insert-one! (current-database-connection)
-                   (make-article #:user-id user-id
-                                 #:feed-id feed-id
-                                 #:link link
-                                 #:title (or (metadata-title metadata)
-                                             (rss-article-title article-data))
-                                 #:description (or (metadata-description metadata) "")
-                                 #:type (or (metadata-type metadata) "")
-                                 #:date (rss-article-date article-data)
-                                 #:content-data "" ; TODO
-                                 #:content-text "" ; TODO
-                                 #:content-html (:xml->string (render-content content)))))))
+        (insert-one! (current-database-connection)
+                     (make-article #:user-id user-id
+                                   #:feed-id feed-id
+                                   #:link link
+                                   #:title (or (metadata-title metadata)
+                                               (rss-article-title article-data))
+                                   #:description (or (metadata-description metadata) "")
+                                   #:type (or (metadata-type metadata) "")
+                                   #:date (rss-article-date article-data)
+                                   #:content-data "" ; TODO
+                                   #:content-text "" ; TODO
+                                   #:content-html (:xml->string (render-content content))))))))

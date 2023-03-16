@@ -102,4 +102,4 @@
         [(text text)
          text]
         [else
-         (error "[error] unimplemented" elem-or-lst)])))
+         (error "unable to render" elem-or-lst)])))
