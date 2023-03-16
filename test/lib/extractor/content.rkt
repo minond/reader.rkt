@@ -24,7 +24,7 @@
 
    (check-match
     minond-xyz-same-adt-content
-    (list (heading empty 1 (list (text "Same (ADT) type, different meaning")))
+    (list (heading empty (list (text "Same (ADT) type, different meaning")) 1)
           _ ...
           (paragraph empty (list (text "There are instances where the semantics of distinct types overlap. Through ADTs and OOP, it is possible to represent this using different sets of types, while still being able to work with the set unions and intersections in a way that is type safe.")))
           _ ...
