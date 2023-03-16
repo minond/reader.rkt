@@ -153,12 +153,14 @@
                   #:margin (1em 0)]
               [h3 h4 h5 h6
                   #:margin (0.6em 0)]
+              [blockquote #:font-style italic]
               [time .action
                     #:font-size 0.75em
                     #:color ,@text-color-light]
               [img iframe
                    #:max-width 100%
-                   #:max-height 90vh]
+                   #:max-height 90vh
+                   #:border none]
               [pre #:overflow scroll
                    #:border (1px solid ,@code-color-border)
                    #:padding (4px 12px)
@@ -168,8 +170,11 @@
               [(: tr (apply not (: first-child)))
                [td #:border-top (1px solid ,@border-color-light)]]]
     [(> (.reading article) object)
-     (> (.reading article) img) #:margin (0 auto)
-     #:display block
+     (> (.reading article) img)
+     (> (.reading article) iframe)
+     #:margin (0 auto)
+     #:display block]
+    [(> (.reading article) object)
      #:min-height 20px]
 
     [.system-error #:color ,@failure-color-dark
