@@ -5,6 +5,7 @@
          net/url-string
 
          reader/lib/extractor/content
+         reader/lib/extractor/document
          reader/lib/extractor/metadata
          reader/lib/extractor/media
          (prefix-in html- reader/lib/extractor/html))
@@ -15,9 +16,12 @@
   (define url (string->url url-string))
   (define doc (download url))
 
-  (values (extract-content doc url)
-          (extract-metadata doc url)
-          (extract-media doc url)))
+  (define content (extract-content doc url))
+  (define metadata (extract-metadata doc url))
+  (define media (extract-media doc url))
+  (define document (extract-document content metadata))
+
+  (values content metadata media document))
 
 (define (download url)
   (define res (get url))
