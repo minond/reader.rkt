@@ -313,7 +313,6 @@
                     (format "~a=\"~a\""
                             (html-attribute-name attr)
                             (html-attribute-value attr))) attributes))
-             ; attributes)
      (map (lambda~> (show (add1 level))) children)]
     [(scored-element tag children score percentage _)
      (printf "~a~a (~a = ~a%) {\n"
