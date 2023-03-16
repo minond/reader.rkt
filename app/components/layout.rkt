@@ -103,8 +103,7 @@
 
     [table #:width 100%
            #:border-collapse collapse
-           [td #:vertical-align top
-               #:padding 0]
+           [td #:padding 0]
            [(> td p) #:margin-top 0]]
 
     [.table-content
@@ -166,6 +165,7 @@
                    #:padding (4px 12px)
                    #:background-color ,@code-color-background]
               [td #:max-width ,@article-max-width
+                  #:vertical-align top
                   #:padding (10px 0)]
               [(: tr (apply not (: first-child)))
                [td #:border-top (1px solid ,@border-color-light)]]]
