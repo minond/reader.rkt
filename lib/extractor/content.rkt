@@ -183,7 +183,7 @@
         [(scored-element (? (lambda~> (member '(b strong)))) children _ _ el)
          (bold (extract-attributes el)
                (element-content/list children base-url))]
-        [(scored-element 'i children _ _ el)
+        [(scored-element (? (lambda~> (member '(i em)))) children _ _ el)
          (italic (extract-attributes el)
                  (element-content/list children base-url))]
         [(scored-element 'blockquote children _ _ el)
