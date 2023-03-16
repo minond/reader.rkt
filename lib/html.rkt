@@ -188,5 +188,5 @@
     [(symbol? entity)
      (html-entity->string (format "&~a;" entity))]
     [(string? entity)
-     (html-entity->string (hash-ref entity-names entity))]
+     (html-entity->string (hash-ref entity-names entity 0))]
     [else ""]))
