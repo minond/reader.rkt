@@ -9,6 +9,7 @@
          reader/app/models/article
          reader/app/models/feed
          reader/app/components/article
+         reader/app/components/reader
          reader/lib/parameters
          reader/lib/web)
 
@@ -32,8 +33,13 @@
                                  (select-articles #:user-id (current-user-id)
                                                   #:archived #f
                                                   #:limit page-size
-                                                  #:offset offset)))])
-    (render (:article/previews articles current-page page-count scheduled))))
+                                                  #:offset offset)))]
+         [feed-stats (sequence->list
+                      (in-entities (current-database-connection)
+                                   (select-feed-stats #:user-id (current-user-id))))])
+    (render
+      ; (:article/previews articles current-page page-count scheduled)
+      (:reader feed-stats articles))))
 
 (define (/arcticles/<id>/show req id)
   (let* ([article (lookup (current-database-connection)

@@ -26,7 +26,7 @@
              (:table
               (:tr
                (:td
-                (:a 'href: "/" "Reader")
+                (:a 'class: "serif" 'href: "/" "Reader")
                 (:flash))
                (:td 'class: "actions"
                     (if (authenticated?)
@@ -49,7 +49,7 @@
             ))))))
 
 (define font-styles-url
-  "https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap")
+  "https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;700&display=swap")
 
 (define body-background-color (css-expr (apply rgba 250 247 239 0.1)))
 (define border-color-light (css-expr (apply rgb 187 187 187)))
@@ -65,12 +65,14 @@
 (define success-color-normal (css-expr (apply rgb 163 223 163)))
 (define text-color-light (css-expr (apply rgb 83 83 83)))
 (define text-color-lighter (css-expr (apply rgb 136 136 136)))
+(define background-color-light (css-expr (apply rgb 244 244 244)))
 
 (define code-color-border (css-expr (apply rgb 215 215 215)))
 (define code-color-background (css-expr (apply rgb 250 250 250)))
 
-(define content-max-width (css-expr 80em))
-(define article-max-width (css-expr 45em))
+(define content-max-width (css-expr 100%))
+(define article-max-width (css-expr 100%))
+(define content-horizontal-padding (css-expr 2em))
 
 (define css
   (css-expr->css
@@ -78,7 +80,7 @@
     [@import ,font-styles-url]
 
     [body #:cursor default
-          #:font-family "Libre Baskerville"
+          #:font-family (Montserrat) (sans-serif)
           #:background-color ,@body-background-color
           #:margin 0
           #:line-height 1.6
@@ -86,8 +88,11 @@
           #:color |#444|
           #:padding 0]
 
+    [.serif #:font-family (Libre Baskerville) (serif)]
+    [.sans-serif #:font-family (Montserrat) (sans-serif)]
+
     [header #:font-weight bold
-            #:padding (.5em 1em)
+            #:padding (.5em ,@content-horizontal-padding)
             [a #:color initial
                #:text-decoration none]
             [.actions #:text-align right
@@ -99,7 +104,7 @@
             #:margin (0 auto)
             #:max-width ,@content-max-width]
 
-    [main #:padding 1em]
+    [main #:padding ,@content-horizontal-padding]
 
     [table #:width 100%
            #:border-collapse collapse
@@ -212,6 +217,7 @@
     [.spacer.horizontal.large #:width 4em]
     [.tc #:text-align center]
     [.wsnw #:white-space nowrap]
+    [.fwb #:font-weight bold]
 
     [.feed-subscription-toggle .article-archive-toggle
                                #:height .9em
@@ -243,6 +249,24 @@
                      #:transition (opacity .2s)]]
     [.show-on-hover-container:hover
      [.show-on-hover #:opacity 1]]
+
+    [.reader-feeds #:width 23em]
+    [.reader-feed-item #:cursor pointer]
+    [.reader-feed-item:hover
+     [.reader-feed-item-title #:font-weight bold]]
+    [.reader-feed-item-title #:display inline-block
+                             #:width 20em
+                             #:white-space nowrap
+                             #:text-overflow ellipsis
+                             #:overflow hidden
+                             #:font-size 0.9em]
+    [.reader-feed-item-count #:display inline-block
+                             #:width 3em
+                             #:white-space nowrap
+                             #:text-overflow ellipsis
+                             #:text-align right
+                             #:overflow hidden
+                             #:font-size 0.8em]
 
     [.page-links #:padding 1em
                  #:text-align center

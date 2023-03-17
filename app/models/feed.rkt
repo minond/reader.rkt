@@ -51,7 +51,7 @@
       (join article #:as a #:on (= f.id a.feed_id))
       (where (= f.user-id ,user-id))
       (group-by f.id f.title)
-      (order-by ([f.title]))
+      (order-by ([(lower f.title)]))
       (project-onto feed-stats-schema)))
 
 (define (select-feeds-in-need-of-sync #:older-than [older-than (-hours (now/utc) 12)]
