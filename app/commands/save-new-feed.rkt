@@ -13,6 +13,7 @@
          reader/lib/parameters
          reader/lib/extractor
          reader/lib/extractor/media
+         reader/lib/extractor/metadata
          (prefix-in rss- reader/lib/rss/parse))
 
 (provide save-new-feed)
@@ -27,33 +28,42 @@
                                      user-id)))
 
   (define link (rss-feed-link feed-data))
-  (define logo-url (find-feed-logo-url link))
+  (define-values (logo-url description) (find-feed-logo-url+description link))
   (define feed-record
     (insert-one! (current-database-connection)
                  (make-feed #:user-id user-id
                             #:feed-url feed-url
                             #:logo-url logo-url
                             #:link link
-                            #:title (rss-feed-title feed-data))))
+                            #:title (rss-feed-title feed-data)
+                            #:description description)))
 
   (log-info "saved feed record, fetching articles")
   (fetch-feed-articles user-id (feed-id feed-record)))
 
-(define (find-feed-logo-url link)
+(define (find-feed-logo-url+description link)
   (with-handlers ([exn:fail? (lambda (e)
-                               (displayln "ERRRRRRRRRRR")
-                               (displayln e)
                                (log-error (exn-message e)))])
     (log-info "extracting content for ~a" link)
     (let* ([url (string->url link)]
            [doc (download url)]
-           [images (media-images (extract-media doc url))])
+           [images (media-images (extract-media doc url))]
+           [metadata (extract-metadata doc url)])
       (define image
         (findf identity (list (find-image-by-type images "apple-touch-icon")
                               (find-image-by-type images "icon"))))
-      (if image
-          (media:image-url image)
-          sql-null))))
+      (define logo-url
+        (if image
+            (media:image-url image)
+            sql-null))
+
+      (define -description (or (metadata-description metadata) ""))
+      (define description
+        (if (not (zero? (string-length -description)))
+            -description
+            sql-null))
+
+      (values logo-url description))))
 
 (define (find-image-by-type lst type)
   (findf (lambda (image)
