@@ -2,6 +2,7 @@
 
 (require racket/function
 
+         db
          deta
          net/url-string
 
@@ -52,7 +53,7 @@
                               (find-image-by-type images "icon"))))
       (if image
           (media:image-url image)
-          ""))))
+          sql-null))))
 
 (define (find-image-by-type lst type)
   (findf (lambda (image)
