@@ -86,16 +86,18 @@
   (element-content (find-article-root doc) url))
 
 (define p-worth (make-parameter 10))
-(define lista-worth (make-parameter 4))
 (define hs-worth (make-parameter 3))
 (define article-worth (make-parameter 11))
 (define main-worth (make-parameter 2))
 (define dldddt-worth (make-parameter -5))
+(define a-worth (make-parameter -2))
+(define list-item-worth (make-parameter -1))
 (define worths `((,p-worth (p))
-                 (,lista-worth (ul ol))
                  (,hs-worth (h1 h2 h3 h4 h5 h6))
                  (,main-worth (main))
                  (,dldddt-worth (dl dd dt))
+                 (,list-item-worth (li))
+                 (,a-worth (a))
                  (,article-worth (article))))
 
 (struct scored-element (tag children score percentage ref)
@@ -260,7 +262,7 @@
               (cons 0 null)
               (html-element-children el)))
      (define parent-score
-       (+ (max children-score-total 0) (calculate-element-score el)))
+       (+ children-score-total (calculate-element-score el)))
      (unless (zero? parent-score)
        (for ([el children])
          (let ([percentage
