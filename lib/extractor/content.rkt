@@ -307,6 +307,9 @@
      (string-contains? class "footer") ; steve-yegge.blogspot.com
      (string-contains? class "dpsp-networks-btns-share") ; WP plugin
      (string-contains? class "owl-carousel") ; WP plugin
+     (string-contains? class "wp-block-post-date") ; WP
+     (string-contains? class "wp-block-post-author") ; WP
+     (string-contains? class "wp-block-post-terms") ; WP
      (string-contains? class "mw-editsection") ; Wikimedia edit links
      (string-contains? class "mw-indicators") ; Wikimedia
      (string-contains? class "navigation-not-searchable") ; Wikimedia
