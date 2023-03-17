@@ -6,7 +6,8 @@
 
 (provide string-chop
          string-list-join
-         string-strip)
+         string-strip
+         string-join+)
 
 (define (string-chop str maxlen #:end [end ""])
   (if (<= (string-length str) maxlen)
@@ -26,3 +27,7 @@
    (map (lambda~> (string-strip)
                   (regexp-replace margin _ ""))
         (string-split str #px"\n+"))))
+
+(define (string-join+ . lst)
+  (string-join
+    (filter string? lst)))
