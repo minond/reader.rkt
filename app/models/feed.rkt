@@ -32,6 +32,7 @@
   #:virtual
   ([id id/f]
    [title string/f]
+   [logo-url string/f #:nullable]
    [link string/f]
    [subscribed boolean/f]
    [last-sync-completed-at datetime/f #:nullable]
@@ -43,7 +44,7 @@
 ;; TODO This is excluding feeds with empty counts
 (define (select-feed-stats #:user-id user-id)
   (~> (from feed #:as f)
-      (select f.id f.title f.link f.subscribed f.last-sync-completed-at f.created-at
+      (select f.id f.title f.logo-url f.link f.subscribed f.last-sync-completed-at f.created-at
               (count a.id)
               (sum (iif (= a.archived #t) 1 0))
               (sum (iif (= a.archived #f) 1 0)))
