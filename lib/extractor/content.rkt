@@ -177,7 +177,7 @@
         [(scored-element 'tr children _ _ el)
          (table-row (extract-attributes el)
                     (element-content/list children base-url))]
-        [(scored-element 'td children _ _ el)
+        [(scored-element (? (lambda~> (member '(td th)))) children _ _ el)
          (table-cell (extract-attributes el)
                      (element-content/list children base-url))]
         [(scored-element 'ul children _ _ el)
