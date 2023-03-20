@@ -17,6 +17,7 @@
      (~> entity
          (string-replace "&#" "")
          (string-replace ";" "")
+         (string-replace "x" "#x")
          (string->number)
          (html-entity->string))]
     [(and (string? entity) (string-prefix? entity "&"))
