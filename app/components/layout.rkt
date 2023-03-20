@@ -152,6 +152,7 @@
           [a #:font-size 0.8em]]
 
     [.reading #:max-width ,@article-max-width
+              #:font-family (Libre Baskerville) (serif)
               #:margin (0 auto)
               #:overflow hidden
               [h1 h2 h3
