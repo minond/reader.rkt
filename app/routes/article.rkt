@@ -18,7 +18,7 @@
          /articles/<id>/archive
          /articles/<id>/unarchive)
 
-(define page-size 10)
+(define page-size 20)
 
 (define (/articles req)
   (let* ([scheduled (equal? "1" (parameter 'scheduled req))]
@@ -39,7 +39,7 @@
                                    (select-feed-stats #:user-id (current-user-id))))])
     (render
       ; (:article/previews articles current-page page-count scheduled)
-      (:reader feed-stats articles))))
+      (:reader feed-stats articles current-page page-count))))
 
 (define (/arcticles/<id>/show req id)
   (let* ([article (lookup (current-database-connection)

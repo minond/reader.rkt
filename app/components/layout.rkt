@@ -52,6 +52,7 @@
   "https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;700&display=swap")
 
 (define body-background-color (css-expr (apply rgba 250 247 239 0.1)))
+(define border-color-lighter (css-expr (apply rgb 230 230 230)))
 (define border-color-light (css-expr (apply rgb 187 187 187)))
 (define border-color-normal (css-expr (apply rgb 138 138 138)))
 (define failure-color-dark (css-expr (apply rgb 207 10 10)))
@@ -65,13 +66,13 @@
 (define success-color-normal (css-expr (apply rgb 163 223 163)))
 (define text-color-light (css-expr (apply rgb 83 83 83)))
 (define text-color-lighter (css-expr (apply rgb 136 136 136)))
-(define background-color-light (css-expr (apply rgb 244 244 244)))
+(define highlight-color-light (css-expr (apply rgb 254 252 233)))
 
 (define code-color-border (css-expr (apply rgb 215 215 215)))
 (define code-color-background (css-expr (apply rgb 250 250 250)))
 
 (define content-max-width (css-expr 100%))
-(define article-max-width (css-expr 100%))
+(define article-max-width (css-expr 40em))
 (define content-horizontal-padding (css-expr 2em))
 
 (define css
@@ -255,6 +256,7 @@
     [.reader-feed-item:hover
      [.reader-feed-item-title #:font-weight bold]]
     [.reader-feed-item-title #:display inline-block
+                             #:color black
                              #:width 20em
                              #:white-space nowrap
                              #:text-overflow ellipsis
@@ -267,6 +269,31 @@
                              #:text-align right
                              #:overflow hidden
                              #:font-size 0.8em]
+
+    ; #:column-gap 10px
+    ; #:display grid
+    ; #:grid-template-columns (30% 70%)
+    [.reader-article
+     #:padding .5em
+     #:display block
+     #:font-size .95em
+     #:white-space nowrap
+     #:text-overflow ellipsis
+     #:overflow hidden
+     [.reader-article-title
+      #:color ,@text-color-light
+      #:font-weight bold]
+     [.reader-article-description
+      #:color ,@text-color-light
+      #:padding-left .5em]]
+    [(: .reader-article (apply not (: first-child)))
+     #:border-top (1px solid ,@border-color-lighter)]
+    [.reader-article:hover
+     .reader-article:focus
+     #:background-color ,@highlight-color-light
+     [.reader-article-title
+      .reader-article-description
+      #:color black]]
 
     [.page-links #:padding 1em
                  #:text-align center
