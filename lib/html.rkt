@@ -36,7 +36,8 @@
   str)
 
 (define entity-names
-  (hash "&amp;"           38            ; Ampersand
+  (hash "&quot;"          34            ; Quote
+        "&amp;"           38            ; Ampersand
         "&lt;"            60            ; Less than
         "&gt;"            62            ; Greater than
         "&nbsp;"          160           ; Non-breaking space

@@ -69,7 +69,8 @@
                                    #:title (string-replace-html-entities
                                             (or (metadata-title metadata)
                                                 (rss-article-title article-data)))
-                                   #:description (document-summary document)
+                                   #:description (string-replace-html-entities
+                                                   (document-summary document))
                                    #:type (or (metadata-type metadata) "")
                                    #:date (rss-article-date article-data)
                                    #:content-data "" ; TODO
