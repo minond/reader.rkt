@@ -17,4 +17,6 @@
    (check-match (html-entity->string 38) "&")
 
    (check-match (string-replace-html-entities "testing &#38; running &amp; saving")
-                "testing & running & saving")))
+                "testing & running & saving")
+   (check-match (string-replace-html-entities "testing &#38; running &am; saving")
+                "testing & running &am; saving")))

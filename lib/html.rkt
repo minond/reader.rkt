@@ -20,7 +20,9 @@
          (string->number)
          (html-entity->string))]
     [(and (string? entity) (string-prefix? entity "&"))
-     (html-entity->string (hash-ref entity-names entity 0))]
+     (if (hash-has-key? entity-names entity)
+         (html-entity->string (hash-ref entity-names entity))
+         fallback)]
     [else fallback]))
 
 (define entity-regexp #px"&#?[0-9A-Za-z]+;")
