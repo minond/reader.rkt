@@ -1,6 +1,36 @@
 #lang racket/base
 
-(provide html-entity->string)
+(require racket/string)
+
+(require threading)
+
+(provide html-entity->string
+         string-replace-html-entities)
+
+(define (html-entity->string entity #:fallback [fallback ""])
+  (cond
+    [(integer? entity)
+     (string (integer->char entity))]
+    [(symbol? entity)
+     (html-entity->string (format "&~a;" entity))]
+    [(and (string? entity) (string-prefix? entity "&#"))
+     (~> entity
+         (string-replace "&#" "")
+         (string-replace ";" "")
+         (string->number)
+         (html-entity->string))]
+    [(and (string? entity) (string-prefix? entity "&"))
+     (html-entity->string (hash-ref entity-names entity 0))]
+    [else fallback]))
+
+(define entity-regexp #px"&#?[0-9A-Za-z]+;")
+
+(define (string-replace-html-entities str)
+  (for ([entity (regexp-match* entity-regexp str)])
+    (define replacement (html-entity->string entity #:fallback #f))
+    (when replacement
+      (set! str (string-replace str entity replacement))))
+  str)
 
 (define entity-names
   (hash "&amp;"           38            ; Ampersand
@@ -179,14 +209,3 @@
         "&clubs;"         9827          ; Club
         "&hearts;"        9829          ; Heart
         "&diams;"         983))         ; Diamond
-
-
-(define (html-entity->string entity)
-  (cond
-    [(integer? entity)
-     (string (integer->char entity))]
-    [(symbol? entity)
-     (html-entity->string (format "&~a;" entity))]
-    [(string? entity)
-     (html-entity->string (hash-ref entity-names entity 0))]
-    [else ""]))
