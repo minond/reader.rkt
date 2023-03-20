@@ -10,6 +10,7 @@
          reader/app/models/feed
          reader/app/commands/errors
 
+         reader/lib/html
          reader/lib/parameters
          reader/lib/extractor
          reader/lib/extractor/render
@@ -65,8 +66,9 @@
                      (make-article #:user-id user-id
                                    #:feed-id feed-id
                                    #:link link
-                                   #:title (or (metadata-title metadata)
-                                               (rss-article-title article-data))
+                                   #:title (string-replace-html-entities
+                                            (or (metadata-title metadata)
+                                                (rss-article-title article-data)))
                                    #:description (document-summary document)
                                    #:type (or (metadata-type metadata) "")
                                    #:date (rss-article-date article-data)
