@@ -92,7 +92,7 @@
          (eval `(,:img ,@(attributes-arguments attributes)
                        'src: ,src
                        'alt: ,alt))]
-        [(object attributes type data content)
+        [(object attributes content type data)
          (eval `(,:object ,@(attributes-arguments attributes)
                           'type: ,type
                           'data: ,data
