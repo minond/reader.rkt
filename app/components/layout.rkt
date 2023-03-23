@@ -33,8 +33,8 @@
                         (list (:a 'href: "/feeds/new" "Add feed")
                               (:a 'href: "/feeds" "Manage feeds")
                               (:a 'href: "/sessions/destroy" "Sign out"))
-                        null)))))
-            (:div 'class: "separator")
+                        null))))
+             (:div 'class: "separator"))
             (:main content)
             #;(:script
                'type: "text/javascript"
@@ -51,7 +51,7 @@
 (define font-styles-url
   "https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@200;400;700&display=swap")
 
-(define body-background-color (css-expr (apply rgba 250 247 239 0.1)))
+(define body-background-color (css-expr (apply rgb 252 252 252)))
 (define border-color-lighter (css-expr (apply rgb 230 230 230)))
 (define border-color-light (css-expr (apply rgb 187 187 187)))
 (define border-color-normal (css-expr (apply rgb 138 138 138)))
@@ -93,7 +93,20 @@
     [.sans-serif #:font-family (Nunito) (sans-serif)]
 
     [header #:font-weight bold
-            #:padding (.5em ,@content-horizontal-padding)
+            #:position fixed
+            #:transition (background-color .2s)
+            #:display block
+            #:background-color transparent
+            #:width 100%
+            #:top 0
+            #:left 0
+
+            [.separator
+             .actions
+             #:transition (opacity .2s)
+             #:opacity 0]
+
+            [td #:padding (.5em ,@content-horizontal-padding)]
             [a #:color initial]
             [.actions #:text-align right
                       [a #:font-size 0.8em
@@ -104,12 +117,18 @@
             #:margin (0 auto)
             #:max-width ,@content-max-width]
 
+    [header:hover
+     #:background-color ,@body-background-color
+     [.separator
+      .actions
+      #:opacity 1]]
+
     [main #:padding ,@content-horizontal-padding]
 
     [table #:width 100%
-           #:border-collapse collapse
-           [td #:padding 0]
-           [(> td p) #:margin-top 0]]
+           #:border-collapse collapse]
+    [td #:padding 0]
+    [(> td p) #:margin-top 0]
 
     [.table-content
      [td th
