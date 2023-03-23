@@ -252,28 +252,33 @@
     [.show-on-hover-container:hover
      [.show-on-hover #:opacity 1]]
 
-    [.reader-feeds #:width 23em]
-    [.reader-feed-item #:cursor pointer]
+    [.reader-container #:column-gap 10px
+                       #:display grid
+                       #:grid-template-columns (22em auto)]
+
+    [.reader-feed-item #:cursor pointer
+                       #:column-gap 10px
+                       #:display grid
+                       #:grid-template-columns (auto 3em)]
     [.reader-feed-item:hover
      [.reader-feed-item-title #:font-weight bold]]
     [.reader-feed-item-title #:display inline-block
                              #:color black
-                             #:width 20em
                              #:white-space nowrap
                              #:text-overflow ellipsis
                              #:overflow hidden
                              #:font-size 0.9em]
     [.reader-feed-item-count #:display inline-block
-                             #:width 3em
                              #:white-space nowrap
                              #:text-overflow ellipsis
                              #:text-align right
                              #:overflow hidden
                              #:font-size 0.8em]
 
-    ; #:column-gap 10px
-    ; #:display grid
-    ; #:grid-template-columns (30% 70%)
+    [.reader-articles
+     #:overflow hidden
+     #:text-overflow ellipsis]
+
     [.reader-article
      #:padding .5em
      #:display block

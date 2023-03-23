@@ -14,8 +14,9 @@
 
 (define (:reader feed-stats articles current-page page-count)
   (:div 'class: "reader"
-        ;(:reader/feeds feed-stats)
-        (:reader/articles articles)
+        (:div 'class: "reader-container"
+              (:reader/feeds feed-stats)
+              (:reader/articles articles))
         (:pagination current-page page-count)))
 
 (define (:reader/feeds feed-stats)
@@ -46,5 +47,5 @@
 (define (:reader/article article)
   (:a 'href: (format "/articles/~a" (article-id article))
       'class: "reader-article"
-        (:span 'class: "reader-article-title" (article-title article))
-        (:span 'class: "reader-article-description" (article-description article))))
+      (:span 'class: "reader-article-title" (article-title article))
+      (:span 'class: "reader-article-description" (article-description article))))
