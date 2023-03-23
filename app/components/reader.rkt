@@ -47,5 +47,6 @@
 (define (:reader/article article)
   (:a 'href: (format "/articles/~a" (article-id article))
       'class: "reader-article"
+      'title: (article-title article)
       (:span 'class: "reader-article-title" (article-title article))
       (:span 'class: "reader-article-description" (article-description article))))

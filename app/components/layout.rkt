@@ -49,7 +49,7 @@
             ))))))
 
 (define font-styles-url
-  "https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;700&display=swap")
+  "https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@200;400;700&display=swap")
 
 (define body-background-color (css-expr (apply rgba 250 247 239 0.1)))
 (define border-color-lighter (css-expr (apply rgb 230 230 230)))
@@ -81,7 +81,7 @@
     [@import ,font-styles-url]
 
     [body #:cursor default
-          #:font-family (Montserrat) (sans-serif)
+          #:font-family (Nunito) (sans-serif)
           #:background-color ,@body-background-color
           #:margin 0
           #:line-height 1.6
@@ -90,17 +90,16 @@
           #:padding 0]
 
     [.serif #:font-family (Libre Baskerville) (serif)]
-    [.sans-serif #:font-family (Montserrat) (sans-serif)]
+    [.sans-serif #:font-family (Nunito) (sans-serif)]
 
     [header #:font-weight bold
             #:padding (.5em ,@content-horizontal-padding)
-            [a #:color initial
-               #:text-decoration none]
+            [a #:color initial]
             [.actions #:text-align right
                       [a #:font-size 0.8em
-                         #:margin-left 1.5em
+                         #:margin-left 2em
                          #:color ,@text-color-light
-                         #:font-weight 100]]]
+                         #:font-weight bold]]]
     [header main
             #:margin (0 auto)
             #:max-width ,@content-max-width]
@@ -122,6 +121,7 @@
 
     [a #:color ,@link-color-normal
        #:text-decoration none]
+    [a:hover #:text-decoration underline]
     [h1 h2 h3 h4 h5 h6
         #:line-height 1.2
         #:color initial
@@ -273,6 +273,7 @@
                              #:text-overflow ellipsis
                              #:text-align right
                              #:overflow hidden
+                             #:font-weight 200
                              #:font-size 0.8em]
 
     [.reader-articles
@@ -290,6 +291,7 @@
       #:color ,@text-color-light
       #:font-weight bold]
      [.reader-article-description
+      #:font-weight 200
       #:color ,@text-color-light
       #:padding-left .5em]]
     [(: .reader-article (apply not (: first-child)))
