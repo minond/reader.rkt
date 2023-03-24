@@ -29,4 +29,10 @@
       [(container-element _ content)
        (string-append* (map extract-text content))]
       [else ""]))
-  (extract-text (findf paragraph? content)))
+
+  (extract-text
+   (cond
+     [(list? content)
+      content]
+     [else
+      content])))
