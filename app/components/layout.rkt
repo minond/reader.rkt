@@ -296,28 +296,31 @@
                              #:font-size 0.8em]
 
     [.reader-articles
+     #:max-width 60em
+     #:margin (3em auto 2em auto)
      #:overflow hidden
      #:text-overflow ellipsis]
 
     [.reader-article
-     #:padding .5em
+     #:padding 1em
+     #:outline none
      #:display block
-     #:font-size .95em
-     #:white-space nowrap
-     #:text-overflow ellipsis
-     #:overflow hidden
      [.reader-article-title
-      #:color ,@text-color-light
+      .reader-article-description
+      #:transition (color .25s)
+      #:color ,@text-color-light]
+     [.reader-article-title
+      #:font-size 1.25em
       #:font-weight bold]
      [.reader-article-description
-      #:font-weight 200
-      #:color ,@text-color-light
-      #:padding-left .5em]]
+      #:font-weight 200]]
     [(: .reader-article (apply not (: first-child)))
      #:border-top (1px solid ,@border-color-lighter)]
     [.reader-article:hover
      .reader-article:focus
-     #:background-color ,@highlight-color-light
+     #:text-decoration none
+     [.reader-article-title
+      #:text-decoration underline]
      [.reader-article-title
       .reader-article-description
       #:color black]]
