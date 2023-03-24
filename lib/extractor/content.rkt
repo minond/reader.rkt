@@ -328,10 +328,12 @@
                     (format "~a=\"~a\""
                             (html-attribute-name attr)
                             (html-attribute-value attr))) attributes))
-     (map (lambda~> (show (add1 level))) children)]
+     (map (lambda~> (show (add1 level))) children)
+     (printf "~a}\n" padding)]
+    [(scored-element 'text _ _ _ _)
+     (printf "~a[text]\n" padding)]
     [(scored-element tag children score percentage _)
      (printf "~a~a (~a = ~a%) {\n"
              padding tag score percentage)
-     (map (lambda~> (show (add1 level))) children)])
-  (printf "~a}\n"
-          padding))
+     (map (lambda~> (show (add1 level))) children)
+     (printf "~a}\n" padding)]))
