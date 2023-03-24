@@ -14,12 +14,17 @@
 (define (fetch feed-url)
   (parse (download feed-url)))
 
-(define (download feed-url)
-  (let* ([response (get (string->url feed-url))]
-         [body (http-response-body response)]
-         [root (read-xml (open-input-string body))]
-         [elem (document-element root)])
-    (xml->xexpr elem)))
+(define (download url)
+  (define res (get (string->url url)))
+  (define headers (http-response-headers res))
+
+  (if (and (equal? 301 (http-response-code res))
+           (hash-has-key? headers "Location"))
+      (download (hash-ref headers "Location"))
+      (xml->xexpr
+       (document-element
+        (read-xml
+          (open-input-string (http-response-body res)))))))
 
 (define (parse xexpr)
   (cond
