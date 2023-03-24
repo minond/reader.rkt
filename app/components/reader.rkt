@@ -51,5 +51,6 @@
       'title: ""
       (:div 'class: "reader-article-title"
             (article-title article))
-      (:p 'class: "reader-article-description"
-          (string-chop (article-description article) 300 #:end "…"))))
+      (and (not (zero? (string-length (article-description article))))
+           (:p 'class: "reader-article-description"
+               (string-chop (article-description article) 300 #:end "…")))))

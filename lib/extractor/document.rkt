@@ -33,6 +33,6 @@
   (extract-text
    (cond
      [(list? content)
-      content]
+      (findf paragraph? content)]
      [else
       content])))
