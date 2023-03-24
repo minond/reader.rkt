@@ -7,7 +7,8 @@
          xml/path
 
          reader/lib/string
-         reader/lib/rss/data)
+         reader/lib/rss/data
+         reader/lib/rss/processing)
 
 (provide atom?
          parse-atom)
@@ -39,5 +40,10 @@
                                                               (cdata-string (caddr part))
                                                               (string-list-join (cddr part) "")))]
                                   [else null])))
-                            (article link title date content)) entries))])
-    (feed link title articles)))
+                            (article (strip-cdata link)
+                                     (strip-cdata title)
+                                     (strip-cdata date)
+                                     content)) entries))])
+    (feed (strip-cdata link)
+          (strip-cdata title)
+          articles)))

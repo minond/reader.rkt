@@ -7,7 +7,8 @@
          xml/path
 
          reader/lib/string
-         reader/lib/rss/data)
+         reader/lib/rss/data
+         reader/lib/rss/processing)
 
 (provide rss?
          parse-rss)
@@ -37,17 +38,10 @@
                                                                   (cdata-string (caddr part))
                                                                   (string-list-join (cddr part) "")))]
                                   [else null])))
-                            (article link title date content)) items))])
-    (feed link title articles)))
-
-(define (string->datetime str)
-  (let ([parse (lambda (format)
-                 (with-handlers
-                     ([exn:gregor:parse?
-                       (lambda (e) #f)])
-                   (parse-datetime str format)))])
-    (or (parse "eee, d MMM y HH:mm:ss Z")
-        (parse "eee,  d MMM y HH:mm:ss Z")
-        (parse "d MMM y")
-        (parse "eee, d MMM y HH:mm:ss 'GMT'")
-        (parse "y-M-d HH:mm:ss"))))
+                            (article (strip-cdata link)
+                                     (strip-cdata title)
+                                     (strip-cdata date)
+                                     (strip-cdata content))) items))])
+    (feed (strip-cdata link)
+          (strip-cdata title)
+          articles)))
