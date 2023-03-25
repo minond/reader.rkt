@@ -85,13 +85,14 @@
 (define (extract-content doc url)
   (element-content (find-article-root doc) url))
 
+(define text-worth (make-parameter 0.1))
 (define p-worth (make-parameter 10))
 (define hs-worth (make-parameter 3))
 (define article-worth (make-parameter 11))
 (define main-worth (make-parameter 2))
 (define dldddt-worth (make-parameter -5))
 (define a-worth (make-parameter -2))
-(define list-item-worth (make-parameter -1))
+(define list-item-worth (make-parameter -0.2))
 (define worths `((,p-worth (p))
                  (,hs-worth (h1 h2 h3 h4 h5 h6))
                  (,main-worth (main))
@@ -252,6 +253,8 @@
 
 (define (score-element el)
   (cond
+    [(and (html-element? el) (ignorable-element? el))
+     (scored-element (html-element-tag el) null 0 0 el)]
     [(html-element? el)
      (match-define (cons children-score-total children)
        (foldl (lambda (el acc)
@@ -273,6 +276,8 @@
                      parent-score
                      0
                      el)]
+    [(html-text? el)
+     (scored-element (object-name el) null (text-worth) 0 el)]
     [else
      (scored-element (object-name el) null 0 0 el)]))
 
@@ -292,14 +297,17 @@
 (define ignorable-tags
   '(aside header form footer nav script style))
 (define (ignorable-element? elem)
-  (let* ([el (scored-element-ref elem)]
+  (let* ([el (if (scored-element? elem) (scored-element-ref elem) elem)]
+         [tag (if (html-element? el) (html-element-tag el) #f)]
          [attributes (if (html-element? el) (html-element-attributes el) empty)]
          [id (read-attribute attributes 'id #:default "")]
          [class (read-attribute attributes 'class #:default "")])
     (or
+     (equal? tag 'script)
      (string-contains? id "comments") ; steve-yegge.blogspot.com
      (string-contains? id "sidebar") ; Lambda the Ultimate
      (string-contains? id "footer") ; Lambda the Ultimate
+     (string-contains? id "header") ; steve-yegge.blogspot.com
      (string-contains? class "breadcrumb") ; Lambda the Ultimate
      (string-contains? class "mailing-list")
      (string-contains? class "nomobile")
