@@ -45,6 +45,8 @@
           (render-content content))]
         [(paragraph attributes content)
          (render-element :p attributes content)]
+        [(division attributes content)
+         (render-element :div attributes content)]
         [(link attributes content href)
          (apply :a (append (attributes-arguments attributes)
                            (list 'href: href
