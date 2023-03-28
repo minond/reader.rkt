@@ -25,15 +25,15 @@
         [width (findf width? attributes)]
         [name (findf name? attributes)])
     (append
-      (if id `('id: ,(element-attribute-value id)) empty)
-      (if height `('height: ,(element-attribute-value height)) empty)
-      (if width `('width: ,(element-attribute-value width)) empty)
-      (if name `('name: ,(element-attribute-value name)) empty)
-      empty)))
+     (if id `(id: ,(element-attribute-value id)) empty)
+     (if height `(height: ,(element-attribute-value height)) empty)
+     (if width `(width: ,(element-attribute-value width)) empty)
+     (if name `(name: ,(element-attribute-value name)) empty)
+     empty)))
 
 (define (render-element tagf attributes content)
-  (eval `(,tagf ,@(attributes-arguments attributes)
-                ',(render-content content))))
+  (apply tagf (append (attributes-arguments attributes)
+                      (list (render-content content)))))
 
 (define (render-content elem-or-lst)
   (if (list? elem-or-lst)
@@ -46,9 +46,9 @@
         [(paragraph attributes content)
          (render-element :p attributes content)]
         [(link attributes content href)
-         (eval `(,:a ,@(attributes-arguments attributes)
-                     'href: ,href
-                     ',(render-content content)))]
+         (apply :a (append (attributes-arguments attributes)
+                           (list 'href: href
+                                 (render-content content))))]
         [(bold attributes content)
          (render-element :b attributes content)]
         [(italic attributes content)
@@ -78,25 +78,28 @@
         [(line-break)
          (:br)]
         [(video attributes src)
-         (eval `(,:element 'video
-                           ,@(attributes-arguments attributes)
-                           'src: ,src
-                           'autoplay: "autoplay"
-                           'muted: "true"
-                           'loop: "true"
-                           '(#f)))]
+         (apply :element 'video
+                (append (attributes-arguments attributes)
+                        (list 'src: src
+                              'autoplay: "autoplay"
+                              'muted: "true"
+                              'loop: "true"
+                              #f)))]
         [(iframe attributes src)
-         (eval `(,:iframe ,@(attributes-arguments attributes)
-                          'src: ,src))]
+         (apply :iframe
+                (append (attributes-arguments attributes)
+                        (list 'src: src)))]
         [(image attributes src alt)
-         (eval `(,:img ,@(attributes-arguments attributes)
-                       'src: ,src
-                       'alt: ,alt))]
+         (apply :img
+                (append (attributes-arguments attributes)
+                        (list 'src: src
+                              'alt: alt)))]
         [(object attributes content type data)
-         (eval `(,:object ,@(attributes-arguments attributes)
-                          'type: ,type
-                          'data: ,data
-                          ',(render-content content)))]
+         (apply :object
+                (append (attributes-arguments attributes)
+                        (list 'type: type
+                              'data: data
+                              (render-content content))))]
         [(entity id)
          (:entity id)]
         [(text text)

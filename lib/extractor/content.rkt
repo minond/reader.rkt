@@ -300,8 +300,8 @@
   (let* ([el (if (scored-element? elem) (scored-element-ref elem) elem)]
          [tag (if (html-element? el) (html-element-tag el) #f)]
          [attributes (if (html-element? el) (html-element-attributes el) empty)]
-         [id (read-attribute attributes 'id #:default "")]
-         [class (read-attribute attributes 'class #:default "")])
+         [id (or (read-attribute attributes 'id #:default "") "")]
+         [class (or (read-attribute attributes 'class #:default "") "")])
     (or
      (equal? tag 'script)
      (string-contains? id "comments") ; steve-yegge.blogspot.com

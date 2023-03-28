@@ -184,6 +184,7 @@
                     #:color ,@text-color-light]
               [img iframe
                    #:max-width 100%
+                   #:height auto
                    #:max-height 90vh
                    #:border none]
               [pre #:overflow scroll
