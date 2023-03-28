@@ -79,6 +79,10 @@
          (:hr)]
         [(line-break)
          (:br)]
+        [(caption attributes content)
+         (apply :element 'figcaption
+                (append (attributes-arguments attributes)
+                        (list (render-content content))))]
         [(video attributes src)
          (apply :element 'video
                 (append (attributes-arguments attributes)

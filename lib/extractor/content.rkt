@@ -18,6 +18,7 @@
          (struct-out heading)
          (struct-out paragraph)
          (struct-out division)
+         (struct-out caption)
          (struct-out pre)
          (struct-out code)
          (struct-out bold)
@@ -51,6 +52,7 @@
 (struct heading container-element (level) #:prefab)
 (struct paragraph container-element () #:prefab)
 (struct division container-element () #:prefab)
+(struct caption container-element () #:prefab)
 (struct pre container-element () #:prefab)
 (struct code container-element () #:prefab)
 (struct bold container-element () #:prefab)
@@ -192,6 +194,9 @@
         [(scored-element 'div children _ _ el)
          (division (extract-attributes el)
                    (element-content/list children base-url))]
+        [(scored-element 'figcaption children _ _ el)
+         (caption (extract-attributes el)
+                  (element-content/list children base-url))]
         [(scored-element 'pre children _ _ el)
          (pre (extract-attributes el)
               (element-content/list children base-url))]
@@ -319,6 +324,7 @@
      (string-contains? class "sidebar")
      (string-contains? class "noprint")
      (string-contains? class "navbar")
+     (string-contains? class "embedded-post-wrap") ; madeleinedore.substack.com
      (string-contains? class "footer") ; steve-yegge.blogspot.com
      (string-contains? class "dpsp-networks-btns-share") ; WP plugin
      (string-contains? class "owl-carousel") ; WP plugin

@@ -178,6 +178,9 @@
                   #:margin (1em 0)]
               [h3 h4 h5 h6
                   #:margin (0.6em 0)]
+              [figcaption #:text-align center;
+                          #:font-size .9em;
+                          #:color ,@text-color-light]
               [blockquote #:font-style italic]
               [time .action
                     #:font-size 0.75em
