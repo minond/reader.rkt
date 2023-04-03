@@ -10,13 +10,15 @@
          reader/app/models/feed
          reader/app/components/article
          reader/app/components/reader
+         reader/app/commands/content-summary
          reader/lib/parameters
          reader/lib/web)
 
 (provide /articles
          /arcticles/<id>/show
          /articles/<id>/archive
-         /articles/<id>/unarchive)
+         /articles/<id>/unarchive
+         /articles/<id>/summary)
 
 (define page-size 20)
 
@@ -63,3 +65,10 @@
                                   #:user-id (current-user-id)))
   (with-flash #:alert "Article unarchived."
     (redirect-back)))
+
+(define (/articles/<id>/summary req id)
+  (let* ([article (lookup (current-database-connection)
+                          (find-article-by-id #:id id
+                                              #:user-id (current-user-id)))]
+         [summary (article-content-summary article)])
+    (json 'summary summary)))
