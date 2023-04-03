@@ -70,5 +70,10 @@
   (let* ([article (lookup (current-database-connection)
                           (find-article-by-id #:id id
                                               #:user-id (current-user-id)))]
-         [summary (article-content-summary article)])
+         [summary (article-generated-summary article)])
+    (when (sql-null? summary)
+      (set! summary (generate-article-content-summary article))
+      (update-one! (current-database-connection)
+                   (set-article-generated-summary article summary)))
+
     (json 'summary summary)))

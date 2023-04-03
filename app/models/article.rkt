@@ -5,7 +5,7 @@
          gregor
          deta)
 
-(provide (struct-out article)
+(provide (schema-out article)
          make-article
          count-articles
          count-articles-by-feed
@@ -23,6 +23,7 @@
    [link string/f #:contract non-empty-string?]
    [title string/f #:contract non-empty-string?]
    [description string/f]
+   [generated-summary string/f #:nullable]
    [type string/f]
    [date datetime/f]
    [content-data string/f]

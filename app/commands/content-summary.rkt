@@ -4,9 +4,9 @@
          reader/app/models/article
          reader/lib/openai/client)
 
-(provide article-content-summary)
+(provide generate-article-content-summary)
 
-(define (article-content-summary article)
+(define (generate-article-content-summary article)
   (define response
     (create-chat-completion
      #:model "gpt-3.5-turbo"
