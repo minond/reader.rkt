@@ -12,20 +12,36 @@
          reader/lib/parameters
          reader/lib/web/session)
 
-(provide render
+(provide json
+         render
          redirect
          redirect-back)
 
+(define (json . args)
+  (define obj (apply hash args))
+  (respond-with #:data (jsexpr->string obj)
+                #:content-type APPLICATION/JSON-MIME-TYPE))
+
 (define (render content
-                #:layout [layout (or (default-layout) basic-layout)]
-                #:code [code 200])
-  (let* ([request (current-request)]
-         [session (current-session)]
-         [user-id (current-user-id)]
-         [json? (wants-json? request)]
+                #:code [code 200]
+                #:layout [layout (or (default-layout) basic-layout)])
+  (let* ([json? (wants-json? (current-request))]
          [content-type (if json?
                            APPLICATION/JSON-MIME-TYPE
-                           TEXT/HTML-MIME-TYPE)])
+                           TEXT/HTML-MIME-TYPE)]
+         [data (if json?
+                   (jsexpr->string (hash 'html (:xml->string content)))
+                   (layout content))])
+    (respond-with #:data data
+                  #:code code
+                  #:content-type content-type)))
+
+(define (respond-with #:data data
+                      #:code [code 200]
+                      #:content-type [content-type TEXT/HTML-MIME-TYPE])
+  (let* ([request (current-request)]
+         [session (current-session)]
+         [user-id (current-user-id)])
     (response/output
      #:code code
      #:headers (list (header #"Content-Type" content-type))
@@ -33,9 +49,7 @@
        (parameterize ([current-request request]
                       [current-session session]
                       [current-user-id user-id])
-         (display (if json?
-                      (jsexpr->string (hash 'html (:xml->string content)))
-                      (layout content)) op))))))
+         (display data op))))))
 
 (define (redirect url)
   (~> (current-session)
