@@ -2,10 +2,16 @@
 
 (require racket/string)
 
-(require threading)
+(require threading
+         (prefix-in : scribble/html/xml)
+         (prefix-in : scribble/html/html))
 
-(provide html-entity->string
+(provide text->html
+         html-entity->string
          string-replace-html-entities)
+
+(define (text->html s)
+  (:xml->string (map :p (string-split s "\n\n"))))
 
 (define (html-entity->string entity #:fallback [fallback ""])
   (cond

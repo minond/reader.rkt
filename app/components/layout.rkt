@@ -75,6 +75,9 @@
 (define article-max-width (css-expr 40em))
 (define content-horizontal-padding (css-expr 2em))
 
+(define spinning-ring-color (css-expr (apply rgb 61 77 255)))
+(define spinning-ring-size (css-expr 42px))
+
 (define css
   (css-expr->css
    (css-expr
@@ -170,10 +173,37 @@
            #:margin-right 0.5em]
           [a #:font-size 0.8em]]
 
-    [.reading #:max-width ,@article-max-width
-              #:font-family (Libre Baskerville) (serif)
+    ; Taken from https://loading.io/css/
+    [.spinning-ring #:display block
+                    #:margin (0 auto)
+                    #:width 80px
+                    #:height 80px
+                    [div #:box-sizing border-box
+                         #:display block
+                         #:position absolute
+                         #:width ,@spinning-ring-size
+                         #:height ,@spinning-ring-size
+                         #:margin 8px
+                         #:border-width 2px
+                         #:border-style solid
+                         #:border-radius 50%
+                         #:animation (spinning-ring 1.2s (apply cubic-bezier 0.5 0 0.5 1) infinite)
+                         #:border-color (,@spinning-ring-color transparent transparent transparent)]
+                    [(: div (apply nth-child 1)) #:animation-delay -0.45s]
+                    [(: div (apply nth-child 2)) #:animation-delay -0.3s]
+                    [(: div (apply nth-child 3)) #:animation-delay -0.15s]]
+    [@keyframes spinning-ring
+                [0% #:transform (apply rotate 0deg)]
+                [100% #:transform (apply rotate 360deg)]]
+
+    [.reading #:max-width (apply calc (,@article-max-width * 2 + 5em))
               #:margin (0 auto)
-              #:overflow hidden
+              #:font-family (Libre Baskerville) (serif)
+
+              [.container #:display grid
+                          #:column-gap 5em
+                          #:grid-template-columns (,@article-max-width ,@article-max-width)]
+
               [h1 h2 h3
                   #:margin (1em 0)]
               [h3 h4 h5 h6
@@ -212,10 +242,10 @@
                    #:font-size 1.25em
                    #:margin-top 2em]
 
+    [.fadein #:animation (fadein .25s linear 0s)]
     [@keyframes fadein
                 [from #:opacity 0]
                 [to #:opacity 1]]
-
     [@keyframes fadeout
                 [from #:opacity 1
                       #:left 0]

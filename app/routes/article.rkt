@@ -3,6 +3,7 @@
 (require (except-in racket/list group-by)
          racket/sequence
 
+         threading
          deta
          db
 
@@ -40,8 +41,8 @@
                       (in-entities (current-database-connection)
                                    (select-feed-stats #:user-id (current-user-id))))])
     (render
-      ; (:article/previews articles current-page page-count scheduled)
-      (:reader feed-stats articles current-page page-count))))
+     ; (:article/previews articles current-page page-count scheduled)
+     (:reader feed-stats articles current-page page-count))))
 
 (define (/arcticles/<id>/show req id)
   (let* ([article (lookup (current-database-connection)
@@ -70,10 +71,13 @@
   (let* ([article (lookup (current-database-connection)
                           (find-article-by-id #:id id
                                               #:user-id (current-user-id)))]
-         [summary (article-generated-summary article)])
+         [summary (article-generated-summary-html article)])
     (when (sql-null? summary)
-      (set! summary (generate-article-content-summary article))
+      (define-values (text html) (generate-article-content-summary article))
+      (set! summary html)
       (update-one! (current-database-connection)
-                   (set-article-generated-summary article summary)))
+                   (~> article
+                       (set-article-generated-summary-html html)
+                       (set-article-generated-summary-text text))))
 
     (json 'summary summary)))

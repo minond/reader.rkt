@@ -23,12 +23,13 @@
    [link string/f #:contract non-empty-string?]
    [title string/f #:contract non-empty-string?]
    [description string/f]
-   [generated-summary string/f #:nullable]
    [type string/f]
    [date datetime/f]
    [content-data string/f]
    [content-html string/f]
    [content-text string/f]
+   [generated-summary-html string/f #:nullable]
+   [generated-summary-text string/f #:nullable]
    [(archived #f) boolean/f]
    [(created-at (now/utc)) datetime/f]))
 
