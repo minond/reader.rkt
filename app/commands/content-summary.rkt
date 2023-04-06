@@ -5,10 +5,16 @@
          reader/lib/html
          reader/lib/openai/client)
 
-(provide generate-article-content-summary)
+(provide generate-article-content-summary
+         process-article-chat)
 
-(define (generate-article-content-summary-prompt link)
-  (format "Write a summary of ~a to be displayed besides the article" link))
+(define (article-content-summary-prompt article)
+  (format "Write a short summary of this article: ~a"
+          (substring (article-content-html article) 0 4000)))
+
+(define (article-chat-prompt article)
+  (format "This conversation is about this article: ~a"
+          (substring (article-content-html article) 0 4000)))
 
 (define (generate-article-content-summary article)
   (define response
@@ -16,13 +22,24 @@
      #:model "gpt-3.5-turbo"
      #:user (format "user-~a" (article-user-id article))
      #:messages (list (hash 'role "user"
-                            'content (generate-article-content-summary-prompt (article-link article))))))
-
-  (define text (~> response
-                   (hash-ref 'choices)
-                   (car)
-                   (hash-ref 'message)
-                   (hash-ref 'content)))
-
+                            'content (article-content-summary-prompt article)))))
+  (define text (first-message-content response))
   (values text
           (text->html text)))
+
+(define (process-article-chat article messages)
+  (define response
+    (create-chat-completion
+     #:model "gpt-3.5-turbo"
+     #:user (format "user-~a" (article-user-id article))
+     #:messages (cons (hash 'role "user"
+                            'content (article-chat-prompt article))
+                      messages)))
+  (first-message-content response))
+
+(define (first-message-content response)
+  (~> response
+      (hash-ref 'choices)
+      (car)
+      (hash-ref 'message)
+      (hash-ref 'content)))

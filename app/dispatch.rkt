@@ -39,5 +39,6 @@
    [("articles" (integer-arg) "unarchive") #:method "put" (authenticated-route /articles/<id>/unarchive)]
    [("articles" (integer-arg) "unarchive") (authenticated-route /articles/<id>/unarchive)]
    [("articles" (integer-arg) "summary") (authenticated-route /articles/<id>/summary)]
+   [("articles" (integer-arg) "chat") #:method "post" (authenticated-route /articles/<id>/chat)]
 
    [else (authenticated-route /not-found)]))

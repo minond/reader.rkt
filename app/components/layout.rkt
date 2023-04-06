@@ -150,7 +150,7 @@
         [a #:color initial]]
 
     [form #:margin (3em auto)
-          #:max-width 40em
+          #:max-width ,@article-max-width
           [(attribute input (= type "url"))
            (attribute input (= type "input"))
            (attribute input (= type "email"))
@@ -236,6 +236,31 @@
      #:display block]
     [(> (.reading article) object)
      #:min-height 20px]
+
+    [.chat
+     #:position relative
+     [.input-wrapper #:margin-top 1em
+                     #:box-shadow (0 2px 7px 1px (apply rgb 193 193 193))
+                     #:border-radius 4px
+                     #:overflow hidden
+                     [textarea #:display block
+                               #:width 100%
+                               #:font-size 1em
+                               #:padding .5em
+                               #:border none
+                               #:outline none]]
+     [.disclaimer #:font-style italic
+                  #:text-align center
+                  #:font-size .85em
+                  #:padding 0
+                  #:margin (.75em 0)]]
+
+    [.summary #:font-size .85em
+              #:padding .5em]
+    [.summary .assistant .user
+              #:font-size .85em
+              #:margin 0
+              #:padding .5em]
 
     [.system-error #:color ,@failure-color-dark
                    #:text-align center

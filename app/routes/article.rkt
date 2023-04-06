@@ -3,9 +3,11 @@
 (require (except-in racket/list group-by)
          racket/sequence
 
+         web-server/servlet
          threading
          deta
          db
+         json
 
          reader/app/models/article
          reader/app/models/feed
@@ -19,7 +21,8 @@
          /arcticles/<id>/show
          /articles/<id>/archive
          /articles/<id>/unarchive
-         /articles/<id>/summary)
+         /articles/<id>/summary
+         /articles/<id>/chat)
 
 (define page-size 20)
 
@@ -79,5 +82,15 @@
                    (~> article
                        (set-article-generated-summary-html html)
                        (set-article-generated-summary-text text))))
-
     (json 'summary summary)))
+
+(define (/articles/<id>/chat req id)
+  (let* ([article (lookup (current-database-connection)
+                          (find-article-by-id #:id id
+                                              #:user-id (current-user-id)))]
+         [summary (article-generated-summary-html article)]
+         [body (bytes->string/utf-8 (request-post-data/raw req))]
+         [chat (string->jsexpr body)]
+         [messages (hash-ref chat 'chat)]
+         [response (process-article-chat article messages)])
+    (json 'response response)))

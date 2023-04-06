@@ -33,45 +33,103 @@
                    (feed-title feed)))
           (:time 'datetime: datetime humandate)
           (:spacer #:direction horizontal #:size small)
+          (:input 'id: 'article-id
+                  'type: 'hidden
+                  'value: (article-id article))
           (:div 'class: "container"
                 (:article/content article)
                 (:div (:article/summary article)
+                      (:spacer #:direction horizontal #:size small)
                       (:article/chat article)))
           )))
 
 (define (:article/content article)
   (:article
-    (:literal (article-content-html article))))
+   (:literal (article-content-html article))))
 
 (define (:article/chat article)
-  null)
+  (:div 'class: "chat"
+        (:div 'class: "messages")
+        (:div 'class: "input-wrapper"
+              (:textarea 'rows: 1
+                         'placeholder: "Send a message..."))
+        (:p 'class: "disclaimer"
+            "ChatGPT may produce inaccurate information about people, places, or facts.")
+        (:script/inline 'type: "text/javascript" article-chat-js)))
 
 (define (:article/summary article)
   (let* ([summary-html (article-generated-summary-html article)]
          [has-summary? (not (sql-null? summary-html))])
     (:div 'id: "summary"
+          'class: "summary"
           (if has-summary?
               (:literal summary-html)
               (:div 'class: "loading-summary"
-                    (:input 'id: 'article-id
-                            'type: 'hidden
-                            'value: (article-id article))
                     (:spinning-ring)))
-          (:script/inline 'type: "text/javascript" article-ai-js))))
+          (:script/inline 'type: "text/javascript" article-summary-js))))
 
-(define article-ai-js "
+(define article-chat-js "
 (function () {
 
-const $ = document.querySelector.bind(document)
-const $$ = document.querySelectorAll.bind(document)
+const chat = []
+const messageEl = document.querySelector('.chat textarea')
+const messagesEl = document.querySelector('.chat .messages')
+const articleIdEl = document.querySelector('#article-id')
+const articleId = articleIdEl.value
 
-const summaryEl = $('#summary')
-const articleIdEl = $('#summary #article-id')
-const loadingSummaryEl = $('#summary .loading-summary')
+messageEl.addEventListener('keypress', function (ev) {
+  switch (ev.keyCode) {
+    case 13:
+      sendMessage()
+      ev.preventDefault()
+      return false
+  }
+})
+
+function sendMessage() {
+  const content = messageEl.value
+  const message = {
+    role: 'user',
+    content: messageEl.value,
+  }
+  chat.push(message)
+  showMessage(message)
+  messageEl.value = ''
+
+  fetch(`/articles/${articleId}/chat`, {
+    method: 'POST',
+    body: JSON.stringify({ chat }),
+  })
+    .then((res) => res.json())
+    .then((body) => {
+      const message = {
+        role: 'assistant',
+        content: body.response
+      }
+      chat.push(message)
+      showMessage(message)
+    })
+}
+
+function showMessage(message) {
+  const p = document.createElement('p')
+  p.className = `${message.role} fadein`
+  p.innerText = message.content
+  messagesEl.appendChild(p)
+}
+
+})()")
+
+(define article-summary-js "
+(function () {
+
+const summaryEl = document.querySelector('#summary')
+const loadingSummaryEl = document.querySelector('#summary .loading-summary')
+const articleIdEl = document.querySelector('#article-id')
+const articleId = articleIdEl.value
 
 if (loadingSummaryEl && articleIdEl) {
-  const url = `/articles/${articleIdEl.value}/summary`
-  fetch(url)
+  fetch(`/articles/${articleId}/summary`)
     .then((res) => res.json())
     .then((body) => {
       const p = document.createElement('p')
