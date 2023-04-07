@@ -19,7 +19,7 @@
 (define (trim-prompt-part str)
   (if (< (string-length str) 4000)
       str
-      (substring str 4000)))
+      (substring str 0 4000)))
 
 (define (generate-article-content-summary article)
   (define response
