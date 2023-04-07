@@ -71,13 +71,15 @@
 (define article-chat-js "
 import markdownIt from 'https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/+esm'
 
-const renderer = markdownIt({ breaks: true })
-const storedChat = sessionStorage.getItem('reader/chat')
-const chat = storedChat ? JSON.parse(storedChat) : []
 const messageEl = document.querySelector('.chat textarea')
 const messagesEl = document.querySelector('.chat .messages')
 const articleIdEl = document.querySelector('#article-id')
 const articleId = articleIdEl.value
+
+const renderer = markdownIt({ breaks: true })
+const storageKey = `reader/chat/${articleId}`
+const storedChat = localStorage.getItem(storageKey)
+const chat = storedChat ? JSON.parse(storedChat) : []
 
 chat.forEach((message) => showMessage(message, false))
 
@@ -111,7 +113,7 @@ function storeMessage(role, content) {
   const message = { role, content }
   chat.push(message)
   showMessage(message)
-  sessionStorage.setItem('reader/chat', JSON.stringify(chat))
+  localStorage.setItem(storageKey, JSON.stringify(chat))
 }
 
 function showMessage(message, animate = true) {
