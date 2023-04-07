@@ -55,7 +55,7 @@
                          'placeholder: "Send a message..."))
         (:p 'class: "disclaimer"
             "ChatGPT may produce inaccurate information about people, places, or facts.")
-        (:script/inline 'type: "text/javascript" article-chat-js)))
+        (:script/inline 'type: 'module article-chat-js)))
 
 (define (:article/summary article)
   (let* ([summary-html (article-generated-summary-html article)]
@@ -69,8 +69,9 @@
           (:script/inline 'type: "text/javascript" article-summary-js))))
 
 (define article-chat-js "
-(function () {
+import markdownIt from 'https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/+esm'
 
+const renderer = markdownIt({ breaks: true })
 const storedChat = sessionStorage.getItem('reader/chat')
 const chat = storedChat ? JSON.parse(storedChat) : []
 const messageEl = document.querySelector('.chat textarea')
@@ -117,11 +118,10 @@ function showMessage(message, animate = true) {
   const p = document.createElement('p')
   p.classList.add(message.role)
   if (animate) p.classList.add('fadein')
-  p.innerText = message.content
+  p.innerHTML = renderer.render(message.content)
   messagesEl.appendChild(p)
 }
-
-})()")
+")
 
 (define article-summary-js "
 (function () {
