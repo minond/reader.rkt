@@ -1,6 +1,9 @@
 #lang racket/base
 
-(require web-server/servlet
+(require racket/match
+
+         web-server/servlet
+         web-server/dispatchers/dispatch
 
          reader/app/routes/article
          reader/app/routes/feed
@@ -41,4 +44,11 @@
    [("articles" (integer-arg) "summary") (authenticated-route /articles/<id>/summary)]
    [("articles" (integer-arg) "chat") #:method "post" (authenticated-route /articles/<id>/chat)]
 
-   [else (authenticated-route /not-found)]))
+   [else
+    (lambda (req)
+      (match (url-path (request-uri req))
+        [(list (path/param "public" _) _ ...)
+         ; TODO this will respond with the default 404 page
+         ((next-dispatcher) req)]
+        [else
+         ((authenticated-route /not-found) req)]))]))

@@ -41,7 +41,7 @@
                 (:div (:article/summary article)
                       (:spacer #:direction horizontal #:size small)
                       (:article/chat article)))
-          )))
+          (:script 'type: 'module 'src: "/public/ai.js"))))
 
 (define (:article/content article)
   (:article
@@ -54,8 +54,7 @@
               (:textarea 'rows: 1
                          'placeholder: "Send a message..."))
         (:p 'class: "disclaimer"
-            "ChatGPT may produce inaccurate information about people, places, or facts.")
-        (:script/inline 'type: 'module article-chat-js)))
+            "ChatGPT may produce inaccurate information about people, places, or facts.")))
 
 (define (:article/summary article)
   (let* ([summary-html (article-generated-summary-html article)]
@@ -65,87 +64,7 @@
           (if has-summary?
               (:literal summary-html)
               (:div 'class: "loading-summary"
-                    (:spinning-ring)))
-          (:script/inline 'type: "text/javascript" article-summary-js))))
-
-(define article-chat-js "
-import markdownIt from 'https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/+esm'
-
-const messageEl = document.querySelector('.chat textarea')
-const messagesEl = document.querySelector('.chat .messages')
-const articleIdEl = document.querySelector('#article-id')
-const articleId = articleIdEl.value
-
-const renderer = markdownIt({ breaks: true })
-const storageKey = `reader/chat/${articleId}`
-const storedChat = localStorage.getItem(storageKey)
-const chat = storedChat ? JSON.parse(storedChat) : []
-
-chat.forEach((message) => showMessage(message, false))
-
-messageEl.addEventListener('keypress', function (ev) {
-  switch (ev.keyCode) {
-    case 13:
-      sendMessage()
-      ev.preventDefault()
-      return false
-  }
-})
-
-function sendMessage() {
-  let content = messageEl.value
-  if (!content) {
-    return
-  }
-
-  storeMessage('user', content)
-  messageEl.value = ''
-
-  fetch(`/articles/${articleId}/chat`, {
-    method: 'POST',
-    body: JSON.stringify({ chat }),
-  })
-    .then((res) => res.json())
-    .then((body) => storeMessage('assistant', body.response))
-}
-
-function storeMessage(role, content) {
-  const message = { role, content }
-  chat.push(message)
-  showMessage(message)
-  localStorage.setItem(storageKey, JSON.stringify(chat))
-}
-
-function showMessage(message, animate = true) {
-  const p = document.createElement('p')
-  p.classList.add(message.role)
-  if (animate) p.classList.add('fadein')
-  p.innerHTML = renderer.render(message.content)
-  messagesEl.appendChild(p)
-}
-")
-
-(define article-summary-js "
-(function () {
-
-const summaryEl = document.querySelector('#summary')
-const loadingSummaryEl = document.querySelector('#summary .loading-summary')
-const articleIdEl = document.querySelector('#article-id')
-const articleId = articleIdEl.value
-
-if (loadingSummaryEl && articleIdEl) {
-  fetch(`/articles/${articleId}/summary`)
-    .then((res) => res.json())
-    .then((body) => {
-      const p = document.createElement('p')
-      p.classList.add('fadein')
-      p.innerHTML = body.summary
-      summaryEl.removeChild(loadingSummaryEl)
-      summaryEl.appendChild(p)
-    })
-}
-
-})()")
+                    (:spinning-ring))))))
 
 (define (:article/list feed articles current-page page-count)
   (list
