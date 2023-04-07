@@ -73,6 +73,7 @@
 
 (define content-max-width (css-expr 100%))
 (define article-max-width (css-expr 40em))
+(define article-column-gap (css-expr 5em))
 (define content-horizontal-padding (css-expr 2em))
 
 (define spinning-ring-color (css-expr (apply rgb 61 77 255)))
@@ -126,6 +127,12 @@
      [.separator
       .actions
       #:opacity 1]]
+    [@media (and screen (#:max-width (apply calc (,@article-max-width * 2 + ,article-column-gap * 4))))
+            [header
+             #:background-color ,@body-background-color
+             [.actions
+              .separator
+              #:opacity 1]]]
 
     [main #:padding ,@content-horizontal-padding]
 
@@ -197,12 +204,12 @@
                 [0% #:transform (apply rotate 0deg)]
                 [100% #:transform (apply rotate 360deg)]]
 
-    [.reading #:max-width (apply calc (,@article-max-width * 2 + 5em))
+    [.reading #:max-width (apply calc (,article-max-width * 2 + ,article-column-gap))
               #:margin (0 auto)
               #:font-family (Libre Baskerville) (serif)
 
               [.container #:display grid
-                          #:column-gap 5em
+                          #:column-gap ,article-column-gap
                           #:grid-template-columns (,@article-max-width ,@article-max-width)]
 
               [h1 h2 h3
