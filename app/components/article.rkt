@@ -71,11 +71,14 @@
 (define article-chat-js "
 (function () {
 
-const chat = []
+const storedChat = sessionStorage.getItem('reader/chat')
+const chat = storedChat ? JSON.parse(storedChat) : []
 const messageEl = document.querySelector('.chat textarea')
 const messagesEl = document.querySelector('.chat .messages')
 const articleIdEl = document.querySelector('#article-id')
 const articleId = articleIdEl.value
+
+chat.forEach((message) => showMessage(message, false))
 
 messageEl.addEventListener('keypress', function (ev) {
   switch (ev.keyCode) {
@@ -87,13 +90,12 @@ messageEl.addEventListener('keypress', function (ev) {
 })
 
 function sendMessage() {
-  const content = messageEl.value
-  const message = {
-    role: 'user',
-    content: messageEl.value,
+  let content = messageEl.value
+  if (!content) {
+    return
   }
-  chat.push(message)
-  showMessage(message)
+
+  storeMessage('user', content)
   messageEl.value = ''
 
   fetch(`/articles/${articleId}/chat`, {
@@ -101,19 +103,20 @@ function sendMessage() {
     body: JSON.stringify({ chat }),
   })
     .then((res) => res.json())
-    .then((body) => {
-      const message = {
-        role: 'assistant',
-        content: body.response
-      }
-      chat.push(message)
-      showMessage(message)
-    })
+    .then((body) => storeMessage('assistant', body.response))
 }
 
-function showMessage(message) {
+function storeMessage(role, content) {
+  const message = { role, content }
+  chat.push(message)
+  showMessage(message)
+  sessionStorage.setItem('reader/chat', JSON.stringify(chat))
+}
+
+function showMessage(message, animate = true) {
   const p = document.createElement('p')
-  p.className = `${message.role} fadein`
+  p.classList.add(message.role)
+  if (animate) p.classList.add('fadein')
   p.innerText = message.content
   messagesEl.appendChild(p)
 }
