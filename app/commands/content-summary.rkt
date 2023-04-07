@@ -10,11 +10,16 @@
 
 (define (article-content-summary-prompt article)
   (format "Write a short summary of this article: ~a"
-          (substring (article-content-html article) 0 4000)))
+          (trim-prompt-part (article-content-html article))))
 
 (define (article-chat-prompt article)
   (format "This conversation is about this article: ~a"
-          (substring (article-content-html article) 0 4000)))
+          (trim-prompt-part (article-content-html article))))
+
+(define (trim-prompt-part str)
+  (if (< (string-length str) 4000)
+      str
+      (substring str 4000)))
 
 (define (generate-article-content-summary article)
   (define response
