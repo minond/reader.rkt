@@ -17,7 +17,7 @@
 (define (:feed/list feed-stats)
   (list
    (:spacer #:direction vertical #:size small)
-   (:table 'class: "table-content"
+   (:table 'class: "table-content with-indicator"
     (:thead
      (:th)
      (:th "Title")

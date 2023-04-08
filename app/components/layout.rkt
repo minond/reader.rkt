@@ -141,12 +141,18 @@
     [(> td p) #:margin-top 0]
 
     [.table-content
+     #:font-size 1.1em
+     #:max-width (apply calc (,article-max-width * 2))
+     #:margin (0 auto)
      [td th
          #:padding 0.75em
          #:margin 0]
      [th #:text-align left
          #:font-weight 900]
      [td #:border-top (1px solid ,@border-color-light)]]
+
+    [.table-content.with-indicator
+     [(: td first-child) #:width 20px]]
 
     [a #:color ,@link-color-normal
        #:text-decoration none]
