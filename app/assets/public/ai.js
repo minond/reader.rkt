@@ -77,9 +77,10 @@ function storeMessage(role, content) {
 }
 
 function showMessage(message, animate = true) {
-  const p = document.createElement("p");
-  p.innerHTML = renderer.render(message.content);
-  p.classList.add(message.role);
-  if (animate) p.classList.add("fadein");
-  messagesEl.appendChild(p);
+  const container = document.createElement("div");
+  container.innerHTML = renderer.render(message.content);
+  container.classList.add("message");
+  container.classList.add(message.role);
+  if (animate) container.classList.add("fadein");
+  messagesEl.appendChild(container);
 }

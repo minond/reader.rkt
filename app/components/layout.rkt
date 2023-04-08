@@ -260,7 +260,7 @@
                                #:outline none]
                      [.spinning-ring #:display none
                                      #:position absolute
-                                     #:top 2px
+                                     #:top 0px
                                      #:right 5px]]
      [.disclaimer #:font-style italic
                   #:text-align center
@@ -270,10 +270,11 @@
     [.chat.loading
      [.spinning-ring #:display block]]
 
-    [.summary #:padding .5em]
-    [.summary .assistant .user
-              #:margin 0
-              #:padding .5em]
+    [.summary #:padding (0 1em)]
+    [.message #:padding 1em
+              [p #:padding 0
+                 #:margin 0]]
+    [.message.assistant #:background-color (apply rgb 240 240 240)]
 
     [.system-error #:color ,@failure-color-dark
                    #:text-align center
