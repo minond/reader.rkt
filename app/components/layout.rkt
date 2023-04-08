@@ -88,7 +88,7 @@
           #:background-color ,@body-background-color
           #:margin 0
           #:line-height 1.6
-          #:font-size 16px
+          #:font-size 14px
           #:color |#444|
           #:padding 0]
 
@@ -113,7 +113,7 @@
             [td #:padding (.5em ,@content-horizontal-padding)]
             [a #:color initial]
             [.actions #:text-align right
-                      [a #:font-size 0.8em
+                      [a #:font-size 0.9em
                          #:margin-left 2em
                          #:color ,@text-color-light
                          #:font-weight bold]]]
@@ -177,8 +177,7 @@
            (attribute input (= type "cancel"))
            #:font-size 1.1em
            #:margin-top 0.5em
-           #:margin-right 0.5em]
-          [a #:font-size 0.8em]]
+           #:margin-right 0.5em]]
 
     ; Taken from https://loading.io/css/
     [.spinning-ring #:display block
@@ -216,7 +215,7 @@
                           #:color ,@text-color-light]
               [blockquote #:font-style italic]
               [time .action
-                    #:font-size 0.75em
+                    #:font-size 0.8em
                     #:color ,@text-color-light]
               [img iframe
                    #:max-width 100%
@@ -259,7 +258,7 @@
                                      #:right 5px]]
      [.disclaimer #:font-style italic
                   #:text-align center
-                  #:font-size .85em
+                  #:font-size .75em
                   #:padding 0
                   #:margin (.75em 0)]]
     [.chat.loading
@@ -267,13 +266,12 @@
 
     [.summary #:padding .5em]
     [.summary .assistant .user
-              #:font-size .85em
               #:margin 0
               #:padding .5em]
 
     [.system-error #:color ,@failure-color-dark
                    #:text-align center
-                   #:font-size 1.25em
+                   #:font-size 1.5em
                    #:margin-top 2em]
 
     [.fadein #:animation (fadein .25s linear 0s)]
@@ -288,7 +286,6 @@
 
     [.flash #:display inline-block
             #:animation (fadein .15s linear 0s) (fadeout .3s linear forwards 5s)
-            #:font-size .9em
             #:font-weight 100
             #:position relative
             #:margin-left 1em
@@ -376,22 +373,19 @@
      [.reader-article-title
       .reader-article-description
       #:transition (color .25s)
-      #:color ,@text-color-light]
+      #:color black]
      [.reader-article-title
       #:font-size 1.25em
       #:font-weight bold]
      [.reader-article-description
-      #:font-weight 200]]
+      #:margin-bottom 0]]
     [(: .reader-article (apply not (: first-child)))
      #:border-top (1px solid ,@border-color-lighter)]
     [.reader-article:hover
      .reader-article:focus
      #:text-decoration none
      [.reader-article-title
-      #:text-decoration underline]
-     [.reader-article-title
-      .reader-article-description
-      #:color black]]
+      #:text-decoration underline]]
 
     [.page-links #:padding 1em
                  #:text-align center
