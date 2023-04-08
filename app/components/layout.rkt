@@ -272,9 +272,24 @@
 
     [.summary #:padding (0 1em)]
     [.message #:padding 1em
+              #:position relative
+              [time #:opacity 0
+                    #:transition (opacity .2s)
+                    #:position absolute
+                    #:bottom 0px
+                    #:right 0px
+                    #:background-color (apply rgb 240 240 240)
+                    #:padding (2px 8px)]
               [p #:padding 0
                  #:margin 0]]
-    [.message.assistant #:background-color (apply rgb 240 240 240)]
+    [.message:hover
+     [time #:opacity 1]]
+    [.message.user
+     (.message.user time)
+     #:background-color ,body-background-color]
+    [.message.assistant
+     (.message.assistant time)
+     #:background-color (apply rgb 240 240 240)]
 
     [.system-error #:color ,@failure-color-dark
                    #:text-align center

@@ -59,7 +59,12 @@ function sendMessage() {
 
   fetch(`/articles/${articleId}/chat`, {
     method: "POST",
-    body: JSON.stringify({ chat }),
+    body: JSON.stringify({
+      chat: chat.map((message) => ({
+        role: message.role,
+        content: message.content,
+      })),
+    }),
   })
     .then((res) => res.json())
     .then((body) => {
@@ -70,7 +75,8 @@ function sendMessage() {
 }
 
 function storeMessage(role, content) {
-  const message = { role, content };
+  const time = new Date().valueOf();
+  const message = { role, content, time };
   chat.push(message);
   showMessage(message);
   localStorage.setItem(storageKey, JSON.stringify(chat));
@@ -82,5 +88,10 @@ function showMessage(message, animate = true) {
   container.classList.add("message");
   container.classList.add(message.role);
   if (animate) container.classList.add("fadein");
+
+  const timestamp = document.createElement("time");
+  timestamp.innerText = new Date(message.time).toLocaleString();
+
+  container.appendChild(timestamp);
   messagesEl.appendChild(container);
 }
