@@ -51,8 +51,8 @@
   (:div 'class: "chat"
         (:div 'class: "messages")
         (:div 'class: "input-wrapper"
-              (:textarea 'rows: 1
-                         'placeholder: "Send a message..."))
+              (:textarea 'rows: 1 'placeholder: "Send a message...")
+              (:spinning-ring 30))
         (:p 'class: "disclaimer"
             "ChatGPT may produce inaccurate information about people, places, or facts.")))
 
@@ -64,7 +64,7 @@
           (if has-summary?
               (:literal summary-html)
               (:div 'class: "loading-summary"
-                    (:spinning-ring))))))
+                    (:spinning-ring 80))))))
 
 (define (:article/list feed articles current-page page-count)
   (list
@@ -135,9 +135,11 @@
                   'href: (format "/articles/~a/archive" (article-id article))
                   "archive"))))
 
-(define (:spinning-ring)
+(define (:spinning-ring size)
+  (define size-half (floor (/ size 2)))
   (:div 'class: "spinning-ring"
-        (:div)
-        (:div)
-        (:div)
-        (:div)))
+        'style: (format "height: ~apx; width: ~apx" size size)
+        (:div 'style: (format "height: ~apx; width: ~apx" size-half size-half))
+        (:div 'style: (format "height: ~apx; width: ~apx" size-half size-half))
+        (:div 'style: (format "height: ~apx; width: ~apx" size-half size-half))
+        (:div 'style: (format "height: ~apx; width: ~apx" size-half size-half))))

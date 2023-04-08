@@ -1,5 +1,6 @@
 import markdownIt from "https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/+esm";
 
+const chatEl = document.querySelector(".chat");
 const messageEl = document.querySelector(".chat textarea");
 const messagesEl = document.querySelector(".chat .messages");
 const summaryEl = document.querySelector("#summary");
@@ -53,13 +54,19 @@ function sendMessage() {
 
   storeMessage("user", content);
   messageEl.value = "";
+  messageEl.disabled = true;
+  chatEl.classList.add("loading");
 
   fetch(`/articles/${articleId}/chat`, {
     method: "POST",
     body: JSON.stringify({ chat }),
   })
     .then((res) => res.json())
-    .then((body) => storeMessage("assistant", body.response));
+    .then((body) => {
+      messageEl.disabled = false;
+      chatEl.classList.remove("loading");
+      storeMessage("assistant", body.response);
+    });
 }
 
 function storeMessage(role, content) {

@@ -77,7 +77,6 @@
 (define content-horizontal-padding (css-expr 2em))
 
 (define spinning-ring-color (css-expr (apply rgb 61 77 255)))
-(define spinning-ring-size (css-expr 42px))
 
 (define css
   (css-expr->css
@@ -184,13 +183,9 @@
     ; Taken from https://loading.io/css/
     [.spinning-ring #:display block
                     #:margin (0 auto)
-                    #:width 80px
-                    #:height 80px
                     [div #:box-sizing border-box
                          #:display block
                          #:position absolute
-                         #:width ,@spinning-ring-size
-                         #:height ,@spinning-ring-size
                          #:margin 8px
                          #:border-width 2px
                          #:border-style solid
@@ -248,6 +243,7 @@
     [.chat
      #:position relative
      [.input-wrapper #:margin-top 1em
+                     #:position relative
                      #:box-shadow (0 2px 7px 1px (apply rgb 193 193 193))
                      #:border-radius 4px
                      #:overflow hidden
@@ -256,15 +252,20 @@
                                #:font-size 1em
                                #:padding .5em
                                #:border none
-                               #:outline none]]
+                               #:outline none]
+                     [.spinning-ring #:display none
+                                     #:position absolute
+                                     #:top 2px
+                                     #:right 5px]]
      [.disclaimer #:font-style italic
                   #:text-align center
                   #:font-size .85em
                   #:padding 0
                   #:margin (.75em 0)]]
+    [.chat.loading
+     [.spinning-ring #:display block]]
 
-    [.summary #:font-size .85em
-              #:padding .5em]
+    [.summary #:padding .5em]
     [.summary .assistant .user
               #:font-size .85em
               #:margin 0
