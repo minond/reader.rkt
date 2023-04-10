@@ -1,17 +1,16 @@
 #lang racket/base
 
-(require racket/string)
+(require racket/string
+         markdown)
 
-(require threading
-         (prefix-in : scribble/html/xml)
-         (prefix-in : scribble/html/html))
+(require threading)
 
 (provide text->html
          html-entity->string
          string-replace-html-entities)
 
 (define (text->html s)
-  (:xml->string (map :p (string-split s "\n\n"))))
+  (string-append* (map xexpr->string (parse-markdown s))))
 
 (define (html-entity->string entity #:fallback [fallback ""])
   (cond
