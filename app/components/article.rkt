@@ -45,7 +45,7 @@
 
 (define (:article/content article)
   (:article
-   (:literal (article-content-html article))))
+   (:literal (article-extracted-content-html article))))
 
 (define (:article/chat article)
   (:div 'class: "chat"
