@@ -120,4 +120,9 @@ function showMessage(message, animate = true) {
   container.appendChild(timestamp);
   messagesEl.appendChild(container);
   scrollToBottomOfMessages();
+  makeChatSticky();
+}
+
+function makeChatSticky() {
+  chatEl.style.top = "30px";
 }
