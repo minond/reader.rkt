@@ -39,10 +39,13 @@ function loadChat() {
 }
 
 function initChat() {
+  const toggleMessagesShadowDebounced = debounce(toggleMessagesShadow, 10)
+  const setMessagesContainerSizeDebounced = debounce(setMessagesContainerSize, 10)
+
   inputEl.addEventListener("keypress", handleChatInput);
-  messagesEl.addEventListener("scroll", toggleMessagesShadow);
-  window.addEventListener("scroll", setMessagesContainerSize);
-  window.addEventListener("resize", setMessagesContainerSize);
+  messagesEl.addEventListener("scroll", toggleMessagesShadowDebounced);
+  window.addEventListener("scroll", setMessagesContainerSizeDebounced);
+  window.addEventListener("resize", setMessagesContainerSizeDebounced);
 }
 
 function handleChatInput(ev) {
@@ -125,4 +128,13 @@ function showMessage(message, animate = true) {
 
 function makeChatSticky() {
   chatEl.style.top = "30px";
+}
+
+function debounce(fn, time) {
+  let timer;
+
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(fn.bind(null, ...args), time);
+  };
 }
