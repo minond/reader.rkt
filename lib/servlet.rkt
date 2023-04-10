@@ -1,12 +1,10 @@
 #lang racket/base
 
-(require racket/runtime-path
-         web-server/servlet-env
+(require web-server/servlet-env
+         reader/lib/app
          reader/lib/parameters)
 
 (provide start-servlet)
-
-(define-runtime-path app-root "../app")
 
 (define (start-servlet)
   (serve/servlet (servlet-app-dispatch)

@@ -13,6 +13,7 @@
          reader/lib/html
          reader/lib/parameters
          reader/lib/extractor
+         reader/lib/extractor/text
          reader/lib/extractor/render
          reader/lib/extractor/metadata
          reader/lib/extractor/document
@@ -73,6 +74,5 @@
                                                    (document-summary document))
                                    #:type (or (metadata-type metadata) "")
                                    #:date (rss-article-date article-data)
-                                   #:content-data "" ; TODO
-                                   #:content-text "" ; TODO
-                                   #:content-html (:xml->string (render-content content))))))))
+                                   #:extracted-content-text (extract-text content)
+                                   #:extracted-content-html (:xml->string (render-content content))))))))

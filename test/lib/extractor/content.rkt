@@ -1,30 +1,19 @@
 #lang racket/base
 
-(require racket/string
-         racket/file
-         racket/list
-
-         rackunit
-         net/url-string
-
-         reader/test/lib/extractor/data
+(require rackunit
          reader/lib/extractor/content
-         (prefix-in html- reader/lib/extractor/html))
+         reader/test/lib/extractor/data)
 
 (module+ test
   (require rackunit/text-ui)
   (run-tests tests))
-
-(define minond-xyz-same-adt-content
-  (extract-test-data data/minond-xyz-same-adt))
-
 
 (define tests
   (test-suite
    "Content extraction"
 
    (check-match
-    minond-xyz-same-adt-content
+    (extract-test-data data/minond-xyz-same-adt)
     (division
      empty
      (list

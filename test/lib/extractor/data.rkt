@@ -5,7 +5,9 @@
          net/url-string
 
          reader/lib/extractor/content
-         (prefix-in html- reader/lib/extractor/html))
+         (prefix-in html- reader/lib/extractor/html)
+
+         reader/test/setup)
 
 (provide extract-test-data
          data/minond-xyz-same-adt)
@@ -22,4 +24,4 @@
 
 (define data/minond-xyz-same-adt
   (load-test-data "https://minond.xyz/posts/adt-type-meaning"
-                  "./data/minond.xyz-posts-adt-type-meaning.html"))
+                  (build-path test-root "lib/extractor/data/minond.xyz-posts-adt-type-meaning.html")))
