@@ -246,7 +246,9 @@
      #:min-height 20px]
 
     [.chat
-     #:position relative
+     #:position -webkit-sticky
+     #:position sticky
+     #:top 30px
      [.input-wrapper #:margin-top 1em
                      #:position relative
                      #:box-shadow (0 2px 7px 1px (apply rgb 193 193 193))
@@ -271,6 +273,15 @@
      [.spinning-ring #:display block]]
 
     [.summary #:padding (0 1em)]
+    [.shadow #:opacity 0
+             #:transition opacity .25s
+             #:height 6px
+             #:width 100%
+             #:background-color (apply rgba 128 128 128 0.09)
+             #:position absolute
+             #:top 0]
+    [.messages #:transition max-height .2s
+               #:overflow-y scroll]
     [.message #:padding 1em
               #:position relative
               [time #:opacity 0
@@ -281,7 +292,8 @@
                     #:background-color (apply rgb 240 240 240)
                     #:padding (2px 8px)]
               [p #:padding 0
-                 #:margin 0]]
+                 #:margin 0]
+              [(p + p) #:margin-top 14px]]
     [.message:hover
      [time #:opacity 1]]
     [.message.user

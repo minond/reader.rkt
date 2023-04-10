@@ -38,9 +38,9 @@
                   'value: (article-id article))
           (:div 'class: "container"
                 (:article/content article)
-                (:div (:article/summary article)
-                      (:spacer #:direction horizontal #:size small)
-                      (:article/chat article)))
+                (:aside (:article/summary article)
+                        (:spacer #:direction horizontal #:size small)
+                        (:article/chat article)))
           (:script 'type: 'module 'src: "/public/ai.js"))))
 
 (define (:article/content article)
@@ -50,6 +50,7 @@
 (define (:article/chat article)
   (:div 'class: "chat"
         (:div 'class: "messages")
+        (:div 'class: "shadow")
         (:div 'class: "input-wrapper"
               (:textarea 'rows: 1 'placeholder: "Send a message...")
               (:spinning-ring 30))

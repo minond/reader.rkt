@@ -1,7 +1,8 @@
 import markdownIt from "https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/+esm";
 
 const chatEl = document.querySelector(".chat");
-const messageEl = document.querySelector(".chat textarea");
+const inputEl = document.querySelector(".chat textarea");
+const shadowEl = document.querySelector(".chat .shadow");
 const messagesEl = document.querySelector(".chat .messages");
 const summaryEl = document.querySelector("#summary");
 const loadingSummaryEl = document.querySelector("#summary .loading-summary");
@@ -16,6 +17,8 @@ const chat = storedChat ? JSON.parse(storedChat) : [];
 loadSummary();
 loadChat();
 initChat();
+setMessagesContainerSize();
+scrollToBottomOfMessages();
 
 function loadSummary() {
   if (loadingSummaryEl && articleIdEl) {
@@ -36,25 +39,47 @@ function loadChat() {
 }
 
 function initChat() {
-  messageEl.addEventListener("keypress", function (ev) {
-    switch (ev.keyCode) {
-      case 13:
-        sendMessage();
-        ev.preventDefault();
-        return false;
-    }
-  });
+  inputEl.addEventListener("keypress", handleChatInput);
+  messagesEl.addEventListener("scroll", toggleMessagesShadow);
+  window.addEventListener("scroll", setMessagesContainerSize);
+  window.addEventListener("resize", setMessagesContainerSize);
+}
+
+function handleChatInput(ev) {
+  switch (ev.keyCode) {
+    case 13:
+      sendMessage();
+      ev.preventDefault();
+      return false;
+  }
+}
+
+function toggleMessagesShadow() {
+  shadowEl.style.opacity = messagesEl.scrollTop < 10 ? 0 : 1;
+}
+
+function scrollToBottomOfMessages() {
+  messagesEl.scrollTo(0, messagesEl.scrollHeight);
+}
+
+function setMessagesContainerSize() {
+  const verticalMargins = 100;
+  const maxHeight = Math.max(
+    innerHeight - chatEl.getBoundingClientRect().top - verticalMargins,
+    150
+  );
+  messagesEl.style.maxHeight = `${maxHeight}px`;
 }
 
 function sendMessage() {
-  let content = messageEl.value;
+  let content = inputEl.value;
   if (!content) {
     return;
   }
 
   storeMessage("user", content);
-  messageEl.value = "";
-  messageEl.disabled = true;
+  inputEl.value = "";
+  inputEl.disabled = true;
   chatEl.classList.add("loading");
 
   fetch(`/articles/${articleId}/chat`, {
@@ -68,7 +93,7 @@ function sendMessage() {
   })
     .then((res) => res.json())
     .then((body) => {
-      messageEl.disabled = false;
+      inputEl.disabled = false;
       chatEl.classList.remove("loading");
       storeMessage("assistant", body.response);
     });
@@ -94,4 +119,5 @@ function showMessage(message, animate = true) {
 
   container.appendChild(timestamp);
   messagesEl.appendChild(container);
+  scrollToBottomOfMessages();
 }
