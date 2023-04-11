@@ -21,6 +21,8 @@
          [(separator) ""]
          [(line-break) ""]
          [(image _ _ _) ""]
+         [(iframe _ _) ""]
+         [(video _ _) ""]
          [(text text) text]
          [(entity id) (html-entity->string id)]
          [(paragraph _ content) (extract-text content)]
