@@ -30,7 +30,7 @@
                           (log-info "stopping worker:~a" id)))
             (handle-evt (alarm-evt (+ (current-inexact-milliseconds) 1000))
                         (lambda (args)
-                          (define job (acquire-next-job! (current-database-connection)))
+                          (define job (acquire-job! (current-database-connection)))
                           (when job (safe-run-job job))
                           (loop)))))))))
 

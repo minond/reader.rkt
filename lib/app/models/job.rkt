@@ -19,7 +19,8 @@
          (rename-out [make-job-override make-job])
          job-command
          job-label
-         acquire-next-job!
+         acquire-job!
+         schedule-job!
          job-completed!
          job-errored!)
 
@@ -50,7 +51,11 @@
   (-> job? serializable?)
   (deserialize (fasl->s-exp (job-data job))))
 
-(define (acquire-next-job! [conn (current-database-connection)])
+(define (schedule-job! command [conn (current-database-connection)])
+  (insert-one! (current-database-connection)
+               (make-job-override #:command command)))
+
+(define (acquire-job! [conn (current-database-connection)])
   (let/cc return
     (define job (lookup conn (find-ready-job)))
     (unless (job? job)

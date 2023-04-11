@@ -4,6 +4,7 @@
          deta
          deta/reflect
 
+         reader/app/commands/fetch-feed-articles
          reader/app/models/article
          reader/app/models/feed
          reader/app/models/user
@@ -13,6 +14,7 @@
          reader/lib/app/models/job
          reader/lib/parameters
          reader/lib/logger
+         reader/lib/job
          reader/lib/servlet)
 
 (let ([pool (connection-pool
@@ -27,7 +29,11 @@
 (create-table! (current-database-connection) 'user)
 (create-table! (current-database-connection) 'job)
 
+(register-job-handler! fetch-feed-articles fetch-feed-articles/handler)
+
 (parameterize ([current-logger application-logger]
                [servlet-app-dispatch app-dispatch]
                [default-layout layout])
-  (start-servlet))
+  (define stop-manager (make-job-manager))
+  (start-servlet)
+  (stop-manager))

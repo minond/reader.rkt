@@ -12,6 +12,7 @@
          reader/app/commands/save-new-feed
          reader/app/commands/fetch-feed-articles
          reader/lib/parameters
+         reader/lib/job
          reader/lib/web)
 
 (provide /feeds
@@ -77,6 +78,6 @@
     (render (:article/list feed articles current-page page-count))))
 
 (define (/feeds/<id>/sync req id)
-  (fetch-feed-articles (current-user-id) id)
+  (schedule-job! (fetch-feed-articles (current-user-id) id))
   (with-flash #:alert "Syncing feed"
     (redirect-back)))

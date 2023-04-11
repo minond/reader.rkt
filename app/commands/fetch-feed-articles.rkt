@@ -19,9 +19,15 @@
          reader/lib/extractor/document
          (prefix-in rss- reader/lib/rss/parse))
 
-(provide fetch-feed-articles)
+(provide fetch-feed-articles
+         fetch-feed-articles/handler)
 
-(define (fetch-feed-articles user-id feed-id)
+(struct fetch-feed-articles (user-id feed-id) #:prefab)
+
+(define (fetch-feed-articles/handler cmd)
+  (define user-id (fetch-feed-articles-user-id cmd))
+  (define feed-id (fetch-feed-articles-feed-id cmd))
+
   (define feed-record
     (lookup (current-database-connection)
             (find-feed-by-id #:id feed-id
