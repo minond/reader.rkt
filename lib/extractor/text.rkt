@@ -42,4 +42,4 @@
          [(pre _ content) (extract-text content)]
          [(caption _ content) (extract-text content)]
          [(object _ content type data) (extract-text content)]
-         [else (error "unable to render" elem-or-lst)]))))
+         [else (error "unable to extract" elem-or-lst)]))))
