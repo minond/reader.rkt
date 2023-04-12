@@ -31,6 +31,9 @@
 
 (register-job-handler! fetch-feed-articles fetch-feed-articles/handler)
 
+(define-logger application)
+(start-logger #:parent application-logger)
+
 (parameterize ([current-logger application-logger]
                [servlet-app-dispatch app-dispatch]
                [default-layout layout])

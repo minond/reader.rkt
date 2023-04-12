@@ -1,6 +1,7 @@
 #lang racket/base
 
 (require reader/lib/random
+         reader/lib/logger
          reader/lib/parameters
          reader/lib/app/models/job)
 
@@ -41,13 +42,20 @@
   (define errored? #f)
   (define buf (open-output-string))
 
+  (define-logger worker)
+  (define stop-logger (start-logger #:parent worker-logger
+                                    #:out buf))
+
   (parameterize ([current-output-port buf]
-                 [current-error-port buf])
+                 [current-error-port buf]
+                 [current-logger worker-logger])
     (with-handlers ([exn:fail?
                      (lambda (e)
                        (set! errored? #t)
                        (displayln (exn-message e)))])
       (run-job job)))
+
+  (stop-logger)
 
   (if errored?
       (job-errored! job (get-output-string buf))
@@ -59,4 +67,5 @@
     (error "job handler not found"))
 
   (define handler (hash-ref handlers name))
+  (log-info "running ~a" name)
   (handler (job-command job)))

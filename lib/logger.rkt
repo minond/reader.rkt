@@ -3,18 +3,31 @@
 (require gregor
          reader/lib/format)
 
-(provide application-logger)
+(provide start-logger)
 
-(define-logger application)
-(define receiver (make-log-receiver application-logger 'debug))
-
-(void
- (thread
-  (lambda ()
+(define (start-logger #:parent [parent (current-logger)]
+                      #:level [level 'info]
+                      #:out [out (current-output-port)])
+  (define receiver
+    (make-log-receiver parent level))
+  (define (handler)
     (let loop ()
-      (define rec (sync receiver))
-      (displayln (format "~a [~a] ~a"
-                         (date->rfc7231 (now/utc))
-                         (vector-ref rec 0)
-                         (vector-ref rec 1)))
-      (loop)))))
+      (sync
+       (handle-evt (thread-receive-evt)
+                   (lambda (_)
+                     (void)))
+       (handle-evt receiver
+                   (lambda (rec)
+                     (displayln
+                      (format "~a [~a] ~a"
+                              (date->rfc7231 (now/utc))
+                              (vector-ref rec 0)
+                              (vector-ref rec 1))
+                      out)
+                     (loop))))))
+
+  (define thd
+    (thread handler))
+
+  (lambda ()
+    (thread-send thd 'stop)))
