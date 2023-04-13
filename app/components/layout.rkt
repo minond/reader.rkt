@@ -184,7 +184,7 @@
            (attribute input (= type "cancel"))
            #:font-size 1.1em
            #:margin-top 0.5em
-           #:margin-right 0.5em]]
+           #:margin-right 0.25em]]
 
     ; Taken from https://loading.io/css/
     [.spinning-ring #:display block
