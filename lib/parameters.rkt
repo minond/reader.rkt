@@ -9,6 +9,8 @@
          model-user-id
          component-session/form
          component-user/form
+         user-registration/validate
+         user-registration/post
          servlet-app-dispatch
          current-request
          current-session
@@ -31,5 +33,8 @@
 
 (define component-session/form (make-parameter #f))
 (define component-user/form (make-parameter #f))
+
+(define user-registration/validate (make-parameter #f))
+(define user-registration/post (make-parameter #f))
 
 (define servlet-app-dispatch (make-parameter #f))

@@ -17,20 +17,41 @@
 
 ;; TODO URLs need to be dynamic
 (define (/users/create req)
-  (let* ([email (parameter 'email req)]
-         [password (parameter 'password req)]
-         [password-confirm (parameter 'password-confirm req)])
-    (if (not (equal? password password-confirm))
-        (with-flash #:notice "Your password and confirmation did not match, please try again."
-          (redirect (format "/users/new?email=~a" email)))
-        (let-values ([(encrypted-password salt) (make-password password)])
-          (define user
-            (insert-one! (current-database-connection)
-                         ((model-make-user) #:email email
-                                            #:salt salt
-                                            #:encrypted-password encrypted-password)))
-          (define session-cookie
-            (create-session+cookie #:user-id ((model-user-id) user)))
-          (redirect-to "/" permanently
-                       #:headers (list
-                                  (cookie->header session-cookie)))))))
+  (define-values (ok notice) ((user-registration/validate) req))
+  (if (not ok)
+      (registration-err req notice)
+      (registration-ok req)))
+
+(define (registration-err req notice)
+  (with-flash #:notice notice
+    (redirect (format "/users/new?email=~a"
+                      (parameter 'email req)))))
+
+(define (registration-ok req)
+  (define email (parameter 'email req))
+  (define password (parameter 'password req))
+  (define-values (encrypted-password salt) (make-password password))
+  (define user
+    (insert-one! (current-database-connection)
+                 ((model-make-user) #:email email
+                                    #:salt salt
+                                    #:encrypted-password encrypted-password)))
+
+  ((user-registration/post) req user)
+
+  (define session-cookie
+    (create-session+cookie #:user-id ((model-user-id) user)))
+  (redirect-to "/" permanently
+               #:headers (list (cookie->header session-cookie))))
+
+(user-registration/validate
+ (lambda (req)
+   (define ok
+     (and (parameter 'email req)
+          (equal? (parameter 'password req)
+                  (parameter 'password-confirm req))))
+   (values ok "Your password and confirmation did not match, please try again.")))
+
+(user-registration/post
+ (lambda (req user)
+   (void)))
