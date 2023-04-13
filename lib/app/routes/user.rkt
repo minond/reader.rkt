@@ -37,7 +37,7 @@
                                     #:salt salt
                                     #:encrypted-password encrypted-password)))
 
-  ((user-registration/post) req user)
+  ((user-registration/registered) req user)
 
   (define session-cookie
     (create-session+cookie #:user-id ((model-user-id) user)))
@@ -52,6 +52,6 @@
                   (parameter 'password-confirm req))))
    (values ok "Your password and confirmation did not match, please try again.")))
 
-(user-registration/post
+(user-registration/registered
  (lambda (req user)
    (void)))
