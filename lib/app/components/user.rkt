@@ -29,7 +29,8 @@
                  'placeholder: "Password confirmation")
          (:input 'type: "submit"
                  'value: "Register")
+         (:span "or ")
          (:a 'href: "/sessions/new"
-             "or login instead")))
+             "login instead")))
 
 (component-user/form :user/form)

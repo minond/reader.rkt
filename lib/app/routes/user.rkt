@@ -13,8 +13,9 @@
 
 (define (/users/new req)
   (let* ([email (parameter 'email req)])
-    (render (:user/form email))))
+    (render ((component-user/form) email))))
 
+;; TODO URLs need to be dynamic
 (define (/users/create req)
   (let* ([email (parameter 'email req)]
          [password (parameter 'password req)]
@@ -30,6 +31,6 @@
                                             #:encrypted-password encrypted-password)))
           (define session-cookie
             (create-session+cookie #:user-id ((model-user-id) user)))
-          (redirect-to "/feeds/new" permanently
+          (redirect-to "/" permanently
                        #:headers (list
                                   (cookie->header session-cookie)))))))
