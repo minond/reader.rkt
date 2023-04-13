@@ -3,7 +3,8 @@
 (require gregor
          reader/lib/format)
 
-(provide start-logger)
+(provide application-logger
+         start-logger)
 
 (define (start-logger #:parent [parent (current-logger)]
                       #:level [level 'info]
@@ -31,3 +32,6 @@
 
   (lambda ()
     (thread-send thd 'stop)))
+
+(define-logger application)
+(start-logger #:parent application-logger)
