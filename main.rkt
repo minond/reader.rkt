@@ -20,7 +20,7 @@
 
 (let ([pool (connection-pool
              (lambda ()
-               (sqlite3-connect #:database "data.db" #:mode 'create)))])
+               (postgresql-connect #:database "reader" #:user "marcos")))])
   (current-database-connection (connection-pool-lease pool)))
 
 (schema-registry-allow-conflicts? #t)

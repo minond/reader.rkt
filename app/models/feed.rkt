@@ -41,13 +41,16 @@
    [archived-count integer/f]
    [unarchived-count integer/f]))
 
+
 ;; TODO This is excluding feeds with empty counts
 (define (select-feed-stats #:user-id user-id)
   (~> (from feed #:as f)
       (select f.id f.title f.logo-url f.link f.subscribed f.last-sync-completed-at f.created-at
               (count a.id)
-              (sum (iif (= a.archived #t) 1 0))
-              (sum (iif (= a.archived #f) 1 0)))
+              (sum (case [(= a.archived #t) 1]
+                     [else 0]))
+              (sum (case [(= a.archived #t) 0]
+                     [else 1])))
       (join article #:as a #:on (= f.id a.feed_id))
       (where (= f.user-id ,user-id))
       (group-by f.id f.title)

@@ -76,26 +76,38 @@
 
 (define (find-ready-job)
   (~> (from job #:as j)
-      (where (is j.status ,ready))
+      (where (= j.status ,ready))
       (limit 1)))
 
 (define (update-job-as-running job)
   (~> (from job #:as j)
       (update [status ,running]
-              [started-at ,(~t (now/utc) "yyyy-MM-dd'T'HH:mm:ss")])
-      (where (and (is j.status ,ready)
+              [started-at ,(datetime->sql-timestamp (now/utc))])
+      (where (and (= j.status ,ready)
                   (= j.id ,(job-id job))))))
 
 (define (update-job-as-completed job logs)
   (~> (from job #:as j)
       (update [status ,completed]
               [logs ,logs]
-              [completed-at ,(~t (now/utc) "yyyy-MM-dd'T'HH:mm:ss")])
+              [completed-at ,(datetime->sql-timestamp (now/utc))])
       (where (= j.id ,(job-id job)))))
 
 (define (update-job-as-errored job logs)
   (~> (from job #:as j)
       (update [status ,errored]
               [logs ,logs]
-              [completed-at ,(~t (now/utc) "yyyy-MM-dd'T'HH:mm:ss")])
+              [completed-at ,(datetime->sql-timestamp (now/utc))])
       (where (= j.id ,(job-id job)))))
+
+;; Not sure why deta isn't converting now/utc to a sql-timestamp in a prepared
+;; statement, but it is when used as the default value in a schema definition.
+(define (datetime->sql-timestamp dt)
+  (sql-timestamp (->year dt)
+                 (->month dt)
+                 (->day dt)
+                 (->hours dt)
+                 (->minutes dt)
+                 (->seconds dt)
+                 (->nanoseconds dt)
+                 #f))
