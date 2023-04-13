@@ -17,6 +17,7 @@
   (let* ([email (parameter 'email req)])
     (render ((component-session/form) email))))
 
+;; TODO URLs need to be dynamic
 (define (/sessions/create req)
   (let* ([email (parameter 'email req)]
          [password (parameter 'password req)]
