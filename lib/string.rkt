@@ -7,7 +7,8 @@
 (provide string-chop
          string-list-join
          string-strip
-         string-join+)
+         string-join+
+         string->boolean)
 
 (define (string-chop str maxlen #:end [end ""])
   (if (<= (string-length str) maxlen)
@@ -30,4 +31,8 @@
 
 (define (string-join+ . lst)
   (string-join
-    (filter string? lst)))
+   (filter string? lst)))
+
+(define (string->boolean str)
+  (and (string? str)
+       (non-empty-string? str)))

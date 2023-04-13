@@ -8,6 +8,7 @@
          reader/app/models/feed
          reader/app/models/user
          reader/app/components/layout
+         reader/app/components/user
          reader/app/dispatch
 
          reader/lib/app/models/job
@@ -29,7 +30,8 @@
 
 (parameterize ([current-logger application-logger]
                [servlet-app-dispatch app-dispatch]
-               [default-layout layout])
+               [default-layout layout]
+               [component-user/form :user/form])
   (define stop-manager (make-job-manager))
   (start-servlet)
   (stop-manager))
