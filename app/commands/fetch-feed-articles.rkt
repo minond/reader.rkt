@@ -33,17 +33,17 @@
             (find-feed-by-id #:id feed-id
                              #:user-id user-id)))
   (unless feed-record
-    (raise (unabled-to-find-feed "failed"
-                                 (current-continuation-marks)
-                                 feed-id)))
+    (raise (unable-to-find-feed "failed"
+                                (current-continuation-marks)
+                                feed-id)))
 
   (define feed-url (feed-feed-url feed-record))
   (define feed-data (rss-fetch feed-url))
   (unless feed-data
-    (raise (unabled-to-download-feed "failed"
-                                     (current-continuation-marks)
-                                     feed-url
-                                     user-id)))
+    (raise (unable-to-download-feed "failed"
+                                    (current-continuation-marks)
+                                    feed-url
+                                    user-id)))
 
   (update-one! (current-database-connection)
                (update-feed-last-sync-attempted-at
@@ -77,7 +77,7 @@
                                             (or (rss-article-title article-data)
                                                 (metadata-title metadata)))
                                    #:description (string-replace-html-entities
-                                                   (document-summary document))
+                                                  (document-summary document))
                                    #:type (or (metadata-type metadata) "")
                                    #:date (rss-article-date article-data)
                                    #:extracted-content-text (extract-text content)

@@ -29,10 +29,10 @@
   (log-info "downloading feed, ~a" feed-url)
   (define feed-data (rss-fetch feed-url))
   (unless feed-data
-    (raise (unabled-to-download-feed "failed"
-                                     (current-continuation-marks)
-                                     feed-url
-                                     user-id)))
+    (raise (unable-to-download-feed "failed"
+                                    (current-continuation-marks)
+                                    feed-url
+                                    user-id)))
 
   (define link (rss-feed-link feed-data))
   (define-values (logo-url description) (find-feed-logo-url+description link))

@@ -18,7 +18,7 @@
          reader/lib/web)
 
 (provide /articles
-         /arcticles/<id>/show
+         /articles/<id>/show
          /articles/<id>/archive
          /articles/<id>/unarchive
          /articles/<id>/summary
@@ -47,7 +47,7 @@
      ; (:article/previews articles current-page page-count scheduled)
      (:reader feed-stats articles current-page page-count))))
 
-(define (/arcticles/<id>/show req id)
+(define (/articles/<id>/show req id)
   (let* ([article (lookup (current-database-connection)
                           (find-article-by-id #:id id
                                               #:user-id (current-user-id)))]

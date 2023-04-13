@@ -36,7 +36,7 @@
    [("feeds" (integer-arg) "sync") (authenticated-route /feeds/<id>/sync)]
 
    [("articles") (authenticated-route /articles)]
-   [("articles" (integer-arg)) (authenticated-route /arcticles/<id>/show)]
+   [("articles" (integer-arg)) (authenticated-route /articles/<id>/show)]
    [("articles" (integer-arg) "archive") #:method "put" (authenticated-route /articles/<id>/archive)]
    [("articles" (integer-arg) "archive") (authenticated-route /articles/<id>/archive)]
    [("articles" (integer-arg) "unarchive") #:method "put" (authenticated-route /articles/<id>/unarchive)]
