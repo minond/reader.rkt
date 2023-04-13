@@ -1,8 +1,6 @@
 #lang racket/base
 
-(require db
-         deta
-         deta/reflect
+(require deta
 
          reader/app/commands/fetch-feed-articles
          reader/app/commands/save-new-feed
@@ -16,14 +14,10 @@
          reader/lib/parameters
          reader/lib/logger
          reader/lib/job
+         reader/lib/database
          reader/lib/servlet)
 
-(let ([pool (connection-pool
-             (lambda ()
-               (postgresql-connect #:database "reader" #:user "marcos")))])
-  (current-database-connection (connection-pool-lease pool)))
-
-(schema-registry-allow-conflicts? #t)
+(database-connect! 'postgres)
 
 (create-table! (current-database-connection) 'article)
 (create-table! (current-database-connection) 'feed)
