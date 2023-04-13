@@ -10,15 +10,22 @@
          reader/app/commands/errors
          reader/app/commands/fetch-feed-articles
 
+         reader/lib/job
          reader/lib/parameters
          reader/lib/extractor
          reader/lib/extractor/media
          reader/lib/extractor/metadata
          (prefix-in rss- reader/lib/rss/parse))
 
-(provide save-new-feed)
+(provide save-new-feed
+         save-new-feed/handler)
 
-(define (save-new-feed user-id feed-url)
+(struct save-new-feed (user-id feed-url) #:prefab)
+
+(define (save-new-feed/handler cmd)
+  (define user-id (save-new-feed-user-id cmd))
+  (define feed-url (save-new-feed-feed-url cmd))
+
   (log-info "downloading feed, ~a" feed-url)
   (define feed-data (rss-fetch feed-url))
   (unless feed-data
@@ -39,7 +46,7 @@
                             #:description description)))
 
   (log-info "saved feed record, fetching articles")
-  (fetch-feed-articles user-id (feed-id feed-record)))
+  (schedule-job! (fetch-feed-articles user-id (feed-id feed-record))))
 
 (define (find-feed-logo-url+description link)
   (with-handlers ([exn:fail? (lambda (e)

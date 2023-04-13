@@ -44,7 +44,7 @@
         (with-flash #:notice (and exists "This feed already exists.")
           (redirect "/articles"))
         (with-flash #:alert "Downloading feed data and articles."
-          (save-new-feed (current-user-id) url)
+          (schedule-job! (save-new-feed (current-user-id) url))
           (redirect "/articles?scheduled=1")))))
 
 (define (/feeds/<id>/subscribe req id)
