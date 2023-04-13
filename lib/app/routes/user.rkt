@@ -12,8 +12,7 @@
          /users/create)
 
 (define (/users/new req)
-  (let* ([email (parameter 'email req)])
-    (render ((component-user/form) email))))
+  (render ((component-user/form) req)))
 
 ;; TODO URLs need to be dynamic
 (define (/users/create req)
@@ -24,8 +23,9 @@
 
 (define (registration-err req notice)
   (with-flash #:notice notice
-    (redirect (format "/users/new?email=~a"
-                      (parameter 'email req)))))
+    (redirect (format "/users/new?email=~a&~a"
+                      (parameter 'email req)
+                      (parameter 'for-retry req #:default "")))))
 
 (define (registration-ok req)
   (define email (parameter 'email req))

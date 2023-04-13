@@ -165,7 +165,7 @@
     [form #:margin (3em auto)
           #:max-width ,@article-max-width
           [(attribute input (= type "url"))
-           (attribute input (= type "input"))
+           (attribute input (= type "text"))
            (attribute input (= type "email"))
            (attribute input (= type "password"))
            #:border-width (1px 1px 1.5px 1px)
@@ -320,7 +320,7 @@
 
     [.flash #:display inline-block
             #:animation (fadein .15s linear 0s) (fadeout .3s linear forwards 5s)
-            #:font-weight 100
+            #:font-weight 400
             #:position relative
             #:margin-left 1em
             #:text-transform lowercase]
@@ -338,6 +338,12 @@
     [.tc #:text-align center]
     [.wsnw #:white-space nowrap]
     [.fwb #:font-weight bold]
+
+    [.registration-form #:max-width ,article-max-width
+                        #:margin (0 auto)
+                        #:padding-top 2em
+                        [p #:font-size 1.25em]
+                        [form #:margin-top 0]]
 
     [.feed-subscription-toggle .article-archive-toggle
                                #:height .9em

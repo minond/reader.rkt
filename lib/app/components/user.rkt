@@ -4,12 +4,14 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
+         reader/lib/web
          reader/lib/parameters)
 
 (provide :user/form)
 
 ;; TODO URLs need to be dynamic
-(define (:user/form [email null])
+(define (:user/form [req #f])
+  (define email (and req (parameter 'email req)))
   (:form 'action: "/users/create"
          'method: "post"
          (:input 'type: "email"
