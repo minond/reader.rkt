@@ -177,6 +177,7 @@
            #:padding 0.5em
            #:width 100%
            #:font-size 1.1em
+           #:box-sizing border-box
            #:margin (0.25em 0)]
           [(attribute input (= type "button"))
            (attribute input (= type "submit"))
