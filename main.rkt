@@ -6,6 +6,7 @@
          reader/app/commands/save-new-feed
          reader/app/models/article
          reader/app/models/feed
+         reader/app/models/registration-invitation
          reader/app/models/user
          reader/app/components/layout
          reader/app/components/user
@@ -23,6 +24,7 @@
 (create-table! (current-database-connection) 'article)
 (create-table! (current-database-connection) 'feed)
 (create-table! (current-database-connection) 'user)
+(create-table! (current-database-connection) 'registration-invitation)
 (create-table! (current-database-connection) 'job)
 
 (register-job-handler! fetch-feed-articles fetch-feed-articles/handler)
