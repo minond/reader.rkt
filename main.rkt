@@ -4,6 +4,7 @@
 
          reader/app/commands/fetch-feed-articles
          reader/app/commands/save-new-feed
+         reader/app/routes/user
          reader/app/models/article
          reader/app/models/feed
          reader/app/models/registration-invitation
@@ -33,7 +34,9 @@
 (parameterize ([current-logger application-logger]
                [servlet-app-dispatch app-dispatch]
                [default-layout layout]
-               [component-user/form :user/form])
+               [component-user/form :user/form]
+               [user-registration/validate user-registration/validate+override]
+               [user-registration/registered user-registration/registered+override])
   (define stop-manager (make-job-manager))
   (start-servlet)
   (stop-manager))
