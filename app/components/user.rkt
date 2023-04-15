@@ -42,7 +42,7 @@
                    (:input 'type: "text"
                            'name: "code"
                            'value: code
-                           'disabled: "true"
+                           'readonly: "true"
                            'required: "true"
                            'placeholder: "Invite code")
                    (:input 'type: "email"

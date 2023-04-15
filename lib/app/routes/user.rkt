@@ -16,10 +16,17 @@
 
 ;; TODO URLs need to be dynamic
 (define (/users/create req)
-  (define-values (ok notice) ((user-registration/validate) req))
-  (if (not ok)
-      (registration-err req notice)
-      (registration-ok req)))
+  (define passwords-match
+    (and (parameter 'email req)
+         (equal? (parameter 'password req)
+                 (parameter 'password-confirm req))))
+
+  (if (not passwords-match)
+      (registration-err req "Your password and confirmation did not match, please try again.")
+      (let-values ([(ok notice) ((user-registration/validate) req)])
+        (if (not ok)
+            (registration-err req notice)
+            (registration-ok req)))))
 
 (define (registration-err req notice)
   (with-flash #:notice notice
@@ -46,11 +53,7 @@
 
 (user-registration/validate
  (lambda (req)
-   (define ok
-     (and (parameter 'email req)
-          (equal? (parameter 'password req)
-                  (parameter 'password-confirm req))))
-   (values ok "Your password and confirmation did not match, please try again.")))
+   (values #t "")))
 
 (user-registration/registered
  (lambda (req user)
