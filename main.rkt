@@ -19,7 +19,7 @@
          reader/lib/database
          reader/lib/servlet)
 
-(database-connect! 'postgres)
+(database-connect!)
 
 (register-job-handler! fetch-feed-articles fetch-feed-articles/handler)
 (register-job-handler! save-new-feed save-new-feed/handler)

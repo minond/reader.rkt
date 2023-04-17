@@ -20,7 +20,7 @@
                                  #:user (getenv "DATABASE_USER")
                                  #:password (getenv "DATABASE_PASSWORD")))
 
-(define (database-connect! dsn)
+(define (database-connect! [dsn (string->symbol (getenv "DATABASE_DRIVER"))])
   (let ([pool (connection-pool
                (lambda ()
                  (dsn-connect (get-dsn dsn))))])
