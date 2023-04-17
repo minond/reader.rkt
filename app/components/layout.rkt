@@ -339,6 +339,9 @@
     [.wsnw #:white-space nowrap]
     [.fwb #:font-weight bold]
 
+    [.error-message
+      #:color ,failure-color-dark]
+
     [.registration-form #:max-width ,article-max-width
                         #:margin (0 auto)
                         #:padding-top 2em

@@ -10,10 +10,13 @@
 (provide :user/form)
 
 ;; TODO URLs need to be dynamic
-(define (:user/form [req #f])
+(define (:user/form [req #f] [error-message #f])
   (define email (and req (parameter 'email req)))
   (:form 'action: "/users/create"
          'method: "post"
+         (and error-message
+              (:p 'class: "error-message"
+                  error-message))
          (:input 'type: "email"
                  'name: "email"
                  'value: email

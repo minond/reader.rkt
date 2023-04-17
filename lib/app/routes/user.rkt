@@ -23,16 +23,13 @@
 
   (if (not passwords-match)
       (registration-err req "Your password and confirmation did not match, please try again.")
-      (let-values ([(ok notice) ((user-registration/validate) req)])
+      (let-values ([(ok error-message) ((user-registration/validate) req)])
         (if (not ok)
-            (registration-err req notice)
+            (registration-err req error-message)
             (registration-ok req)))))
 
-(define (registration-err req notice)
-  (with-flash #:notice notice
-    (redirect (format "/users/new?email=~a&~a"
-                      (parameter 'email req)
-                      (parameter 'for-retry req #:default "")))))
+(define (registration-err req error-message)
+  (render ((component-user/form) req error-message)))
 
 (define (registration-ok req)
   (define email (parameter 'email req))
