@@ -32,4 +32,4 @@
                  (~> invite
                      (set-registration-invitation-user-id (user-id user))
                      (set-registration-invitation-user-registered-at (now/utc))
-                     (set-registration-invitation-available #t)))))
+                     (set-registration-invitation-available #f)))))
