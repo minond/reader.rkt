@@ -9,6 +9,7 @@
          threading
          gregor
          deta
+         uuid
 
          reader/lib/parameters)
 
@@ -28,7 +29,7 @@
   (values "ready" "running" "completed" "errored"))
 
 (define-schema job
-  ([id id/f #:primary-key #:auto-increment]
+  ([(id (uuid-string)) string/f #:primary-key #:contract non-empty-string?]
    [status string/f #:contract non-empty-string?]
    [name string/f #:contract non-empty-string?]
    [data binary/f]

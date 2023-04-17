@@ -3,6 +3,7 @@
 (require racket/string
          threading
          gregor
+         uuid
          deta
 
          reader/lib/parameters)
@@ -11,7 +12,7 @@
          make-user)
 
 (define-schema user
-  ([id id/f #:primary-key #:auto-increment]
+  ([(id (uuid-string)) string/f #:primary-key #:contract non-empty-string?]
    [email string/f #:unique #:contract non-empty-string?]
    [encrypted-password binary/f]
    [salt binary/f]

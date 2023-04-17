@@ -4,7 +4,7 @@
 -- @description: Creates the users table.
 -- @up {
 create table users (
-    id bigserial primary key,
+    id varchar(36) primary key,
     email text,
     encrypted_password bytea,
     salt bytea,

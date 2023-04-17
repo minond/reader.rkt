@@ -3,6 +3,7 @@
 (require racket/string
          threading
          gregor
+         uuid
          deta)
 
 (provide (schema-out feed)
@@ -16,8 +17,8 @@
          unsubscribe-from-feed)
 
 (define-schema feed
-  ([id id/f #:primary-key #:auto-increment]
-   [user-id id/f]
+  ([(id (uuid-string)) string/f #:primary-key #:contract non-empty-string?]
+   [user-id string/f]
    [feed-url string/f #:contract non-empty-string?]
    [logo-url string/f #:contract non-empty-string? #:nullable]
    [link string/f #:contract non-empty-string?]
@@ -30,7 +31,7 @@
 
 (define-schema feed-stats
   #:virtual
-  ([id id/f]
+  ([id string/f]
    [title string/f]
    [logo-url string/f #:nullable]
    [link string/f]

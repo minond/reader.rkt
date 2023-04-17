@@ -5,9 +5,9 @@
 -- @description: Creates the articles table.
 -- @up {
 create table articles (
-    id bigserial primary key,
-    user_id integer,
-    feed_id integer,
+    id varchar(36) primary key,
+    user_id varchar(36),
+    feed_id varchar(36),
     link text,
     title text,
     description text,

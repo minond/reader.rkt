@@ -3,6 +3,7 @@
 (require racket/string
          threading
          gregor
+         uuid
          deta)
 
 (provide (schema-out article)
@@ -17,9 +18,9 @@
          unarchive-article-by-id)
 
 (define-schema article
-  ([id id/f #:primary-key #:auto-increment]
-   [user-id id/f]
-   [feed-id id/f]
+  ([(id (uuid-string)) string/f #:primary-key #:contract non-empty-string?]
+   [user-id string/f]
+   [feed-id string/f]
    [link string/f #:contract non-empty-string?]
    [title string/f #:contract non-empty-string?]
    [description string/f]

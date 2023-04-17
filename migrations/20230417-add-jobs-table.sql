@@ -5,7 +5,7 @@
 -- @description: Creates the jobs table.
 -- @up {
 create table jobs (
-    id bigserial primary key,
+    id varchar(36) primary key,
     status text,
     name text,
     data bytea,

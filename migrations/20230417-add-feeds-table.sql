@@ -5,8 +5,8 @@
 -- @description: Creates the feeds table.
 -- @up {
 create table feeds (
-    id bigserial primary key,
-    user_id bigint,
+    id varchar(36) primary key,
+    user_id varchar(36),
     feed_url text,
     logo_url text,
     link text,

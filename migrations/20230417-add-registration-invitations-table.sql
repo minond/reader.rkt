@@ -5,10 +5,10 @@
 -- @description: Creates the registration_invitations table.
 -- @up {
 create table registration_invitations (
-    id bigserial primary key,
+    id varchar(36) primary key,
     code text,
     available boolean,
-    user_id integer,
+    user_id varchar(36),
     user_registered_at timestamp without time zone,
     created_at timestamp without time zone
 );

@@ -3,6 +3,7 @@
 (require racket/string
          threading
          gregor
+         uuid
          deta)
 
 (provide (schema-out registration-invitation)
@@ -10,10 +11,10 @@
 
 (define-schema registration-invitation
   #:table "registration_invitations"
-  ([id id/f #:primary-key #:auto-increment]
+  ([(id (uuid-string)) string/f #:primary-key #:contract non-empty-string?]
    [code string/f #:contract non-empty-string?]
    [(available #t) boolean/f]
-   [user-id id/f #:nullable]
+   [user-id string/f #:nullable]
    [user-registered-at datetime/f #:nullable]
    [(created-at (now/utc)) datetime/f]))
 
