@@ -23,8 +23,8 @@
         (if (not (non-empty-string? code))
             (list
              (:p "Thank you for your interest in Reader, unfortunately we're currently in private beta mode and you'll need an invite before you can register.")
-             (:p "If you're interested in joining the wait list, then let us know your email and we will send you an invite as soon as possible.")
-             (:form 'action: "/"
+             #;(:p "If you're interested in joining the wait list, then let us know your email and we will send you an invite as soon as possible.")
+             #;(:form 'action: "/"
                     'method: "post"
                     (:input 'type: "email"
                             'name: "email"
