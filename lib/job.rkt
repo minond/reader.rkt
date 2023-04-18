@@ -32,10 +32,10 @@
                      (loop)))))))
 
 (define (make-job-manager #:background [background? #t]
-                          #:cust [cust (current-custodian)])
+                          #:custodian [custodian (current-custodian)])
   (define id (random-string))
   (if background?
-      (let ([thd (parameterize ([current-custodian cust])
+      (let ([thd (parameterize ([current-custodian custodian])
                    (thread (gen-loop id)))])
         (lambda ()
           (thread-send thd 'stop)))
