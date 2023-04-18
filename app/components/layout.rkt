@@ -338,9 +338,10 @@
     [.tc #:text-align center]
     [.wsnw #:white-space nowrap]
     [.fwb #:font-weight bold]
+    [.dn #:display none]
 
     [.error-message
-      #:color ,failure-color-dark]
+     #:color ,failure-color-dark]
 
     [.registration-form #:max-width ,article-max-width
                         #:margin (0 auto)

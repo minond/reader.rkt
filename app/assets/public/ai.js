@@ -14,13 +14,15 @@ const storageKey = `reader/chat/${articleId}`;
 const storedChat = localStorage.getItem(storageKey);
 const chat = storedChat ? JSON.parse(storedChat) : [];
 
-loadSummary();
-loadChat();
-initChat();
-setMessagesContainerSize();
-scrollToBottomOfMessages();
+loadSummary((wasLoaded) => {
+  showChat(!wasLoaded);
+  loadChat();
+  initChat();
+  setMessagesContainerSize();
+  scrollToBottomOfMessages();
+});
 
-function loadSummary() {
+function loadSummary(onLoaded) {
   if (loadingSummaryEl && articleIdEl) {
     fetch(`/articles/${articleId}/summary`)
       .then((res) => res.json())
@@ -28,10 +30,34 @@ function loadSummary() {
         const p = document.createElement("p");
         p.classList.add("fadein");
         p.innerHTML = body.summary;
+        return p;
+      })
+      .catch((err) => {
+        const p = document.createElement("p");
+        p.classList.add("fadein");
+        p.innerText =
+          "There was an error generating a summary for this document at this time. Please try again later.";
+        return p;
+      })
+      .then((p) => {
         summaryEl.removeChild(loadingSummaryEl);
         summaryEl.appendChild(p);
+      })
+      .finally(() => {
+        try {
+          onLoaded(false);
+        } catch (err) {}
       });
+  } else {
+    onLoaded(true);
   }
+}
+
+function showChat(fadeIn) {
+  if (fadeIn) {
+    chatEl.classList.add("fadein");
+  }
+  chatEl.classList.remove("dn");
 }
 
 function loadChat() {
@@ -39,8 +65,11 @@ function loadChat() {
 }
 
 function initChat() {
-  const toggleMessagesShadowDebounced = debounce(toggleMessagesShadow, 10)
-  const setMessagesContainerSizeDebounced = debounce(setMessagesContainerSize, 10)
+  const toggleMessagesShadowDebounced = debounce(toggleMessagesShadow, 10);
+  const setMessagesContainerSizeDebounced = debounce(
+    setMessagesContainerSize,
+    10
+  );
 
   inputEl.addEventListener("keypress", handleChatInput);
   messagesEl.addEventListener("scroll", toggleMessagesShadowDebounced);

@@ -48,14 +48,16 @@
    (:literal (article-extracted-content-html article))))
 
 (define (:article/chat article)
-  (:div 'class: "chat"
-        (:div 'class: "messages")
-        (:div 'class: "shadow")
-        (:div 'class: "input-wrapper"
-              (:textarea 'rows: 1 'placeholder: "Send a message...")
-              (:spinning-ring 30))
-        (:p 'class: "disclaimer"
-            "ChatGPT may produce inaccurate information about people, places, or facts.")))
+  (let* ([summary-html (article-generated-summary-html article)]
+         [has-summary? (not (sql-null? summary-html))])
+    (:div 'class: (if has-summary? "chat" "dn chat")
+          (:div 'class: "messages")
+          (:div 'class: "shadow")
+          (:div 'class: "input-wrapper"
+                (:textarea 'rows: 1 'placeholder: "Send a message...")
+                (:spinning-ring 30))
+          (:p 'class: "disclaimer"
+              "ChatGPT may produce inaccurate information about people, places, or facts."))))
 
 (define (:article/summary article)
   (let* ([summary-html (article-generated-summary-html article)]
@@ -65,6 +67,9 @@
           (if has-summary?
               (:literal summary-html)
               (:div 'class: "loading-summary"
+                    (:p 'class: "tc"
+                        "Hold tight while we summarize this content for you.")
+                    (:spacer #:direction vertical #:size medium)
                     (:spinning-ring 80))))))
 
 (define (:article/list feed articles current-page page-count)
