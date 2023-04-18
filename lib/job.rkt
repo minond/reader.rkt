@@ -17,26 +17,29 @@
           [else (object-name name)]))
   (hash-set! handlers label f))
 
-(define (make-job-manager #:cust [cust (current-custodian)])
-  (define id (random-string))
-  (define thd
-    (parameterize ([current-custodian cust])
-      (thread
-       (lambda ()
-         (log-info "starting worker:~a" id)
-         (let loop ()
-           (sync
-            (handle-evt (thread-receive-evt)
-                        (lambda (_)
-                          (log-info "stopping worker:~a" id)))
-            (handle-evt (alarm-evt (+ (current-inexact-milliseconds) 1000))
-                        (lambda (args)
-                          (define job (acquire-job! (current-database-connection)))
-                          (when job (safe-run-job job))
-                          (loop)))))))))
-
+(define (gen-loop id)
   (lambda ()
-    (thread-send thd 'stop)))
+    (log-info "starting worker:~a" id)
+    (let loop ()
+      (sync
+       (handle-evt (thread-receive-evt)
+                   (lambda (_)
+                     (log-info "stopping worker:~a" id)))
+       (handle-evt (alarm-evt (+ (current-inexact-milliseconds) 1000))
+                   (lambda (args)
+                     (define job (acquire-job! (current-database-connection)))
+                     (when job (safe-run-job job))
+                     (loop)))))))
+
+(define (make-job-manager #:background [background? #t]
+                          #:cust [cust (current-custodian)])
+  (define id (random-string))
+  (if background?
+      (let ([thd (parameterize ([current-custodian cust])
+                   (thread (gen-loop id)))])
+        (lambda ()
+          (thread-send thd 'stop)))
+      ((gen-loop id))))
 
 (define (safe-run-job job)
   (define errored? #f)
