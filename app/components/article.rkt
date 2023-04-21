@@ -12,6 +12,7 @@
          reader/app/models/feed
 
          reader/lib/app/components/spacer
+         reader/lib/app/components/spinner
          reader/lib/app/components/pagination)
 
 (provide :article/full
@@ -95,12 +96,3 @@
          (:td 'class: "wsnw" (:a 'href: (article-link article)
                                  'target: '_blank
                                  "Visit page")))))
-
-(define (:spinning-ring size)
-  (define size-half (floor (/ size 2)))
-  (:div 'class: "spinning-ring"
-        'style: (format "height: ~apx; width: ~apx" size size)
-        (:div 'style: (format "height: ~apx; width: ~apx" size-half size-half))
-        (:div 'style: (format "height: ~apx; width: ~apx" size-half size-half))
-        (:div 'style: (format "height: ~apx; width: ~apx" size-half size-half))
-        (:div 'style: (format "height: ~apx; width: ~apx" size-half size-half))))
