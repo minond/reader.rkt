@@ -27,7 +27,7 @@
 (define page-size 20)
 
 (define (/articles req)
-  (let* ([scheduled (equal? "1" (parameter 'scheduled req))]
+  (let* ([scheduled-feed-download (equal? "1" (parameter 'scheduled req))]
          [current-page (or (string->number (parameter 'page req #:default "")) 1)]
          [page-count (ceiling (/ (lookup (current-database-connection)
                                          (count-articles #:user-id (current-user-id)
@@ -44,8 +44,7 @@
                       (in-entities (current-database-connection)
                                    (select-feed-stats #:user-id (current-user-id))))])
     (render
-     ; (:article/previews articles current-page page-count scheduled)
-     (:reader feed-stats articles current-page page-count))))
+     (:reader feed-stats articles scheduled-feed-download current-page page-count))))
 
 (define (/articles/<id>/show req id)
   (let* ([article (lookup (current-database-connection)

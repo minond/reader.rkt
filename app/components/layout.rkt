@@ -404,6 +404,13 @@
                              #:font-weight 200
                              #:font-size 0.8em]
 
+    [.reader
+     [.no-articles #:max-width ,article-max-width
+                   #:margin (0 auto)
+                   #:padding-top 2em
+                   [p #:font-size 1.25em]
+                   [form #:margin-top 0]]]
+
     [.reader-articles
      #:max-width 60em
      #:margin (3em auto 2em auto)

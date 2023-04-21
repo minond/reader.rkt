@@ -1,8 +1,6 @@
 #lang racket/base
 
 (require racket/string
-         racket/match
-         racket/list
 
          db
          gregor
@@ -12,14 +10,12 @@
 
          reader/app/models/article
          reader/app/models/feed
-         reader/app/components/feed
 
          reader/lib/app/components/spacer
          reader/lib/app/components/pagination)
 
 (provide :article/full
-         :article/list
-         :article/previews)
+         :article/list)
 
 (define (:article/full feed article)
   (let* ([datetime (~t (article-date article) "y-M-d HH:mm:ss")]
@@ -99,47 +95,6 @@
          (:td 'class: "wsnw" (:a 'href: (article-link article)
                                  'target: '_blank
                                  "Visit page")))))
-
-(define (:article/previews articles current-page page-count scheduled)
-  (match (cons (empty? articles) scheduled)
-    [(cons #t #t)
-     (list
-      (:spacer #:direction horizontal
-               #:size large)
-      (:p 'class: "tc"
-          "We're getting articles for you, hold tight!"))]
-    [(cons #t #f)
-     (list
-      (:spacer #:direction horizontal
-               #:size large)
-      (:p 'class: "tc"
-          "There are no articles to show at this time. Use the form below to
-           subscribe to a feed.")
-      (:feed/form))]
-    [else
-     (list
-      (map :article-preview articles)
-      (:pagination current-page page-count))]))
-
-(define (:article-preview article)
-  (let ([datetime (~t (article-date article) "y-M-d HH:mm:ss")]
-        [humandate (~t (article-date article) "MMMM d, yyyy")])
-    (:article 'class: "article-preview show-on-hover-container"
-              (:a 'href: (format "/articles/~a" (article-id article))
-                  (:h3 (article-title article))
-                  (:p (article-description article)))
-              (:time 'datetime: datetime humandate)
-              (:spacer #:direction horizontal
-                       #:size small)
-              (:a 'class: "action show-on-hover"
-                  'href: (article-link article)
-                  'target: '_blank
-                  "read")
-              (:spacer #:direction horizontal
-                       #:size small)
-              (:a 'class: "action show-on-hover"
-                  'href: (format "/articles/~a/archive" (article-id article))
-                  "archive"))))
 
 (define (:spinning-ring size)
   (define size-half (floor (/ size 2)))
