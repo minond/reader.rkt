@@ -20,6 +20,7 @@
 (define (authenticated-ping-pong-websocket-server ws-conn state)
   (define session (lookup-ws-session ws-conn))
   (when (authenticated? session)
+    (log-info "tracking connection for ~a" session)
     (track-connection! session ws-conn)
 
     (let loop ()
@@ -32,5 +33,6 @@
         [else
          (loop)]))
 
+    (log-info "untracking connection for ~a" session)
     (untrack-connection! session ws-conn))
   (ws-close! ws-conn))

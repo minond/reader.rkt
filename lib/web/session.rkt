@@ -1,6 +1,8 @@
 #lang racket/base
 
-(require gregor
+(require racket/struct
+
+         gregor
          web-server/servlet
          web-server/http/id-cookie
 
@@ -18,7 +20,13 @@
 
 (define new-session-route (make-parameter "/sessions/new"))
 
-(struct session (key user-id flash))
+(struct session (key user-id flash)
+  #:methods gen:custom-write
+  [(define write-proc
+     (make-constructor-style-printer
+      (lambda (obj) 'session)
+      (lambda (obj) (list (session-key obj)))))])
+
 (define session-cookie-name "session")
 (define sessions (make-hash))
 
