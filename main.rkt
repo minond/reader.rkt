@@ -17,6 +17,7 @@
          reader/lib/logger
          reader/lib/job
          reader/lib/database
+         reader/lib/websocket
          reader/lib/servlet)
 
 (database-connect!)
@@ -30,6 +31,8 @@
                [component-user/form :user/form]
                [user-registration/validate user-registration/validate+override]
                [user-registration/registered user-registration/registered+override])
-  (define stop-manager (make-job-manager))
+  (define stop-job-manager (make-job-manager))
+  (define stop-websocket-server (start-authenticated-ping-pong-websocket-server))
   (start-servlet)
-  (stop-manager))
+  (stop-websocket-server)
+  (stop-job-manager))
