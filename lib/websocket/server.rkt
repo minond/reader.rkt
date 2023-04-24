@@ -5,6 +5,7 @@
 
          net/rfc6455
 
+         reader/lib/database/notify
          reader/lib/websocket/connection
          reader/lib/websocket/session)
 
@@ -35,8 +36,7 @@
 
 (define (handle-disconnect channels ws-conn)
   (for ([channel channels])
-    (log-info "untracking connection for ~a" channel)
-    (untrack-connection! channel ws-conn)))
+    (untrack-channel channel ws-conn)))
 
 (define (handle-ping channels ws-conn)
   (ws-send! ws-conn "pong")
@@ -44,12 +44,20 @@
 
 (define (handle-subscribe channels ws-conn message)
   (define channel (string-replace message "subscribe " "" #:all? #f))
-  (log-info "tracking connection for ~a" channel)
-  (track-connection! channel ws-conn)
+  (track-channel channel ws-conn)
   (cons channel channels))
 
 (define (handle-unsubscribe channels ws-conn message)
   (define channel (string-replace message "unsubscribe " "" #:all? #f))
-  (log-info "untracking connection for ~a" channel)
-  (untrack-connection! channel ws-conn)
+  (untrack-channel channel ws-conn)
   (remove channel channels))
+
+(define (track-channel channel ws-conn)
+  (log-info "tracking connection for ~a" channel)
+  (when (equal? (track-connection! channel ws-conn) 1)
+    (listen channel)))
+
+(define (untrack-channel channel ws-conn)
+  (log-info "untracking connection for ~a" channel)
+  (when (zero? (untrack-connection! channel ws-conn))
+    (unlisten channel)))

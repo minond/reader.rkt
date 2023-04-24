@@ -21,8 +21,9 @@
 (define (track-connection! key ws-conn)
   (with-lock lock
     (lambda ()
-      (define ws-conns (lookup-connections key))
-      (hash-set! connections key (cons ws-conn ws-conns)))))
+      (define ws-conns (cons ws-conn (lookup-connections key)))
+      (hash-set! connections key ws-conns)
+      (length ws-conns))))
 
 (define (untrack-connection! key ws-conn)
   (with-lock lock
@@ -30,4 +31,5 @@
       (define ws-conns (remove ws-conn (lookup-connections key)))
       (if (empty? ws-conns)
           (hash-remove! connections key)
-          (hash-set! connections key ws-conns)))))
+          (hash-set! connections key ws-conns))
+      (length ws-conns))))

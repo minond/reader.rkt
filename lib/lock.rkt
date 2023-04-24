@@ -10,5 +10,6 @@
 
 (define (with-lock lck thunk)
   (semaphore-wait (lock-sem lck))
-  (thunk)
-  (semaphore-post (lock-sem lck)))
+  (define result (thunk))
+  (semaphore-post (lock-sem lck))
+  result)
