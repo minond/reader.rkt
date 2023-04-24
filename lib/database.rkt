@@ -26,8 +26,12 @@
 
 (define (database-connect! #:dsn [dsn (string->symbol (getenv "DATABASE_DRIVER"))]
                            #:notify-ch [ch #f])
+  (when (equal? ch #t)
+    (set! ch (make-async-channel)))
+
   (current-database-connection
    (dsn-connect (get-dsn dsn)
                 #:notification-handler (notification-handler ch)))
 
-  (wait-for-notify! ch))
+  (wait-for-notify! ch)
+  ch)
