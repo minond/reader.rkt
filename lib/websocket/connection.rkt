@@ -18,16 +18,16 @@
 (define (clear-connections!)
   (hash-clear! connections))
 
-(define (track-connection! session-key ws-conn)
+(define (track-connection! key ws-conn)
   (with-lock lock
     (lambda ()
-      (define ws-conns (lookup-connections session-key))
-      (hash-set! connections session-key (cons ws-conn ws-conns)))))
+      (define ws-conns (lookup-connections key))
+      (hash-set! connections key (cons ws-conn ws-conns)))))
 
-(define (untrack-connection! session-key ws-conn)
+(define (untrack-connection! key ws-conn)
   (with-lock lock
     (lambda ()
-      (define ws-conns (remove ws-conn (lookup-connections session-key)))
+      (define ws-conns (remove ws-conn (lookup-connections key)))
       (if (empty? ws-conns)
-          (hash-remove! connections session-key)
-          (hash-set! connections session-key ws-conns)))))
+          (hash-remove! connections key)
+          (hash-set! connections key ws-conns)))))

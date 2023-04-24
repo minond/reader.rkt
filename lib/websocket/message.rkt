@@ -7,10 +7,10 @@
 
 (provide ws-send)
 
-(define (ws-send session-key message)
-  (for ([ws-conn (lookup-connections session-key)])
-    (when (ws-conn? ws-conn)
-      (ws-send! ws-conn (encode message)))))
+(define (ws-send key message)
+  (for ([ws-conn (lookup-connections key)]
+        #:unless (ws-conn-closed? ws-conn))
+    (ws-send! ws-conn (encode message))))
 
 (define (encode message)
   (if (hash? message)
