@@ -7,13 +7,12 @@
 
          reader/lib/parameters)
 
-(provide message
+(provide (struct-out message)
          listen
          unlisten
          notify
          notification-handler
-         wait-for-notify!
-         message)
+         wait-for-notify!)
 
 (struct message (channel payload) #:transparent)
 
