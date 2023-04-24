@@ -1,8 +1,12 @@
 #lang racket/base
 
-(require db
+(require racket/class
+         racket/async-channel
+
+         db
          deta/reflect
 
+         reader/lib/database/notify
          reader/lib/parameters)
 
 (provide database-connect!)
@@ -20,8 +24,10 @@
                                  #:user (getenv "DATABASE_USER")
                                  #:password (getenv "DATABASE_PASSWORD")))
 
-(define (database-connect! [dsn (string->symbol (getenv "DATABASE_DRIVER"))])
-  (let ([pool (connection-pool
-               (lambda ()
-                 (dsn-connect (get-dsn dsn))))])
-    (current-database-connection (connection-pool-lease pool))))
+(define (database-connect! #:dsn [dsn (string->symbol (getenv "DATABASE_DRIVER"))]
+                           #:notify-ch [ch #f])
+  (current-database-connection
+   (dsn-connect (get-dsn dsn)
+                #:notification-handler (notification-handler ch)))
+
+  (wait-for-notify! ch))
