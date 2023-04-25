@@ -5,8 +5,9 @@ import {
 } from "https://unpkg.com/htm/preact/standalone.module.js";
 import Subscriber from "/public/subscriber.js";
 
-const sub = new Subscriber("ws://localhost:8082");
 const userId = document.body.getAttribute("data-user-id");
+const wsPort = 8082;
+const sub = new Subscriber(`ws://${window.location.hostname}:${wsPort}`);
 const articleCreatedChannel = `user/${userId}/article/created`;
 const containerEl = document.querySelector(".reload-page-container");
 
