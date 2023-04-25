@@ -3,10 +3,16 @@
 (require crypto
          crypto/libcrypto)
 
-(provide make-password
+(provide hexsha1
+         make-password
          check-password)
 
 (crypto-factories libcrypto-factory)
+
+(define (hexsha1 in)
+  (if (bytes? in)
+      (bytes->hex-string (digest 'sha1 in))
+      (hexsha1 (string->bytes/utf-8 in))))
 
 (define (make-password password #:salt [salt (crypto-random-bytes 128)])
   (let* ([bytes (string->bytes/utf-8 password)]

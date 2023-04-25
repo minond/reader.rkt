@@ -5,9 +5,11 @@
 
          db
 
+         reader/lib/crypto
          reader/lib/parameters)
 
 (provide (struct-out message)
+         gen-channel-id
          listen
          unlisten
          notify
@@ -15,6 +17,11 @@
          wait-for-notify!)
 
 (struct message (channel payload) #:transparent)
+
+(define (gen-channel-id str)
+  (if (> (string-length str) 63)
+      (hexsha1 str)
+      str))
 
 (define (listen channel [conn (current-database-connection)])
   (query conn (format "listen ~a" (escape channel)))

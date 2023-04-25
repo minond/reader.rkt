@@ -43,12 +43,12 @@
   channels)
 
 (define (handle-subscribe channels ws-conn message)
-  (define channel (string-replace message "subscribe " "" #:all? #f))
+  (define channel (gen-channel-id (string-replace message "subscribe " "" #:all? #f)))
   (track-channel channel ws-conn)
   (cons channel channels))
 
 (define (handle-unsubscribe channels ws-conn message)
-  (define channel (string-replace message "unsubscribe " "" #:all? #f))
+  (define channel (gen-channel-id (string-replace message "unsubscribe " "" #:all? #f)))
   (untrack-channel channel ws-conn)
   (remove channel channels))
 
