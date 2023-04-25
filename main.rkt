@@ -18,9 +18,10 @@
          reader/lib/job
          reader/lib/database
          reader/lib/websocket
+         reader/lib/websocket/listen
          reader/lib/servlet)
 
-(database-connect!)
+(define ch (database-connect! #:notify-ch #t))
 
 (register-job-handler! fetch-feed-articles fetch-feed-articles/handler)
 (register-job-handler! save-new-feed save-new-feed/handler)
@@ -32,7 +33,13 @@
                [user-registration/validate user-registration/validate+override]
                [user-registration/registered user-registration/registered+override])
   (define stop-job-manager (make-job-manager))
-  (define stop-websocket-server (start-authenticated-ping-pong-websocket-server))
+  (define stop-websocket-server (start-authenticated-websocket-server))
+  (define stop-notify-listens (listen ch))
+
   (start-servlet)
+
+  (stop-notify-listens)
   (stop-websocket-server)
-  (stop-job-manager))
+  (stop-job-manager)
+
+  (clear-connections!))
