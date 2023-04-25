@@ -12,6 +12,7 @@
 
          reader/lib/job
          reader/lib/parameters
+         reader/lib/websocket/message
          reader/lib/extractor
          reader/lib/extractor/media
          reader/lib/extractor/metadata
@@ -45,8 +46,12 @@
                             #:title (rss-feed-title feed-data)
                             #:description description)))
 
+  (define record-id (feed-id feed-record))
+  (ws-publish (format "user/~a/feed/created" user-id)
+              (hash 'id record-id))
+
   (log-info "saved feed record, fetching articles")
-  (schedule-job! (fetch-feed-articles user-id (feed-id feed-record))))
+  (schedule-job! (fetch-feed-articles user-id record-id)))
 
 (define (find-feed-logo-url+description link)
   (with-handlers ([exn:fail? (lambda (e)
