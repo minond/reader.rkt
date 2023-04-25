@@ -1,6 +1,8 @@
 #lang racket/base
 
-(require reader/lib/database/notify
+(require json
+
+         reader/lib/database/notify
          reader/lib/websocket/message)
 
 (provide listen)
@@ -15,7 +17,9 @@
            ch
            (lambda (msg)
              (ws-send (message-channel msg)
-                      (message-payload msg)))))
+                      (jsexpr->string
+                       (hash 'channel (message-channel msg)
+                             'payload (message-payload msg)))))))
          (loop)))))
 
   (lambda ()
