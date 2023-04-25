@@ -53,18 +53,24 @@
 
 (define (:reader-zero-state)
   (:div 'class: "no-articles"
+        (:script 'type: 'module 'src: "/public/reload-on-article-created.js")
         (:p "Welcome to Reader! Let's start by subscribing to a feed. Use the form below to search for something you'd like to start following.")
-        (:feed/form)))
+        (:feed/form)
+        (:div 'class: "reload-page-container")))
 
 (define (:reader-downloading-now)
   (:div 'class: "no-articles"
+        (:script 'type: 'module 'src: "/public/reload-on-article-created.js")
         (:p "We're downloading that feed for you right now. In the mean time, would you like to subscribe to another feed?")
-        (:feed/form)))
+        (:feed/form)
+        (:div 'class: "reload-page-container")))
 
 (define (:reader-nothing-to-read)
   (:div 'class: "no-articles"
+        (:script 'type: 'module 'src: "/public/reload-on-article-created.js")
         (:p "Looks like you're out of things to read. Would you like to subscribe to a new feed?")
-        (:feed/form)))
+        (:feed/form)
+        (:div 'class: "reload-page-container")))
 
 (define (:reader/feeds feed-stats)
   (:div 'class: "reader-feeds"

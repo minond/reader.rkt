@@ -7,6 +7,7 @@
          (prefix-in : scribble/html/extra)
 
          reader/lib/app/components/flash
+         reader/lib/parameters
          reader/lib/web/session)
 
 (provide layout)
@@ -20,33 +21,22 @@
            (:meta 'name: "viewport"
                   'content: "width=device-width, initial-scale=1.0")
            (:title "Reader")
-           (:style (:literal css))
-           (:body
-            (:header
-             (:table
-              (:tr
-               (:td
-                (:a 'class: "serif" 'href: "/" "Reader")
-                (:flash))
-               (:td 'class: "actions"
-                    (if (authenticated?)
-                        (list (:a 'href: "/feeds/new" "Add feed")
-                              (:a 'href: "/feeds" "Manage feeds")
-                              (:a 'href: "/sessions/destroy" "Sign out"))
-                        null))))
-             (:div 'class: "separator"))
-            (:main content)
-            #;(:script
-               'type: "text/javascript"
-               'src: "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
-            #;(:script
-               "MathJax.Hub.Config({
-               TeX: { equationNumbers: { autoNumber: 'AMS' } },
-               CommonHTML: { linebreaks: { automatic: true } },
-               'HTML-CSS': { linebreaks: { automatic: true } },
-               SVG: { linebreaks: { automatic: true } }
-             });")
-            ))))))
+           (:style (:literal css)))
+          (:body 'data-user-id: (current-user-id)
+                 (:header
+                  (:table
+                   (:tr
+                    (:td
+                     (:a 'class: "serif" 'href: "/" "Reader")
+                     (:flash))
+                    (:td 'class: "actions"
+                         (if (authenticated?)
+                             (list (:a 'href: "/feeds/new" "Add feed")
+                                   (:a 'href: "/feeds" "Manage feeds")
+                                   (:a 'href: "/sessions/destroy" "Sign out"))
+                             null))))
+                  (:div 'class: "separator"))
+                 (:main content))))))
 
 (define font-styles-url
   "https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@200;400;700&display=swap")
@@ -154,9 +144,12 @@
     [.table-content.with-indicator
      [(: td first-child) #:width 20px]]
 
-    [a #:color ,@link-color-normal
+    [a .link
+       #:color ,@link-color-normal
        #:text-decoration none]
-    [a:hover #:text-decoration underline]
+    [a:hover .link:hover
+             #:cursor pointer
+             #:text-decoration underline]
     [h1 h2 h3 h4 h5 h6
         #:line-height 1.2
         #:color initial
