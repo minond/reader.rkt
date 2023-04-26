@@ -24,4 +24,4 @@
 
 (define data/minond-xyz-same-adt
   (load-test-data "https://minond.xyz/posts/adt-type-meaning"
-                  (build-path test-root "lib/extractor/data/minond.xyz-posts-adt-type-meaning.html")))
+                  (build-path test-root "lib/extractor/data/minond-xyz-posts-adt-type-meaning")))
