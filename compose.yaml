@@ -1,0 +1,10 @@
+services:
+  reader-web:
+    image: reader
+    build: .
+    stop_signal: SIGINT
+    ports:
+      - "8000:8000"
+      - "8082:8082"
+    env_file:
+      - .env
