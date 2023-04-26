@@ -1,9 +1,1 @@
-main
-*.db
-*~
-.DS_Store
-.\#*
-/doc/
-\#*
-compiled/
 .env

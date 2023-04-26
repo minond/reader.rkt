@@ -1,6 +1,5 @@
 services:
   web:
-    image: reader
     build: web
     stop_signal: SIGINT
     ports:
