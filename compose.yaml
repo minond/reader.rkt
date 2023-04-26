@@ -1,5 +1,5 @@
 services:
-  reader-web:
+  web:
     image: reader
     build: .
     stop_signal: SIGINT
@@ -17,7 +17,7 @@ services:
     ports:
       - 80:80
     depends_on:
-      - reader-web
+      - web
     networks:
       - frontnet
 
