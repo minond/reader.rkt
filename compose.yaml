@@ -8,3 +8,18 @@ services:
       - "8082:8082"
     env_file:
       - .env
+    networks:
+      - frontnet
+
+  proxy:
+    build: proxy
+    restart: always
+    ports:
+      - 80:80
+    depends_on:
+      - reader-web
+    networks:
+      - frontnet
+
+networks:
+  frontnet:
