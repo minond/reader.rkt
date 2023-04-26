@@ -6,7 +6,7 @@
          racket/function
 
          threading
-         reader/lib/thirdparty/html-parsing/main)
+         reader/thirdparty/html-parsing/main)
 
 (provide parse
          (struct-out element)
