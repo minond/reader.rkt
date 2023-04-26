@@ -203,20 +203,3 @@
                            (ceiling (/ (- end-time start-time) 1000000)))
 
                  (response-json res))))]))
-
-; (syntax->datum (expand-once #'
-;                             (openapi openai "openapi.yaml"
-;                                      #:only (create-chat-completion)
-;                                      #:bearer 123)
-;                             ))
-
-; (openapi openai "openapi.yaml"
-;          #:only (create-chat-completion)
-;          #:bearer (getenv "OPENAI_API_KEY"))
-
-; (create-chat-completion
-;   #:model "gpt-3.5-turbo"
-;   #:user (format "user-~a" "admin")
-;   #:stream #t
-;   #:messages (list (hash 'role "user"
-;                          'content "Can you stream API responses?")))
