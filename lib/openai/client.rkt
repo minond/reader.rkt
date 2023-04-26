@@ -1,6 +1,6 @@
 #lang racket/base
 
-(require openapi)
+(require reader/thirdparty/openapi/client)
 
 (provide create-chat-completion)
 
