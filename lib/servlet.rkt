@@ -12,5 +12,8 @@
                  #:extra-files-paths (list (build-path app-root "assets")
                                            (build-path lib-app-root "assets"))
                  #:servlet-path "/"
-                 #:port 8000
+                 #:listen-ip (getenv "SERVER_LISTEN_IP")
+                 #:port (or (and (getenv "SERVER_LISTEN_PORT")
+                                 (string->number (getenv "SERVER_LISTEN_PORT")))
+                            8000)
                  #:servlet-regexp #rx""))
