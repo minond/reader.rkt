@@ -1,7 +1,7 @@
 services:
   web:
     image: reader
-    build: .
+    build: web
     stop_signal: SIGINT
     ports:
       - "8000:8000"

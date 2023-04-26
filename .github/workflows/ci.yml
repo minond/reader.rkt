@@ -27,4 +27,6 @@ jobs:
       #     key: ${{ runner.os }}-racket
 
       - run: raco pkg install --no-docs --skip-installed --auto --name reader
+        working-directory: web
       - run: raco test -x -p reader
+        working-directory: web
