@@ -11,6 +11,7 @@
          reader/app/components/layout
          reader/app/components/user
          reader/app/dispatch
+         reader/app/crontab
 
          reader/lib/app/models/job
          reader/lib/parameters
@@ -35,9 +36,11 @@
   (define stop-job-manager (make-job-manager))
   (define stop-websocket-server (start-authenticated-websocket-server))
   (define stop-notify-listens (listen ch))
+  (define stop-crontab (start-crontab))
 
   (start-servlet)
 
+  (stop-crontab)
   (stop-notify-listens)
   (stop-websocket-server)
   (stop-job-manager)

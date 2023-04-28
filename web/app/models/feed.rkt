@@ -1,10 +1,13 @@
 #lang racket/base
 
 (require racket/string
+
          threading
          gregor
          uuid
-         deta)
+         deta
+
+         reader/lib/database/type)
 
 (provide (schema-out feed)
          (schema-out feed-stats)
@@ -62,7 +65,7 @@
   (~> (from feed #:as f)
       (where (and (= f.subscribed #t)
                   (or
-                   (< f.last-sync-attempted-at ,(~t older-than "yyyy-MM-dd'T'HH:mm:ss"))
+                   (< f.last-sync-attempted-at ,(datetime->sql-timestamp older-than))
                    (is f.last-sync-attempted-at null))))
       (order-by ([f.last-sync-attempted-at]))
       (limit ,lim)))

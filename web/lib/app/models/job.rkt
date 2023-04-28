@@ -11,6 +11,7 @@
          deta
          uuid
 
+         reader/lib/database/type
          reader/lib/parameters)
 
 (provide (except-out (schema-out job)
@@ -100,15 +101,3 @@
               [logs ,logs]
               [completed-at ,(datetime->sql-timestamp (now/utc))])
       (where (= j.id ,(job-id job)))))
-
-;; Not sure why deta isn't converting now/utc to a sql-timestamp in a prepared
-;; statement, but it is when used as the default value in a schema definition.
-(define (datetime->sql-timestamp dt)
-  (sql-timestamp (->year dt)
-                 (->month dt)
-                 (->day dt)
-                 (->hours dt)
-                 (->minutes dt)
-                 (->seconds dt)
-                 (->nanoseconds dt)
-                 #f))
