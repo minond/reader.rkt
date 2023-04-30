@@ -4,7 +4,8 @@ WORKDIR /reader
 
 CMD ["./main"]
 
-COPY info.rkt .
+COPY scripts scripts
+COPY info.rkt info.rkt
 RUN cd /reader && ./scripts/install
 
 COPY . .
