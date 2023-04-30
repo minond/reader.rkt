@@ -1,16 +1,20 @@
+name: reader
+
 services:
   web:
+    image: registry.digitalocean.com/minond/reader-web
     build: web
     stop_signal: SIGINT
     ports:
-      - "8000:8000"
-      - "8082:8082"
+      - 8000:8000
+      - 8082:8082
     env_file:
       - .env
     networks:
       - frontnet
 
   proxy:
+    image: registry.digitalocean.com/minond/reader-proxy
     build: proxy
     restart: always
     ports:
