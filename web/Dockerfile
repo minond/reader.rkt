@@ -5,9 +5,7 @@ WORKDIR /reader
 CMD ["./main"]
 
 COPY info.rkt .
-RUN cd /reader && \
-      raco pkg install --no-docs --skip-installed --auto --name reader
+RUN cd /reader && ./scripts/install
 
 COPY . .
-RUN cd /reader && \
-      raco exe main.rkt
+RUN cd /reader && ./scripts/build

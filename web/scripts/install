@@ -1,0 +1,3 @@
+#!/bin/bash
+
+raco pkg install --no-docs --skip-installed --auto --name reader
