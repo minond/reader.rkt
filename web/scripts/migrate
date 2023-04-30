@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./scripts/north migrate -f
