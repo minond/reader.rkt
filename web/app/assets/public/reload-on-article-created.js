@@ -6,8 +6,10 @@ import {
 import Subscriber from "/public/subscriber.js";
 
 const userId = document.body.getAttribute("data-user-id");
-const wsPort = 8082;
-const sub = new Subscriber(`ws://${window.location.hostname}:${wsPort}`);
+const port = 8082;
+const protocol = window.location.protocol === "http:" ? "ws:" : "wss:";
+const hostname = window.location.hostname;
+const sub = new Subscriber(`${protocol}//${hostname}:${port}`);
 const articleCreatedChannel = `user/${userId}/article/created`;
 const containerEl = document.querySelector(".reload-page-container");
 
