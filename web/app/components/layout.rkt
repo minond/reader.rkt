@@ -12,7 +12,7 @@
 
 (provide layout)
 
-(define (layout content)
+(define (layout content #:body-class [body-class ""])
   (:xml->string
    (list (:doctype 'html)
          (:html
@@ -23,6 +23,7 @@
            (:title "Reader")
            (:style (:literal css)))
           (:body 'data-user-id: (current-user-id)
+                 'class: body-class
                  (:header
                   (:table
                    (:tr
@@ -95,11 +96,6 @@
             #:left 0
             #:z-index 1
 
-            [.separator
-             .actions
-             #:transition (opacity .2s)
-             #:opacity 0]
-
             [td #:padding (.5em ,@content-horizontal-padding)]
             [a #:color initial]
             [.actions #:text-align right
@@ -111,17 +107,24 @@
             #:margin (0 auto)
             #:max-width ,@content-max-width]
 
-    [header:hover
-     #:background-color ,@body-background-color
-     [.separator
-      .actions
-      #:opacity 1]]
+    [body.hidden-header
+     [header
+      [.separator
+       .actions
+       #:transition (opacity .2s)
+       #:opacity 0]]
+     [header:hover
+      #:background-color ,@body-background-color
+      [.separator
+       .actions
+       #:opacity 1]]]
     [@media (and screen (#:max-width (apply calc (,@article-max-width * 2 + ,article-column-gap * 4))))
-            [header
-             #:background-color ,@body-background-color
-             [.actions
-              .separator
-              #:opacity 1]]]
+            [body.hidden-header
+             [header
+              #:background-color ,@body-background-color
+              [.actions
+               .separator
+               #:opacity 1]]]]
 
     [main #:padding ,@content-horizontal-padding]
 
@@ -199,7 +202,7 @@
                 [100% #:transform (apply rotate 360deg)]]
 
     [.reading #:max-width (apply calc (,article-max-width * 2 + ,article-column-gap))
-              #:margin (0 auto)
+              #:margin (2.5em auto 0 auto)
               #:font-family (Libre Baskerville) (serif)
 
               [.container #:display grid

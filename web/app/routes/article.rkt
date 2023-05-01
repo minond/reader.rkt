@@ -13,6 +13,7 @@
          reader/app/models/feed
          reader/app/components/article
          reader/app/components/reader
+         reader/app/components/layout
          reader/app/commands/content-summary
          reader/lib/parameters
          reader/lib/web)
@@ -53,7 +54,9 @@
          [feed (lookup (current-database-connection)
                        (find-feed-by-id #:id (article-feed-id article)
                                         #:user-id (current-user-id)))])
-    (render (:article/full feed article))))
+    (render (:article/full feed article)
+            #:layout (lambda (content)
+                       (layout content #:body-class "hidden-header")))))
 
 (define (/articles/<id>/archive req id)
   (query (current-database-connection)
