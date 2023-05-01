@@ -211,8 +211,22 @@
               #:font-family (Libre Baskerville) (serif)
 
               [.container #:display grid
-                          #:column-gap ,article-column-gap
-                          #:grid-template-columns (,@article-max-width ,@article-max-width)]
+                          #:max-width (apply calc (,article-max-width * 2))
+                          #:grid-template-columns (50% 50%)]
+              [@media (and screen (#:min-width (apply calc (,article-max-width * 2))))
+                      [.container
+                       [article #:padding-right 2.5em]
+                       [aside #:padding-left 2.5em]]]
+              [@media (and screen
+                           (#:min-width (apply calc (,article-max-width)))
+                           (#:max-width (apply calc (,article-max-width * 2))))
+                      [.container
+                       [article #:padding-right 1em]
+                       [aside #:padding-left 1em]]]
+              [@media (and screen (#:max-width ,article-max-width))
+                      [.container
+                       #:grid-template-columns (100% 0%)
+                       [aside #:display none]]]
 
               [h1 h2 h3
                   #:margin (1em 0)]
