@@ -96,13 +96,18 @@
             #:left 0
             #:z-index 1
 
-            [td #:padding (.5em ,@content-horizontal-padding)]
+            [(: td (apply nth-child 1)) #:padding (.5em 0em .5em ,content-horizontal-padding)]
+            [(: td (apply nth-child 2)) #:padding (.5em ,content-horizontal-padding .5em 0em)]
             [a #:color initial]
             [.actions #:text-align right
                       [a #:font-size 0.9em
                          #:margin-left 2em
+                         #:white-space nowrap
                          #:color ,@text-color-light
                          #:font-weight bold]]]
+    [@media (and screen (#:max-width 320px))
+            [header
+             [.actions [a #:margin-left 10px]]]]
     [header main
             #:margin (0 auto)
             #:max-width ,@content-max-width]
