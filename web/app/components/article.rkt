@@ -22,13 +22,21 @@
   (let* ([datetime (~t (article-date article) "y-M-d HH:mm:ss")]
          [humandate (~t (article-date article) "MMMM d, yyyy")])
     (:div 'class: "reading"
-          (:h2 (:a 'href: (article-link article)
-                   'target: '_blank
-                   (article-title article)))
-          (:h4 (:a 'href: (feed-link feed)
-                   'target: '_blank
-                   (feed-title feed)))
-          (:time 'datetime: datetime humandate)
+          (:div 'class: "show-on-hover-container"
+                (:h2 (:a 'href: (article-link article)
+                         'target: '_blank
+                         (article-title article)))
+                (:h4 (:a 'href: (feed-link feed)
+                         'target: '_blank
+                         (feed-title feed)))
+                (:time 'datetime: datetime humandate)
+                (if (article-archived article)
+                    (:a 'class: "action show-on-hover"
+                        'href: (format "/articles/~a/unarchive" (article-id article))
+                        "[unarchive]")
+                    (:a 'class: "action show-on-hover"
+                        'href: (format "/articles/~a/archive" (article-id article))
+                        "[archive]")))
           (:spacer #:direction horizontal #:size small)
           (:input 'id: 'article-id
                   'type: 'hidden

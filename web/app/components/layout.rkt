@@ -237,9 +237,10 @@
                           #:font-size .9em;
                           #:color ,@text-color-light]
               [blockquote #:font-style italic]
-              [time .action
-                    #:font-size 0.8em
+              [time #:font-size 0.8em
                     #:color ,@text-color-light]
+              [.action #:font-size 0.9em
+                       #:margin-left 0.5em]
               [img iframe
                    #:max-width 100%
                    #:height auto
