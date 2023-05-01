@@ -90,7 +90,7 @@
             #:position fixed
             #:transition (background-color .2s)
             #:display block
-            #:background-color transparent
+            #:background-color ,@body-background-color
             #:width 100%
             #:top 0
             #:left 0
@@ -114,6 +114,7 @@
 
     [body.hidden-header
      [header
+      #:background-color transparent
       [.separator
        .actions
        #:transition (opacity .2s)
