@@ -139,12 +139,15 @@
       #f
       (match elem
         [(scored-element 'img _ _ _ (html-element _ attributes _))
-         (let ([data (read-attribute attributes 'data-src)]
-               [src (read-attribute attributes 'src)]
-               [alt (read-attribute attributes 'alt)])
-           (image (extract-attributes attributes)
-                  (or (and src (absolute-url base-url src)) data)
-                  alt))]
+         (let* ([data (read-attribute attributes 'data-src)]
+                [src- (read-attribute attributes 'src)]
+                [alt (read-attribute attributes 'alt)]
+                [src (or (and src- (absolute-url base-url src-)) data)]
+                [not-svg+xml (and src (not (string-prefix? src "data:image/svg+xml")))])
+           (and not-svg+xml
+                (image (extract-attributes attributes)
+                       src
+                       alt)))]
         [(scored-element 'video _ _ _ (html-element _ attributes _))
          (let ([src (read-attribute attributes 'src)])
            (video (extract-attributes attributes)
