@@ -33,7 +33,10 @@
                                     [value (cddr part)])
                                 (match tag
                                   ['title (set! title (car value))]
-                                  ['link (set! link (string-list-join (se-path*/list '(link #:href) part)))]
+                                  ['link
+                                   (when (or (null? link) (equal? "alternative"
+                                                                  (string-list-join (se-path*/list '(link #:rel) part))))
+                                     (set! link (string-list-join (se-path*/list '(link #:href) part))))]
                                   ['published (set! date (iso8601->datetime (car value)))]
                                   ['updated (set! date (iso8601->datetime (car value)))]
                                   ['summary (set! content (if (and (list? (cddr part)) (cdata? (caddr part)))
