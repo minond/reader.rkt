@@ -29,6 +29,7 @@
   (define prepared
     (~> str
         (string-replace "<!DOCTYPE html>" "")
+        (string-replace "<?xml encoding=\"UTF-8\">" "")
         (string-append " " _ " ")))
 
   (define tree (cddr (html->xexp prepared)))
