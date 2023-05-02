@@ -346,9 +346,13 @@
 
     [.separator #:border-bottom (1px solid ,@separator-color-normal)]
     [.spacer #:display inline-block]
+    [.spacer.vertical.tiny #:height .5em]
+    [.spacer.vertical.smaller #:height .75em]
     [.spacer.vertical.small #:height 1em]
     [.spacer.vertical.medium #:height 2em]
     [.spacer.vertical.large #:height 4em]
+    [.spacer.horizontal.tiny #:width .5em]
+    [.spacer.horizontal.smaller #:width .75em]
     [.spacer.horizontal.small #:width 1em]
     [.spacer.horizontal.medium #:width 2em]
     [.spacer.horizontal.large #:width 4em]
@@ -440,13 +444,14 @@
      #:display block
      [.reader-article-title
       .reader-article-description
-      #:transition (color .25s)
       #:color black]
      [.reader-article-title
       #:font-size 1.25em
       #:font-weight bold]
      [.reader-article-description
-      #:margin-bottom 0]]
+      #:margin-bottom 0]
+     [.reader-article-info
+      #:color ,text-color-lighter]]
     [(: .reader-article (apply not (: first-child)))
      #:border-top (1px solid ,@border-color-lighter)]
     [.reader-article:hover

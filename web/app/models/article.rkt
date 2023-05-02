@@ -1,15 +1,21 @@
 #lang racket/base
 
 (require racket/string
+         racket/sequence
+
          threading
          gregor
          uuid
-         deta)
+         deta
+
+         reader/lib/parameters)
 
 (provide (schema-out article)
+         (schema-out article-summary)
          make-article
          count-articles
          count-articles-by-feed
+         select-article-summaries
          select-articles
          select-articles-by-feed
          find-article-by-id
@@ -33,6 +39,20 @@
    [(archived #f) boolean/f]
    [(created-at (now/utc)) datetime/f]))
 
+(define-schema article-summary
+  #:virtual
+  ([id string/f]
+   [link string/f #:contract non-empty-string?]
+   [title string/f #:contract non-empty-string?]
+   [description string/f]
+   [type string/f]
+   [date datetime/f]
+   [archived boolean/f]
+   [created-at datetime/f]
+   [feed-id string/f]
+   [feed-link string/f #:contract non-empty-string?]
+   [feed-title string/f #:contract non-empty-string?]))
+
 (define (count-articles #:user-id user-id
                         #:archived [archived #f]
                         #:subscribed [subscribed #t])
@@ -50,6 +70,26 @@
       (join feed #:as f #:on (= f.id a.feed-id))
       (where (and (= a.user-id ,user-id)
                   (= a.feed-id ,feed-id)))))
+
+(define (select-article-summaries #:user-id [user-id (current-user-id)]
+                                  #:archived [archived #f]
+                                  #:subscribed [subscribed #t]
+                                  #:limit lim
+                                  #:offset [off 0]
+                                  #:conn [conn (current-database-connection)])
+  (sequence->list
+   (in-entities conn
+                (~> (from article #:as a)
+                    (select a.id a.link a.title a.description a.type a.date a.archived a.created-at
+                            f.id f.link f.title)
+                    (join #:left feed #:as f #:on (= f.id a.feed-id))
+                    (where (and (= a.user-id ,user-id)
+                                (= a.archived ,archived)
+                                (= f.subscribed ,subscribed)))
+                    (order-by ([a.date #:desc]))
+                    (offset ,off)
+                    (limit ,lim)
+                    (project-onto article-summary-schema)))))
 
 (define (select-articles #:user-id user-id
                          #:archived [archived #f]

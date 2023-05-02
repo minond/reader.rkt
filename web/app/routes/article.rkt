@@ -35,17 +35,15 @@
                                                          #:archived #f))
                                  page-size))]
          [offset (* (- current-page 1) page-size)]
-         [articles (sequence->list
-                    (in-entities (current-database-connection)
-                                 (select-articles #:user-id (current-user-id)
-                                                  #:archived #f
-                                                  #:limit page-size
-                                                  #:offset offset)))]
+         [article-summaries (select-article-summaries #:user-id (current-user-id)
+                                                      #:archived #f
+                                                      #:limit page-size
+                                                      #:offset offset)]
          [feed-stats (sequence->list
                       (in-entities (current-database-connection)
                                    (select-feed-stats #:user-id (current-user-id))))])
     (render
-     (:reader feed-stats articles scheduled-feed-download current-page page-count))))
+     (:reader feed-stats article-summaries scheduled-feed-download current-page page-count))))
 
 (define (/articles/<id>/show req id)
   (let* ([article (lookup (current-database-connection)

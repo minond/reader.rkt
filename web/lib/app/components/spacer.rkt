@@ -7,12 +7,14 @@
 (provide :spacer
          horizontal
          vertical
+         tiny
+         smaller
          small
          medium
          large)
 
-(define-values (horizontal vertical small medium large)
-  (values 'horizontal 'vertical 'small 'medium 'large))
+(define-values (horizontal vertical tiny smaller small medium large)
+  (values 'horizontal 'vertical 'tiny 'smaller 'small 'medium 'large))
 
 (define (:spacer #:direction direction
                  #:size [size medium])

@@ -45,7 +45,6 @@
    [archived-count integer/f]
    [unarchived-count integer/f]))
 
-
 (define (select-feed-stats #:user-id user-id)
   (~> (from feed #:as f)
       (select f.id f.title f.logo-url f.link f.subscribed f.last-sync-completed-at f.created-at

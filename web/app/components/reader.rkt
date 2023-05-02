@@ -1,6 +1,8 @@
 #lang racket/base
 
 (require racket/match
+
+         gregor
          (prefix-in : scribble/html/xml)
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
@@ -10,12 +12,13 @@
          reader/app/components/feed
 
          reader/lib/app/components/pagination
+         reader/lib/app/components/spacer
          reader/lib/string)
 
 (provide :reader)
 
 (define (:reader feed-stats
-                 articles
+                 article-summaries
                  scheduled-feed-download
                  current-page
                  page-count)
@@ -33,7 +36,7 @@
         ;; (8) | No    | Yes      | No        | Error state, no feeds but has orphan articles. |
         ;;     |-------+----------+-----------+------------------------------------------------|
         (match/values
-         (values feed-stats articles scheduled-feed-download)
+         (values feed-stats article-summaries scheduled-feed-download)
          ;; (1)
          [((list) (list) #f)
           (:reader-zero-state)]
@@ -45,10 +48,10 @@
           (:reader-nothing-to-read)]
          ;; (5/6/7/8)
          [(_ (list _ ...) _)
-          (:reader-standard-view articles current-page page-count)])))
+          (:reader-standard-view article-summaries current-page page-count)])))
 
-(define (:reader-standard-view articles current-page page-count)
-  (list (:reader/articles articles)
+(define (:reader-standard-view article-summaries current-page page-count)
+  (list (:reader/articles article-summaries)
         (:pagination current-page page-count)))
 
 (define (:reader-zero-state)
@@ -93,16 +96,22 @@
         (:div 'class: "reader-feed-item-count" (and (not (zero? count))
                                                     count))))
 
-(define (:reader/articles articles)
+(define (:reader/articles article-summaries)
   (:div 'class: "reader-articles"
-        (map :reader/article articles)))
+        (map :reader/article article-summaries)))
 
-(define (:reader/article article)
-  (:a 'href: (format "/articles/~a" (article-id article))
+(define (:reader/article article-summary)
+  (:a 'href: (format "/articles/~a" (article-summary-id article-summary))
       'class: "reader-article"
       'title: ""
       (:div 'class: "reader-article-title"
-            (article-title article))
-      (and (not (zero? (string-length (article-description article))))
+            (article-summary-title article-summary))
+      (:div 'class: "reader-article-info"
+            (:span  (article-summary-feed-title article-summary))
+            (:spacer #:direction horizontal #:size tiny)
+            (:entity #x000B7)
+            (:spacer #:direction horizontal #:size tiny)
+            (:span  (~t (article-summary-date article-summary) "MMMM d, yyyy")))
+      (and (not (zero? (string-length (article-summary-description article-summary))))
            (:p 'class: "reader-article-description"
-               (string-chop (article-description article) 300 #:end "…")))))
+               (string-chop (article-summary-description article-summary) 300 #:end "…")))))
