@@ -144,7 +144,7 @@
      #:max-width (apply calc (,article-max-width * 2))
      #:margin (0 auto)
      [td th
-         #:padding 0.75em
+         #:padding (0.75em 0 0.75em 0.75em)
          #:margin 0]
      [th #:text-align left
          #:font-weight 900]
@@ -439,7 +439,7 @@
      #:text-overflow ellipsis]
 
     [.reader-article
-     #:padding 1em
+     #:padding (1em 0)
      #:outline none
      #:display block
      [.reader-article-title
