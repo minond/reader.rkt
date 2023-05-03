@@ -25,4 +25,5 @@
 (define (clean-up-tag-string str)
   (map (lambda~> (string-trim)
                  (regexp-replace #px"\\.$" _ "")
-                 (regexp-replace* #px"^[a-z]" _ string-upcase)) (string-split str ",")))
+                 (regexp-replace* #px"^[a-z]" _ string-upcase))
+       (string-split str ",")))

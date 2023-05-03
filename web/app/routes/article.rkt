@@ -14,6 +14,7 @@
          reader/app/components/article
          reader/app/components/reader
          reader/app/components/layout
+         reader/app/commands/generate-article-summary
          reader/app/commands/content-summary
          reader/lib/parameters
          reader/lib/web)
@@ -76,7 +77,7 @@
                                               #:user-id (current-user-id)))]
          [summary (article-generated-summary-html article)])
     (when (sql-null? summary)
-      (define-values (text html) (generate-article-content-summary article))
+      (define-values (text html) (generate-article-summary article))
       (set! summary html)
       (update-one! (current-database-connection)
                    (~> article
