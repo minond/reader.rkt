@@ -10,6 +10,7 @@
          reader/app/models/article
          reader/app/models/feed
          reader/app/components/feed
+         reader/app/components/image
 
          reader/lib/app/components/pagination
          reader/lib/app/components/spacer
@@ -101,17 +102,21 @@
         (map :reader/article article-summaries)))
 
 (define (:reader/article article-summary)
-  (:a 'href: (format "/articles/~a" (article-summary-id article-summary))
-      'class: "reader-article"
-      'title: ""
-      (:div 'class: "reader-article-title"
-            (article-summary-title article-summary))
-      (:div 'class: "reader-article-info"
-            (:span  (article-summary-feed-title article-summary))
-            (:spacer #:direction horizontal #:size tiny)
-            (:entity #x000B7)
-            (:spacer #:direction horizontal #:size tiny)
-            (:span  (~t (article-summary-date article-summary) "MMMM d, yyyy")))
-      (and (not (zero? (string-length (article-summary-description article-summary))))
-           (:p 'class: "reader-article-description"
-               (string-chop (article-summary-description article-summary) 300 #:end "…")))))
+  (:div 'class: "reader-article"
+        (:a 'href: (format "/articles/~a" (article-summary-id article-summary))
+            (:div 'class: "reader-article-title"
+                  (article-summary-title article-summary)))
+        (:div 'class: "reader-article-details"
+              (:span (article-summary-feed-title article-summary))
+              (:spacer #:direction horizontal #:size tiny)
+              (:entity #x000B7)
+              (:spacer #:direction horizontal #:size tiny)
+              (:span (~t (article-summary-date article-summary) "MMMM d, yyyy")))
+        (:div 'class: "reader-article-actions vc-container"
+              (:a 'href: (format "/articles/~a/archive" (article-summary-id article-summary))
+                  'class: "vc"
+                  (:image/archive)))
+        (and (not (zero? (string-length (article-summary-description article-summary))))
+             (:a 'href: (format "/articles/~a" (article-summary-id article-summary))
+                 'class: "reader-article-description"
+                 (:p (string-chop (article-summary-description article-summary) 300 #:end "…"))))))

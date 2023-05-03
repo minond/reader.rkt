@@ -58,6 +58,8 @@
 (define text-color-light (css-expr (apply rgb 83 83 83)))
 (define text-color-lighter (css-expr (apply rgb 136 136 136)))
 (define highlight-color-light (css-expr (apply rgb 254 252 233)))
+(define image-color-idle (css-expr (apply rgb 158 158 158)))
+(define image-color-active (css-expr (apply rgb 53 50 252)))
 
 (define code-color-border (css-expr (apply rgb 215 215 215)))
 (define code-color-background (css-expr (apply rgb 250 250 250)))
@@ -360,6 +362,11 @@
     [.wsnw #:white-space nowrap]
     [.fwb #:font-weight bold]
     [.dn #:display none]
+    [.vc-container #:position relative]
+    [.vc #:margin 0
+         #:position absolute
+         #:top 50%
+         #:transform (apply translateY -50%)]
 
     [.error-message
      #:color ,failure-color-dark]
@@ -449,16 +456,29 @@
       #:font-size 1.25em
       #:font-weight bold]
      [.reader-article-description
-      #:margin-bottom 0]
-     [.reader-article-info
-      #:color ,text-color-lighter]]
+      #:margin-bottom 0
+      #:outline 0]
+     [.reader-article-details
+      .reader-article-actions
+      #:margin-top 7px
+      #:height 25px]
+     [.reader-article-details
+      #:color ,text-color-lighter]
+     [.reader-article-actions
+      #:display none]]
     [(: .reader-article (apply not (: first-child)))
      #:border-top (1px solid ,@border-color-lighter)]
     [.reader-article:hover
      .reader-article:focus
-     #:text-decoration none
-     [.reader-article-title
-      #:text-decoration underline]]
+     [.reader-article-details #:display none]
+     [.reader-article-actions #:display block]
+     [a #:text-decoration none]]
+
+    [.image
+     #:transition (fill .2s)
+     #:fill ,image-color-idle]
+    [.image:hover
+     #:fill ,image-color-active]
 
     [.page-links #:padding 1em
                  #:text-align center
