@@ -15,7 +15,7 @@
          reader/app/components/reader
          reader/app/components/layout
          reader/app/commands/generate-article-summary
-         reader/app/commands/content-summary
+         reader/app/commands/process-article-chat
          reader/lib/parameters
          reader/lib/web)
 
