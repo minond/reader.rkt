@@ -42,6 +42,7 @@
    [("articles" (string-arg) "unarchive") #:method "put" (authenticated-route /articles/<id>/unarchive)]
    [("articles" (string-arg) "unarchive") (authenticated-route /articles/<id>/unarchive)]
    [("articles" (string-arg) "summary") (authenticated-route /articles/<id>/summary)]
+   [("articles" (string-arg) "tags") (authenticated-route /articles/<id>/tags)]
    [("articles" (string-arg) "chat") #:method "post" (authenticated-route /articles/<id>/chat)]
 
    [else

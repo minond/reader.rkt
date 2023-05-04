@@ -474,6 +474,13 @@
      [.reader-article-actions #:display block]
      [a #:text-decoration none]]
 
+    [.tags
+     #:padding (0 1em)
+     [.tag #:display inline-block
+           #:font-size .85em
+           #:padding (.1em .4em)
+           #:margin (0 .5em .5em 0)]]
+
     [.image
      #:transition (fill .2s)
      #:fill ,image-color-idle]

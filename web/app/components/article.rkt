@@ -44,6 +44,7 @@
           (:div 'class: "container"
                 (:article/content article)
                 (:aside (:article/summary article)
+                        (:article/content-processing-component article)
                         (:spacer #:direction horizontal #:size small)
                         (:article/chat article)))
           (:script 'type: 'module 'src: "/public/ai.js"))))
@@ -76,6 +77,11 @@
                         "Hold tight while we summarize this content for you.")
                     (:spacer #:direction vertical #:size medium)
                     (:spinning-ring 80))))))
+
+(define (:article/content-processing-component article)
+  (:div 'data-component: "article-content-processing"
+        'data-article-id: (article-id article)
+        (:script 'type: 'module 'src: "/public/article-content-processing.js")))
 
 (define (:article/list feed articles current-page page-count)
   (list

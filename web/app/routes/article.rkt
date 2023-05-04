@@ -11,10 +11,12 @@
 
          reader/app/models/article
          reader/app/models/feed
+         reader/app/models/tag
          reader/app/components/article
          reader/app/components/reader
          reader/app/components/layout
          reader/app/commands/generate-article-summary
+         reader/app/commands/generate-article-tags
          reader/app/commands/process-article-chat
          reader/lib/parameters
          reader/lib/web)
@@ -24,6 +26,7 @@
          /articles/<id>/archive
          /articles/<id>/unarchive
          /articles/<id>/summary
+         /articles/<id>/tags
          /articles/<id>/chat)
 
 (define page-size 20)
@@ -84,6 +87,20 @@
                        (set-article-generated-summary-html html)
                        (set-article-generated-summary-text text))))
     (json 'summary summary)))
+
+(define (/articles/<id>/tags req id)
+  (let* ([article (lookup (current-database-connection)
+                          (find-article-by-id #:id id
+                                              #:user-id (current-user-id)))]
+         [tags (select-article-tags article)])
+    (when (null? tags)
+      (define tag-strings (generate-article-tags article))
+      (set! tags (create-article-tags article tag-strings 'system)))
+    (json 'tags (map (lambda (tag)
+                       (hash 'id (tag-id tag)
+                             'label (tag-label tag)
+                             'color (tag-color tag)))
+                     tags))))
 
 (define (/articles/<id>/chat req id)
   (let* ([article (lookup (current-database-connection)
