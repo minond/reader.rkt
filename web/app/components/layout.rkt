@@ -271,6 +271,7 @@
      #:min-height 20px]
 
     [.chat
+     #:position relative
      [.input-wrapper #:margin-top 1em
                      #:position relative
                      #:box-shadow (0 2px 7px 1px (apply rgb 193 193 193))
