@@ -297,6 +297,11 @@
      [.spinning-ring #:display block]]
 
     [.summary #:padding (0 1em)]
+    [.summary.loading
+     [.line #:background-color ,loading-placeholder-color
+            #:height .7em
+            #:width 100%
+            #:margin-bottom 1em]]
     [.shadow #:opacity 0
              #:transition opacity .25s
              #:height 6px

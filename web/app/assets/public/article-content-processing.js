@@ -59,10 +59,14 @@ class ArticleContentProcessing extends Component {
 
   renderSummary() {
     if (this.state.loadingSummary) {
-      return html`<div class="summary"></div>`;
+      return html`<div class="summary loading">
+        <div class="line pulse"></div>
+        <div class="line pulse"></div>
+        <div class="line pulse"></div>
+      </div>`;
     } else {
       return html`<div
-        class="summary"
+        class="summary fadein"
         dangerouslySetInnerHTML=${{ __html: this.state.summary }}
       ></div>`;
     }
