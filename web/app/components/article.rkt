@@ -43,8 +43,7 @@
                   'value: (article-id article))
           (:div 'class: "container"
                 (:article/content article)
-                (:aside (:article/summary article)
-                        (:article/content-processing-component article)
+                (:aside (:article/content-processing-component article)
                         (:spacer #:direction horizontal #:size small)
                         (:article/chat article)))
           (:script 'type: 'module 'src: "/public/ai.js"))))
@@ -64,19 +63,6 @@
                 (:spinning-ring 30))
           (:p 'class: "disclaimer"
               "ChatGPT may produce inaccurate information about people, places, or facts."))))
-
-(define (:article/summary article)
-  (let* ([summary-html (article-generated-summary-html article)]
-         [has-summary? (not (sql-null? summary-html))])
-    (:div 'id: "summary"
-          'class: "summary"
-          (if has-summary?
-              (:literal summary-html)
-              (:div 'class: "loading-summary"
-                    (:p 'class: "tc"
-                        "Hold tight while we summarize this content for you.")
-                    (:spacer #:direction vertical #:size medium)
-                    (:spinning-ring 80))))))
 
 (define (:article/content-processing-component article)
   (:div 'data-component: "article-content-processing"

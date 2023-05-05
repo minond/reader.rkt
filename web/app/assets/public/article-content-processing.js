@@ -15,7 +15,20 @@ const Tag = ({ label = "", color = false, className = "fadein" }) =>
 class ArticleContentProcessing extends Component {
   constructor() {
     super();
-    this.state = { loadingTags: false, tags: [] };
+    this.state = {
+      loadingSummary: false,
+      loadingTags: false,
+      summary: null,
+      tags: [],
+    };
+  }
+
+  fetchSummary() {
+    this.setState({ loadingSummary: true });
+    fetch(`/articles/${this.props.articleId}/summary`)
+      .then((res) => res.json())
+      .then((body) => body.summary)
+      .then((summary) => this.setState({ loadingSummary: false, summary }));
   }
 
   fetchTags() {
@@ -41,9 +54,21 @@ class ArticleContentProcessing extends Component {
 
   componentWillMount() {
     this.fetchTags();
+    this.fetchSummary();
   }
 
-  render() {
+  renderSummary() {
+    if (this.state.loadingSummary) {
+      return html`<div class="summary"></div>`;
+    } else {
+      return html`<div
+        class="summary"
+        dangerouslySetInnerHTML=${{ __html: this.state.summary }}
+      ></div>`;
+    }
+  }
+
+  renderTags() {
     if (this.state.loadingTags) {
       return html`<div class="tags">
         ${Array.from(Array(15).keys())
@@ -55,6 +80,10 @@ class ArticleContentProcessing extends Component {
     } else {
       return html`<div class="tags">${this.state.tags.map(Tag)}</div>`;
     }
+  }
+
+  render() {
+    return [this.renderSummary(), this.renderTags()];
   }
 }
 
