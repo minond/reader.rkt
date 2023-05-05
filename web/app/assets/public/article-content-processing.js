@@ -28,7 +28,11 @@ class ArticleContentProcessing extends Component {
     fetch(`/articles/${this.props.articleId}/summary`)
       .then((res) => res.json())
       .then((body) => body.summary)
-      .then((summary) => this.setState({ loadingSummary: false, summary }));
+      .then((summary) => this.setState({ loadingSummary: false, summary }))
+      .catch((err) => {
+        this.setState({ loadingSummary: false, summary: "" });
+        console.error("error loading article summary", err);
+      });
   }
 
   fetchTags() {
@@ -37,7 +41,11 @@ class ArticleContentProcessing extends Component {
       .then((res) => res.json())
       .then((body) => body.tags)
       .then((tags) => this.sortTags(tags))
-      .then((tags) => this.setState({ loadingTags: false, tags }));
+      .then((tags) => this.setState({ loadingTags: false, tags }))
+      .catch((err) => {
+        this.setState({ loadingTags: false, tags: [] });
+        console.error("error loading article tags", err);
+      });
   }
 
   sortTags(tags) {
