@@ -479,7 +479,19 @@
      [.tag #:display inline-block
            #:font-size .85em
            #:padding (.1em .4em)
-           #:margin (0 .5em .5em 0)]]
+           #:margin (0 .5em .5em 0)]
+     [.tag.loading #:background-color (apply rgb 226 232 240)]]
+    [.w--4 #:width 4em]
+    [.w--5 #:width 5em]
+    [.w--6 #:width 6em]
+    [.w--7 #:width 7em]
+    [.w--8 #:width 8em]
+    [.w--9 #:width 9em]
+    [.w--10 #:width 10em]
+
+    [.pulse #:animation (pulse 2s (apply cubic-bezier .4 0 .6 1) infinite)]
+    [@keyframes pulse
+                [50% #:opacity .5]]
 
     [.image
      #:transition (fill .2s)

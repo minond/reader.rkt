@@ -4,21 +4,27 @@ import {
   render,
 } from "https://unpkg.com/htm/preact/standalone.module.js";
 
-const Tag = ({ label, color, id }) =>
-  html`<div class="tag" style="background-color: ${color}">${label}</div>`;
+const Tag = ({ label = "", color = false, className = "fadein" }) =>
+  html`<div
+    class="tag ${className}"
+    style="${color ? `background-color: ${color}` : ""}"
+  >
+    ${label}
+  </div>`;
 
 class ArticleContentProcessing extends Component {
   constructor() {
     super();
-    this.state = { tags: [] };
+    this.state = { loadingTags: false, tags: [] };
   }
 
   fetchTags() {
+    this.setState({ loadingTags: true });
     fetch(`/articles/${this.props.articleId}/tags`)
       .then((res) => res.json())
       .then((body) => body.tags)
       .then((tags) => this.sortTags(tags))
-      .then((tags) => this.setState({ tags }));
+      .then((tags) => this.setState({ loadingTags: false, tags }));
   }
 
   sortTags(tags) {
@@ -38,7 +44,17 @@ class ArticleContentProcessing extends Component {
   }
 
   render() {
-    return html`<div class="tags fadein">${this.state.tags.map(Tag)}</div>`;
+    if (this.state.loadingTags) {
+      return html`<div class="tags">
+        ${Array.from(Array(15).keys())
+          .map(() => Math.floor(Math.random() * (10 - 4 + 1)) + 4)
+          .map(
+            (w) => html`<${Tag} className="loading pulse w--${w}" label=" " />`
+          )}
+      </div>`;
+    } else {
+      return html`<div class="tags">${this.state.tags.map(Tag)}</div>`;
+    }
   }
 }
 
