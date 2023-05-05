@@ -45,29 +45,21 @@
                 (:article/content article)
                 (:aside (:article/content-processing-component article)
                         (:spacer #:direction horizontal #:size small)
-                        (:article/chat article)))
-          (:script 'type: 'module 'src: "/public/ai.js"))))
+                        (:article/ai-chat-component article))))))
 
 (define (:article/content article)
   (:article
    (:literal (article-extracted-content-html article))))
 
-(define (:article/chat article)
-  (let* ([summary-html (article-generated-summary-html article)]
-         [has-summary? (not (sql-null? summary-html))])
-    (:div 'class: (if has-summary? "chat" "dn chat")
-          (:div 'class: "messages")
-          (:div 'class: "shadow")
-          (:div 'class: "input-wrapper"
-                (:textarea 'rows: 1 'placeholder: "Send a message...")
-                (:spinning-ring 30))
-          (:p 'class: "disclaimer"
-              "ChatGPT may produce inaccurate information about people, places, or facts."))))
-
 (define (:article/content-processing-component article)
   (:div 'data-component: "article-content-processing"
         'data-article-id: (article-id article)
         (:script 'type: 'module 'src: "/public/article-content-processing.js")))
+
+(define (:article/ai-chat-component article)
+  (:div 'data-component: "article-ai-chat"
+        'data-article-id: (article-id article)
+        (:script 'type: 'module 'src: "/public/article-ai-chat.js")))
 
 (define (:article/list feed articles current-page page-count)
   (list
