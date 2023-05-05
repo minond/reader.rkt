@@ -60,6 +60,7 @@
 (define highlight-color-light (css-expr (apply rgb 254 252 233)))
 (define image-color-idle (css-expr (apply rgb 158 158 158)))
 (define image-color-active (css-expr (apply rgb 53 50 252)))
+(define loading-placeholder-color (css-expr (apply rgb 226 232 240)))
 
 (define code-color-border (css-expr (apply rgb 215 215 215)))
 (define code-color-background (css-expr (apply rgb 250 250 250)))
@@ -208,6 +209,10 @@
     [@keyframes spinning-ring
                 [0% #:transform (apply rotate 0deg)]
                 [100% #:transform (apply rotate 360deg)]]
+
+    [.pulse #:animation (pulse 2s (apply cubic-bezier .4 0 .6 1) infinite)]
+    [@keyframes pulse
+                [50% #:opacity .5]]
 
     [.reading #:max-width (apply calc (,article-max-width * 2 + ,article-column-gap))
               #:margin (2.5em auto 0 auto)
@@ -367,6 +372,13 @@
          #:position absolute
          #:top 50%
          #:transform (apply translateY -50%)]
+    [.w--4 #:width 4em]
+    [.w--5 #:width 5em]
+    [.w--6 #:width 6em]
+    [.w--7 #:width 7em]
+    [.w--8 #:width 8em]
+    [.w--9 #:width 9em]
+    [.w--10 #:width 10em]
 
     [.error-message
      #:color ,failure-color-dark]
@@ -480,18 +492,7 @@
            #:font-size .85em
            #:padding (.1em .4em)
            #:margin (0 .5em .5em 0)]
-     [.tag.loading #:background-color (apply rgb 226 232 240)]]
-    [.w--4 #:width 4em]
-    [.w--5 #:width 5em]
-    [.w--6 #:width 6em]
-    [.w--7 #:width 7em]
-    [.w--8 #:width 8em]
-    [.w--9 #:width 9em]
-    [.w--10 #:width 10em]
-
-    [.pulse #:animation (pulse 2s (apply cubic-bezier .4 0 .6 1) infinite)]
-    [@keyframes pulse
-                [50% #:opacity .5]]
+     [.tag.loading #:background-color ,loading-placeholder-color]]
 
     [.image
      #:transition (fill .2s)
