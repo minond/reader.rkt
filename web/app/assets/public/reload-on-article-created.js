@@ -2,7 +2,7 @@ import {
   Component,
   html,
   render,
-} from "https://unpkg.com/htm/preact/standalone.module.js";
+} from "https://unpkg.com/htm@3.1.1/preact/standalone.module.js";
 import Subscriber from "/public/subscriber.js";
 
 const userId = document.body.getAttribute("data-user-id");

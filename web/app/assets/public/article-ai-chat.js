@@ -2,7 +2,7 @@ import {
   Component,
   html,
   render,
-} from "https://unpkg.com/htm/preact/standalone.module.js";
+} from "https://unpkg.com/htm@3.1.1/preact/standalone.module.js";
 import markdownIt from "https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/+esm";
 
 const renderer = markdownIt({ breaks: true });
@@ -269,7 +269,6 @@ function debounce(fn, time) {
 
 const containerEl = document.querySelector("[data-component=article-ai-chat]");
 const articleId = containerEl.getAttribute("data-article-id");
-
 render(
   html`<${ArticleAIChat} articleId=${articleId} />`,
   containerEl.parentNode,

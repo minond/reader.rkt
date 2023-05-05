@@ -2,7 +2,7 @@ import {
   Component,
   html,
   render,
-} from "https://unpkg.com/htm/preact/standalone.module.js";
+} from "https://unpkg.com/htm@3.1.1/preact/standalone.module.js";
 
 const Tag = ({ label = "", color = false, className = "fadein" }) =>
   html`<div
@@ -103,7 +103,6 @@ const containerEl = document.querySelector(
   "[data-component=article-content-processing]"
 );
 const articleId = containerEl.getAttribute("data-article-id");
-
 render(
   html`<${ArticleContentProcessing} articleId=${articleId} />`,
   containerEl
