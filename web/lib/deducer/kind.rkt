@@ -1,6 +1,7 @@
 #lang racket/base
 
-(require racket/string
+(require racket/function
+         racket/string
          racket/contract
 
          threading
@@ -55,8 +56,9 @@
             "Content-Type" #f))
 
 (define (mime-type-from-content res)
-  (~> res
-      (rss-read)
-      (rss-parse)
-      (rss-feed?)
-      (and _ "application/xml")))
+  (with-handlers ([exn:fail (const #f)])
+    (~> res
+        (rss-read)
+        (rss-parse)
+        (rss-feed?)
+        (and _ "application/xml"))))
