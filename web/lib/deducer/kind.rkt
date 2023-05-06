@@ -10,7 +10,8 @@
 
          reader/lib/net
          reader/lib/url
-         reader/lib/web)
+         reader/lib/web
+         (prefix-in rss- reader/lib/rss/parse))
 
 (provide deduce-kind)
 
@@ -41,12 +42,21 @@
 
 (define (mime-type* url)
   (or (mime-type-from-path url)
-      (mime-type-from-headers url)))
+      (let ([res (download url)])
+        (or (mime-type-from-headers res)
+            (mime-type-from-content res)))))
 
 (define (mime-type-from-path url)
   (define mime-type (path-mime-type (url->path url)))
   (and mime-type (bytes->string/utf-8 mime-type)))
 
-(define (mime-type-from-headers url)
-  (hash-ref (http-response-headers (download url))
+(define (mime-type-from-headers res)
+  (hash-ref (http-response-headers res)
             "Content-Type" #f))
+
+(define (mime-type-from-content res)
+  (~> res
+      (rss-read)
+      (rss-parse)
+      (rss-feed?)
+      (and _ "application/xml")))

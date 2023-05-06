@@ -11,6 +11,7 @@
 
 (provide fetch
          parse
+         read
          (all-from-out reader/lib/rss/data))
 
 (define (fetch feed-url)
@@ -24,6 +25,6 @@
 
 (define (read res)
   (xml->xexpr
-    (document-element
-      (read-xml
-        (open-input-string (http-response-body res))))))
+   (document-element
+    (read-xml
+     (open-input-string (http-response-body res))))))
