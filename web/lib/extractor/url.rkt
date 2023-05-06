@@ -5,7 +5,6 @@
          racket/string
 
          net/url-string
-         (prefix-in x: xml)
 
          reader/lib/string
          reader/lib/extractor/attribute
@@ -38,7 +37,7 @@
                     (find* doc #:tag 'meta #:attr '(property "article:author")))))
     (define urls
       (map (lambda (el)
-             (define attributes (x:element-attributes el))
+             (define attributes (html-element-attributes el))
              (or (read-attribute attributes 'content)
                  (read-attribute attributes 'href)))
            els))
@@ -65,7 +64,7 @@
     (define alternative-link
       (findf string?
              (map (lambda (el)
-                    (let* ([attributes (x:element-attributes el)]
+                    (let* ([attributes (html-element-attributes el)]
                            [rel (read-attribute attributes 'rel)]
                            [type (read-attribute attributes 'type)]
                            [href (read-attribute attributes 'href)])

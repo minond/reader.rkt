@@ -7,6 +7,7 @@
 
          reader/app/routes/article
          reader/app/routes/feed
+         reader/app/routes/item
          reader/lib/app/routes/session
          reader/lib/app/routes/user
          reader/lib/web/routes)
@@ -44,6 +45,8 @@
    [("articles" (string-arg) "summary") (authenticated-route /articles/<id>/summary)]
    [("articles" (string-arg) "tags") (authenticated-route /articles/<id>/tags)]
    [("articles" (string-arg) "chat") #:method "post" (authenticated-route /articles/<id>/chat)]
+
+   [("item" "deduce") (authenticated-route /item/deduce)]
 
    [else
     (lambda (req)
