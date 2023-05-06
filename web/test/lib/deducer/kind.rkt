@@ -17,6 +17,7 @@
         (hash 'kind 'feed 'input "https://eli.thegreenplace.net/feeds/all.atom.xml")
         (hash 'kind 'feed 'input "https://esoteric.codes/rss")
         (hash 'kind 'feed 'input "https://feeds.feedburner.com/martinkl")
+        (hash 'kind #f    'input "Bad")
         (hash 'kind 'feed 'input "https://lexi-lambda.github.io/feeds/all.rss.xml")
         (hash 'kind 'feed 'input "https://matt.might.net/articles/feed.rss")
         (hash 'kind 'feed 'input "https://matt.sh/.rss")

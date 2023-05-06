@@ -1,5 +1,9 @@
 #lang racket/base
 
+(require (for-syntax racket/base
+                     racket/syntax
+                     syntax/parse))
+
 (require racket/function
          racket/string
          racket/contract
@@ -23,10 +27,10 @@
                     "text/xml")
         'html (list "text/html")))
 
-(define/contract (deduce-kind maybe-url)
+(define/contract (deduce-kind resource)
   (-> (or/c string? url?) (or/c symbol? #f))
   (let/cc return
-    (define url (as-url maybe-url))
+    (define url (fillin (as-url resource)))
     (define mime-type (mime-type* url))
     (unless mime-type
       (return #f))
@@ -43,9 +47,10 @@
 
 (define (mime-type* url)
   (or (mime-type-from-path url)
-      (let ([res (download url)])
-        (or (mime-type-from-headers res)
-            (mime-type-from-content res)))))
+      (let ([res (safe (download url))])
+        (and res
+             (or (mime-type-from-headers res)
+                 (mime-type-from-content res))))))
 
 (define (mime-type-from-path url)
   (define mime-type (path-mime-type (url->path url)))
@@ -56,9 +61,15 @@
             "Content-Type" #f))
 
 (define (mime-type-from-content res)
-  (with-handlers ([exn:fail (const #f)])
+  (safe
     (~> res
         (rss-read)
         (rss-parse)
         (rss-feed?)
         (and _ "application/xml"))))
+
+(define-syntax (safe stx)
+  (syntax-parse stx
+    [(_ ex:expr)
+     #'(with-handlers ([exn:fail? (const #f)])
+         ex)]))
