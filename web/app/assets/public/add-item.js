@@ -79,7 +79,10 @@ class AddItem extends Component {
         ? JSON.stringify(this.state.suggestions)
         : null;
 
-    return html`<form onSubmit=${(ev) => this.handleFormSubmit(ev)}>
+    return html`<form
+      class="add-item-form"
+      onSubmit=${(ev) => this.handleFormSubmit(ev)}
+    >
       <div class=${inputContainerClasses.join(" ")}>
         <input
           autocapitalize="off"

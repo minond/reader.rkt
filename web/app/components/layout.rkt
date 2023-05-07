@@ -169,7 +169,8 @@
 
     [form.session-create-form
      form.user-registration-form
-     form.basic
+     form.add-feed-form
+     form.add-item-form
      #:margin (3em auto)
      #:max-width ,@article-max-width
      [(attribute input (= type "url"))
