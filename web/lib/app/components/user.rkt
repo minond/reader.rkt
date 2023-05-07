@@ -14,6 +14,7 @@
   (define email (and req (parameter 'email req)))
   (:form 'action: "/users/create"
          'method: "post"
+         'class: "user-registration-form"
          (and error-message
               (:p 'class: "error-message"
                   error-message))

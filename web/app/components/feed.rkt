@@ -54,6 +54,7 @@
 (define (:feed/form)
   (:form 'action: "/feeds/create"
          'method: "post"
+         'class: "basic"
          (:input 'type: "url"
                  'name: "url"
                  'required: "true"

@@ -12,6 +12,7 @@
 (define (:session/form [email null])
   (:form 'action: "/sessions/create"
          'method: "post"
+         'class: "session-create-form"
          (:input 'type: "email"
                  'name: "email"
                  'value: email

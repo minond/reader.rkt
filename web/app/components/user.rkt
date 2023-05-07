@@ -22,24 +22,13 @@
                  error-message))
         (if (not (non-empty-string? code))
             (list
-             (:p "Thank you for your interest in Reader, unfortunately we're currently in private beta mode and you'll need an invite before you can register.")
-             #;(:p "If you're interested in joining the wait list, then let us know your email and we will send you an invite as soon as possible.")
-             #;(:form 'action: "/"
-                    'method: "post"
-                    (:input 'type: "email"
-                            'name: "email"
-                            'value: email
-                            'required: "true"
-                            'autofocus: (not email)
-                            'autocapitalize: "false"
-                            'placeholder: "Email")
-                    (:input 'type: "submit"
-                            'value: "Add me to the wait list!")))
+             (:p "Thank you for your interest in Reader, unfortunately we're currently in private beta mode and you'll need an invite before you can register."))
             (list
              (:p "Thank you for your interest in Reader, I hope that you find this application both helpful and enjoyable to use.")
              (:p "If you have any issues or feedback, don't hesitate to submit them via the feedback form or email me directly.")
              (:form 'action: "/users/create"
                     'method: "post"
+                    'class: "user-registration-form"
                     (:input 'type: "text"
                             'name: "code"
                             'value: code

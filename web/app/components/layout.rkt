@@ -167,29 +167,32 @@
         #:color initial
         [a #:color initial]]
 
-    [form #:margin (3em auto)
-          #:max-width ,@article-max-width
-          [(attribute input (= type "url"))
-           (attribute input (= type "text"))
-           (attribute input (= type "email"))
-           (attribute input (= type "password"))
-           #:border-width (1px 1px 1.5px 1px)
-           #:border-style solid
-           #:border-color (,@border-color-light
-                           ,@border-color-light
-                           ,@border-color-normal
-                           ,@border-color-light)
-           #:padding 0.5em
-           #:width 100%
-           #:font-size 1.1em
-           #:box-sizing border-box
-           #:margin (0.25em 0)]
-          [(attribute input (= type "button"))
-           (attribute input (= type "submit"))
-           (attribute input (= type "cancel"))
-           #:font-size 1.1em
-           #:margin-top 0.5em
-           #:margin-right 0.25em]]
+    [form.session-create-form
+     form.user-registration-form
+     form.basic
+     #:margin (3em auto)
+     #:max-width ,@article-max-width
+     [(attribute input (= type "url"))
+      (attribute input (= type "text"))
+      (attribute input (= type "email"))
+      (attribute input (= type "password"))
+      #:border-width (1px 1px 1.5px 1px)
+      #:border-style solid
+      #:border-color (,@border-color-light
+                      ,@border-color-light
+                      ,@border-color-normal
+                      ,@border-color-light)
+      #:padding 0.5em
+      #:width 100%
+      #:font-size 1.1em
+      #:box-sizing border-box
+      #:margin (0.25em 0)]
+     [(attribute input (= type "button"))
+      (attribute input (= type "submit"))
+      (attribute input (= type "cancel"))
+      #:font-size 1.1em
+      #:margin-top 0.5em
+      #:margin-right 0.25em]]
 
     ; Taken from https://loading.io/css/
     [.spinning-ring #:display block
