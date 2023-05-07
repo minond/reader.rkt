@@ -1,11 +1,6 @@
 #lang racket/base
 
-(require (for-syntax racket/base
-                     racket/syntax
-                     syntax/parse))
-
-(require racket/function
-         racket/string
+(require racket/string
          racket/contract
 
          threading
@@ -16,6 +11,7 @@
          reader/lib/net
          reader/lib/url
          reader/lib/web
+         reader/lib/task
          (prefix-in rss- reader/lib/rss/parse))
 
 (provide deduce-kind)
@@ -67,9 +63,3 @@
         (rss-parse)
         (rss-feed?)
         (and _ "application/xml"))))
-
-(define-syntax (safe stx)
-  (syntax-parse stx
-    [(_ ex:expr)
-     #'(with-handlers ([exn:fail? (const #f)])
-         ex)]))

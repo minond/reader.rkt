@@ -4,6 +4,7 @@ import {
   render,
 } from "https://unpkg.com/htm@3.1.1/preact/standalone.module.js";
 import markdownIt from "https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/+esm";
+import { SpinningRing } from "/public/shared-components.js";
 
 const renderer = markdownIt({ breaks: true });
 
@@ -14,18 +15,6 @@ const Message = ({ role, time, content }) =>
     ></span>
     <time>${new Date(time).toLocaleString()}</time>
   </div>`;
-
-const SpinningRing = ({ size }) => {
-  const sizeHalf = Math.floor(size / 2);
-  const containerStyles = `height: ${size}px; width: ${size}px`;
-  const pieceStyles = `height: ${sizeHalf}px; width: ${sizeHalf}px`;
-  return html`<div class="spinning-ring" style=${containerStyles}>
-    <div style=${pieceStyles}></div>
-    <div style=${pieceStyles}></div>
-    <div style=${pieceStyles}></div>
-    <div style=${pieceStyles}></div>
-  </div>`;
-};
 
 class ArticleAIChat extends Component {
   constructor() {

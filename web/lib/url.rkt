@@ -1,6 +1,7 @@
 #lang racket/base
 
-(require net/url-string)
+(require racket/string
+         net/url-string)
 
 (provide as-url
          fillin)
@@ -15,4 +16,8 @@
     (set! url (string->url
                (string-append "https://"
                               (url->string url)))))
+  (unless (string-contains? (url-host url) ".")
+    (set-url-host! url
+                   (string-append (url-host url)
+                                  ".com")))
   url)

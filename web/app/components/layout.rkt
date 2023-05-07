@@ -270,6 +270,15 @@
     [(> (.reading article) object)
      #:min-height 20px]
 
+    [.input-container
+     #:position relative
+     [.spinning-ring #:display none
+                     #:position absolute
+                     #:top 5px
+                     #:right 5px]]
+    [.input-container.loading
+     [.spinning-ring #:display block]]
+
     [.chat
      #:position relative
      [.input-wrapper #:margin-top 1em
