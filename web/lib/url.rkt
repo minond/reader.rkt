@@ -17,6 +17,7 @@
                (string-append "https://"
                               (url->string url)))))
   (unless (string-contains? (url-host url) ".")
+    (set! url (string->url (url->string url)))
     (set-url-host! url
                    (string-append (url-host url)
                                   ".com")))

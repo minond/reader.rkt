@@ -57,9 +57,12 @@
             "Content-Type" #f))
 
 (define (mime-type-from-content res)
-  (safe
-    (~> res
-        (rss-read)
-        (rss-parse)
-        (rss-feed?)
-        (and _ "application/xml"))))
+  (or (safe (~> res
+                (rss-read)
+                (rss-parse)
+                (rss-feed?)
+                (and _ "application/xml")))
+      (safe (~> res
+                (http-response-body)
+                (string-contains? "<html")
+                (and _ "text/html")))))

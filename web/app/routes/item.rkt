@@ -1,7 +1,9 @@
 #lang racket/base
 
 (require racket/match
+         racket/string
 
+         threading
          request/param
          net/url-string
 
@@ -22,13 +24,21 @@
   (render (:item/add)))
 
 (define (/item/deduce req)
-  (define url (fillin (string->url (parameter 'url req))))
+  (define known-feed-paths (list "feed" "rss"))
+  (define url
+    (~> (parameter 'url req)
+        (string-trim)
+        (string-replace " " "")
+        (string->url)
+        (fillin)))
   (match (deduce-kind url)
     [#f (info)]
     ['html
      (define feed-url
-       (extract-feed-url (download url)
-                         url))
+       (or (locate-feed-url url
+                            known-feed-paths)
+           (locate-feed-url (extract-feed-url (download url) url)
+                            known-feed-paths)))
      (if feed-url
          (info "feed" feed-url)
          (info))]
@@ -39,8 +49,19 @@
     (define feed (rss-fetch feed-url))
     (rss-feed-title feed))
   (json 'kind kind
-        'feed-url (and (url? feed-url)
-                       (url->string feed-url))
-        'feed-title (and (equal? kind "feed") feed-url
-                         (or (safe (title feed-url))
-                             (url-host feed-url)))))
+        'url (and (url? feed-url)
+                  (url->string feed-url))
+        'title (and (equal? kind "feed") feed-url
+                    (or (safe (title feed-url))
+                        (url-host feed-url)))))
+
+(define (locate-feed-url url paths-to-try)
+  (define kind (and url (deduce-kind url)))
+  (cond [(not url) #f]
+        [(equal? kind 'feed) url]
+        [(not (null? paths-to-try))
+         (set! url (string->url (url->string url)))
+         (set-url-path! url (list (path/param (car paths-to-try)
+                                              null)))
+         (locate-feed-url url (cdr paths-to-try))]
+        [else #f]))

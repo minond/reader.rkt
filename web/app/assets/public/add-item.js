@@ -12,7 +12,7 @@ class AddItem extends Component {
     this.state = {
       deduction: null,
       loading: false,
-      value: null,
+      value: "",
     };
 
     this.controller = null;
@@ -29,7 +29,7 @@ class AddItem extends Component {
 
   handleInput(ev) {
     const newValue = ev.target.value;
-    if (newValue === this.state.value) {
+    if (newValue.trim() === this.state.value.trim()) {
       return;
     }
 
@@ -66,7 +66,7 @@ class AddItem extends Component {
   }
 
   itemDeduceURL() {
-    return `/item/deduce?url=${encodeURIComponent(this.state.value)}`;
+    return `/item/deduce?url=${encodeURIComponent(this.state.value.trim())}`;
   }
 
   render() {
