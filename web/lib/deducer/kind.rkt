@@ -43,8 +43,10 @@
 
 (define (mime-type* url)
   (or (mime-type-from-path url)
-      (let ([res (safe (download url))])
+      (let* ([res (safe (download url))]
+             [code (and res (http-response-code res))])
         (and res
+             (and (>= code 200) (< code 300))
              (or (mime-type-from-headers res)
                  (mime-type-from-content res))))))
 

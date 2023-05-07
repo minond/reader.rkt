@@ -37,5 +37,5 @@
    "Kind deduction"
 
    (for ([check checks])
-     (check-equal? (hash-ref check 'kind)
-                   (deduce-kind (hash-ref check 'input))))))
+     (check-equal? (deduce-kind (hash-ref check 'input))
+                   (hash-ref check 'kind)))))
