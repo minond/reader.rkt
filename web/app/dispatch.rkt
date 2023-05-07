@@ -46,8 +46,6 @@
    [("articles" (string-arg) "tags") (authenticated-route /articles/<id>/tags)]
    [("articles" (string-arg) "chat") #:method "post" (authenticated-route /articles/<id>/chat)]
 
-   [("item" "deduce") (authenticated-route /item/deduce)]
-
    [else
     (lambda (req)
       (match (url-path (request-uri req))

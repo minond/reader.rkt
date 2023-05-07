@@ -14,20 +14,20 @@
          reader/lib/task
          reader/lib/url)
 
-(provide (struct-out deduction)
-         deduce-item-info
-         deduced-feed?)
+(provide (struct-out suggestion)
+         make-suggestions
+         suggested-feed?)
 
-(struct deduction (kind url title) #:transparent)
+(struct suggestion (kind url title) #:transparent)
 
-(define (deduced-feed? deduction)
-  (and (deduction? deduction)
-       (equal? 'feed (deduction-kind deduction))))
+(define (suggested-feed? suggestion)
+  (and (suggestion? suggestion)
+       (equal? 'feed (suggestion-kind suggestion))))
 
 (define known-feed-paths (list "feed" "rss"))
 
-(define/contract (deduce-item-info item)
-  (-> string? (listof deduction?))
+(define/contract (make-suggestions item)
+  (-> string? (listof suggestion?))
   (define url
     (~> item
         (string-trim)
@@ -42,9 +42,9 @@
            (locate-feed-url (extract-feed-url (download url) url)
                             known-feed-paths)))
      (if feed-url
-         (list (deduction 'feed feed-url (title-for feed-url)))
+         (list (suggestion 'feed feed-url (title-for feed-url)))
          (list))]
-    ['feed (list (deduction 'feed url (title-for url)))]
+    ['feed (list (suggestion 'feed url (title-for url)))]
     [else (list)]))
 
 (define (locate-feed-url url paths-to-try)

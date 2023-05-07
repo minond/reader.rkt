@@ -2,22 +2,22 @@
 
 (require net/url-string
 
-         reader/app/commands/deduce-item-info
+         reader/app/commands/suggestions
          reader/app/components/item
 
          reader/lib/web)
 
-(provide /item/add
-         /item/deduce)
+(provide /add
+         /suggestions)
 
-(define (/item/add req)
+(define (/add req)
   (render (:item/add)))
 
-(define (/item/deduce req)
-  (define deductions (deduce-item-info (parameter 'url req)))
-  (json 'deductions
-        (map (lambda (deduction)
-               (hash 'kind (symbol->string (deduction-kind deduction))
-                     'url (url->string (deduction-url deduction))
-                     'title (deduction-title deduction)))
-             deductions)))
+(define (/suggestions req)
+  (define suggestions (make-suggestions (parameter 'url req)))
+  (json 'suggestions
+        (map (lambda (suggestion)
+               (hash 'kind (symbol->string (suggestion-kind suggestion))
+                     'url (url->string (suggestion-url suggestion))
+                     'title (suggestion-title suggestion)))
+             suggestions)))

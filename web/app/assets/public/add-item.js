@@ -10,7 +10,7 @@ class AddItem extends Component {
     super();
 
     this.state = {
-      deduction: null,
+      suggestions: null,
       loading: false,
       value: "",
     };
@@ -46,12 +46,15 @@ class AddItem extends Component {
   fetchSuggestions() {
     this.controller = new AbortController();
 
+    const url = `/suggestions?url=${encodeURIComponent(
+      this.state.value.trim()
+    )}`;
     this.setState({ loading: true }, () => {
-      fetch(this.itemDeduceURL(), { signal: this.controller.signal })
+      fetch(url, { signal: this.controller.signal })
         .then((res) => res.json())
-        .then((deduction) =>
+        .then((suggestions) =>
           this.setState({
-            deduction,
+            suggestions,
             loading: false,
           })
         )
@@ -60,13 +63,9 @@ class AddItem extends Component {
             return;
           }
 
-          console.error("error deducing item", err);
+          console.error("error making suggestings", err);
         });
     });
-  }
-
-  itemDeduceURL() {
-    return `/item/deduce?url=${encodeURIComponent(this.state.value.trim())}`;
   }
 
   render() {
@@ -75,9 +74,9 @@ class AddItem extends Component {
       inputContainerClasses.push("loading");
     }
 
-    const deductions =
-      !this.state.loading && this.state.deduction
-        ? JSON.stringify(this.state.deduction)
+    const suggestions =
+      !this.state.loading && this.state.suggestions
+        ? JSON.stringify(this.state.suggestions)
         : null;
 
     return html`<form onSubmit=${(ev) => this.handleFormSubmit(ev)}>
@@ -96,7 +95,7 @@ class AddItem extends Component {
         />
         <${SpinningRing} size="30" />
       </div>
-      ${deductions}
+      ${suggestions}
     </form>`;
   }
 }
