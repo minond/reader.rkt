@@ -4,6 +4,7 @@
          racket/list
          racket/string
 
+         threading
          net/url-string
 
          reader/lib/string
@@ -15,14 +16,25 @@
          extract-feed-url
          absolute-url)
 
-(define (absolute-url base-url raw-relative-url #:convert [convert #t])
-  (define relative-url (string-strip raw-relative-url))
-  (if (or (eq? 0 (string-length relative-url))
-          (equal? #\# (string-ref relative-url 0)))
-      relative-url
-      (if convert
-          (url->string (combine-url/relative base-url relative-url))
-          (combine-url/relative base-url relative-url))))
+(define (absolute-url base-url raw-relative-str #:convert [as-string #t])
+  (define relative-str
+    (~> raw-relative-str
+        (string-strip)
+        (regexp-replace #px"^./" _ "")))
+  (define relative-url (string->url relative-str))
+  (define ret
+    (if (or (eq? 0 (string-length relative-str))
+            (equal? #\# (string-ref relative-str 0)))
+        base-url
+        (if (url-path-absolute? relative-url)
+            (combine-url/relative base-url relative-str)
+            (let ([copy (string->url (url->string base-url))])
+              (set-url-path! copy (append (url-path base-url)
+                                          (url-path relative-url)))
+              copy))))
+  (if as-string
+      (url->string ret)
+      ret))
 
 ;; Extracts or deduces the "base" URL by (1) checking link and meta tags for a
 ;; author or article:author, then (2) returning the base URL stripped of its
