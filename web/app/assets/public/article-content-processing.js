@@ -1,8 +1,4 @@
-import {
-  Component,
-  html,
-  render,
-} from "https://unpkg.com/htm@3.1.1/preact/standalone.module.js";
+import { Component, html, render } from "/public/preact.js";
 
 const Tag = ({ label = "", color = false, className = "fadein" }) =>
   html`<div

@@ -1,4 +1,4 @@
-import { html } from "https://unpkg.com/htm@3.1.1/preact/standalone.module.js";
+import { html } from "/public/preact.js";
 
 export const SpinningRing = ({ size }) => {
   const sizeHalf = Math.floor(size / 2);

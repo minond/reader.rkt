@@ -1,10 +1,7 @@
-import {
-  Component,
-  html,
-  render,
-} from "https://unpkg.com/htm@3.1.1/preact/standalone.module.js";
 import markdownIt from "https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/+esm";
-import { SpinningRing } from "/public/shared-components.js";
+import { Component, html, render } from "/public/preact.js";
+import { SpinningRing } from "/public/component.js";
+import { debounce } from "/public/common.js";
 
 const renderer = markdownIt({ breaks: true });
 
@@ -245,15 +242,6 @@ class ArticleAIChat extends Component {
       </p>
     </div>`;
   }
-}
-
-function debounce(fn, time) {
-  let timer;
-
-  return function (...args) {
-    clearTimeout(timer);
-    timer = setTimeout(fn.bind(null, ...args), time);
-  };
 }
 
 const containerEl = document.querySelector("[data-component=article-ai-chat]");
