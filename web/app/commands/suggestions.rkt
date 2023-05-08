@@ -3,6 +3,7 @@
 (require racket/contract
          racket/match
          racket/string
+         racket/function
 
          threading
          net/url-string
@@ -36,14 +37,15 @@
         (fillin)))
   (match (deduce-kind url)
     ['html
-     (define feed-url
-       (or (locate-feed-url url
-                            known-feed-paths)
-           (locate-feed-url (extract-feed-url (download url) url)
-                            known-feed-paths)))
-     (if feed-url
-         (list (suggestion 'feed feed-url (title-for feed-url)))
-         (list))]
+     (define feed-urls
+       (filter identity
+               (cons (locate-feed-url url
+                                      known-feed-paths)
+                     (map (lambda~> (locate-feed-url known-feed-paths))
+                          (extract-feed-urls (download url) url)))))
+     (map (lambda (feed-url)
+            (suggestion 'feed feed-url (title-for feed-url)))
+          feed-urls)]
     ['feed (list (suggestion 'feed url (title-for url)))]
     [else (list)]))
 
