@@ -514,6 +514,7 @@
      [.tag #:display inline-block
            #:font-size .85em
            #:padding (.1em .4em)
+           #:border (1px solid ,border-color-lighter)
            #:margin (0 .5em .5em 0)]
      [.tag.loading #:background-color ,loading-placeholder-color]]
 

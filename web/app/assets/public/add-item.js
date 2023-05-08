@@ -5,13 +5,17 @@ import {
 } from "https://unpkg.com/htm@3.1.1/preact/standalone.module.js";
 import { SpinningRing } from "/public/shared-components.js";
 
+const IDLE = 0;
+const LOADING = 1;
+const ERROR = 2;
+
 class AddItem extends Component {
   constructor() {
     super();
 
     this.state = {
+      state: IDLE,
       suggestions: null,
-      loading: false,
       value: "",
     };
 
@@ -49,13 +53,13 @@ class AddItem extends Component {
     const url = `/suggestions?url=${encodeURIComponent(
       this.state.value.trim()
     )}`;
-    this.setState({ loading: true }, () => {
+    this.setState({ state: LOADING }, () => {
       fetch(url, { signal: this.controller.signal })
         .then((res) => res.json())
         .then((suggestions) =>
           this.setState({
+            state: IDLE,
             suggestions,
-            loading: false,
           })
         )
         .catch((err) => {
@@ -64,19 +68,20 @@ class AddItem extends Component {
           }
 
           console.error("error making suggestings", err);
+          this.setState({ state: ERROR })
         });
     });
   }
 
   render() {
     const inputContainerClasses = ["input-container"];
-    if (this.state.loading) {
+    if (this.state.state === LOADING) {
       inputContainerClasses.push("loading");
     }
 
     const suggestions =
-      !this.state.loading && this.state.suggestions
-        ? JSON.stringify(this.state.suggestions)
+      this.state.state !== LOADING && this.state.suggestions
+        ? JSON.stringify(this.state.suggestions, null, "    ")
         : null;
 
     return html`<form
@@ -98,7 +103,7 @@ class AddItem extends Component {
         />
         <${SpinningRing} size="30" />
       </div>
-      ${suggestions}
+      <pre>${suggestions}</pre>
     </form>`;
   }
 }
