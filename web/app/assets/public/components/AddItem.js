@@ -6,7 +6,7 @@ const IDLE = 0;
 const LOADING = 1;
 const ERROR = 2;
 
-class AddItem extends Component {
+export default class AddItem extends Component {
   constructor() {
     super();
 
@@ -104,6 +104,3 @@ class AddItem extends Component {
     </form>`;
   }
 }
-
-const containerEl = document.querySelector("[data-component=add-item]");
-render(html`<${AddItem} />`, containerEl);
