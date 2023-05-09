@@ -1,6 +1,7 @@
 #lang racket/base
 
 (require racket/match
+         racket/string
 
          gregor
          xml
@@ -39,9 +40,9 @@
                                                                   (string-list-join (cddr part) "")))]
                                   [else null])))
                             (article (strip-cdata link)
-                                     (strip-cdata title)
+                                     (string-trim (strip-cdata title))
                                      (strip-cdata date)
                                      (strip-cdata content))) items))])
     (feed (strip-cdata link)
-          (strip-cdata title)
+          (string-trim (strip-cdata title))
           articles)))
