@@ -43,11 +43,13 @@
                                                       #:archived #f
                                                       #:limit page-size
                                                       #:offset offset)]
-         [feed-stats (sequence->list
-                      (in-entities (current-database-connection)
-                                   (select-feed-stats #:user-id (current-user-id))))])
+         [feed-stats (in-entities (current-database-connection)
+                                   (select-feed-stats #:user-id (current-user-id)))])
     (render
-     (:reader feed-stats article-summaries scheduled-feed-download current-page page-count))))
+     (:reader (sequence->list feed-stats)
+              (sequence->list article-summaries)
+              scheduled-feed-download
+              current-page page-count))))
 
 (define (/articles/<id>/show req id)
   (let* ([article (lookup (current-database-connection)
@@ -93,14 +95,13 @@
                           (find-article-by-id #:id id
                                               #:user-id (current-user-id)))]
          [tags (select-article-tags article)])
-    (when (null? tags)
+    (when (zero? (sequence-length tags))
       (define tag-strings (generate-article-tags article))
       (set! tags (create-article-tags article tag-strings 'system)))
-    (json 'tags (map (lambda (tag)
-                       (hash 'id (tag-id tag)
-                             'label (tag-label tag)
-                             'color (tag-color tag)))
-                     tags))))
+    (json 'tags (for/list ([tag tags])
+                  (hash 'id (tag-id tag)
+                        'label (tag-label tag)
+                        'color (tag-color tag))))))
 
 (define (/articles/<id>/chat req id)
   (let* ([article (lookup (current-database-connection)

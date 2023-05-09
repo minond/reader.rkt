@@ -48,21 +48,19 @@
           (+ (* (random) 10) 85)))
 
 (define/contract (select-article-tags article)
-  (-> article? (listof tag?))
-  (sequence->list
-   (in-entities (current-database-connection)
-                (~> (from tag #:as t)
-                    (join #:left article-tag #:as at #:on (= t.id at.tag-id))
-                    (where (= at.article-id ,(article-id article)))))))
+  (-> article? (sequence/c tag?))
+  (in-entities (current-database-connection)
+               (~> (from tag #:as t)
+                   (join #:left article-tag #:as at #:on (= t.id at.tag-id))
+                   (where (= at.article-id ,(article-id article))))))
 
 (define (select-tags-by-id ids)
-  (sequence->list
-   (in-entities (current-database-connection)
-                (~> (from tag #:as t)
-                    (where (in t.id ,@ids))))))
+  (in-entities (current-database-connection)
+               (~> (from tag #:as t)
+                   (where (in t.id ,@ids)))))
 
 (define/contract (create-article-tags article tag-strings set-by)
-  (-> article? (listof string?) set-by/c (listof tag?))
+  (-> article? (listof string?) set-by/c (sequence/c tag?))
   (define tags (create-tags tag-strings))
   (define article-tags (create-article-tag-mappings article tags set-by))
   (select-tags-by-id (map article-tag-tag-id article-tags)))

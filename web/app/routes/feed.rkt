@@ -1,8 +1,6 @@
 #lang racket/base
 
-(require racket/sequence
-
-         deta
+(require deta
          db
 
          reader/app/components/article
@@ -26,9 +24,8 @@
 (define page-size 50)
 
 (define (/feeds req)
-  (let ([feed-stats (sequence->list
-                     (in-entities (current-database-connection)
-                                  (select-feed-stats #:user-id (current-user-id))))])
+  (let ([feed-stats (in-entities (current-database-connection)
+                                 (select-feed-stats #:user-id (current-user-id)))])
     (render (:feed/list feed-stats))))
 
 (define (/feeds/new req)
@@ -69,12 +66,11 @@
          [feed (lookup (current-database-connection)
                        (find-feed-by-id #:id id
                                         #:user-id (current-user-id)))]
-         [articles (sequence->list
-                    (in-entities (current-database-connection)
-                                 (select-articles-by-feed #:feed-id id
-                                                          #:user-id (current-user-id)
-                                                          #:limit page-size
-                                                          #:offset offset)))])
+         [articles (in-entities (current-database-connection)
+                                (select-articles-by-feed #:feed-id id
+                                                         #:user-id (current-user-id)
+                                                         #:limit page-size
+                                                         #:offset offset))])
     (render (:article/list feed articles current-page page-count))))
 
 (define (/feeds/<id>/sync req id)

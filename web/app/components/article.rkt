@@ -62,7 +62,8 @@
             (:th "Title")
             (:th "Date")
             (:th ""))
-           (:tbody (map :article/row articles)))
+           (:tbody (for/list ([article articles])
+                     (:article/row article))))
    (:spacer #:direction horizontal #:size small)
    (:pagination current-page page-count)))
 

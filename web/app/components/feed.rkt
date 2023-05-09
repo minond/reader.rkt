@@ -27,7 +27,8 @@
      (:th 'class: "wsnw" "Last update")
      (:th "")
      (:th ""))
-    (:tbody (map :feed/row feed-stats)))))
+    (:tbody (for/list ([feed-stat feed-stats])
+              (:feed/row feed-stat))))))
 
 (define (:feed/row feed)
   (let-values ([(route class) (if (feed-stats-subscribed feed)
