@@ -1,12 +1,13 @@
 #lang racket/base
 
-(require (prefix-in : scribble/html/html))
+(require casemate
+         (prefix-in : scribble/html/html))
 
 (provide :script/component)
 
 (define template "
 import { html, render } from '/public/preact.js';
-import Component from '/public/components/~a.js';
+import Component from '/public/~a.js';
 const el = document.querySelector('[data-component=~a]');
 if (el) {
   delete el.dataset.component;
@@ -19,7 +20,9 @@ if (el) {
 
 (define (code name)
   (:script/inline 'type: 'module
-                  (format template name name name)))
+                  (format template
+                          (->kebab-case name)
+                          name name)))
 
 (define (:script/component name . data)
   (apply :span

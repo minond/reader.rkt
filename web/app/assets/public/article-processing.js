@@ -1,14 +1,6 @@
 import { Component, html, render } from "/public/preact.js";
 
-const Tag = ({ label = "", color = false, className = "fadein" }) =>
-  html`<div
-    class="tag ${className}"
-    style="${color ? `background-color: ${color}` : ""}"
-  >
-    ${label}
-  </div>`;
-
-class ArticleContentProcessing extends Component {
+export default class ArticleProcessing extends Component {
   constructor() {
     super();
     this.state = {
@@ -95,11 +87,10 @@ class ArticleContentProcessing extends Component {
   }
 }
 
-const containerEl = document.querySelector(
-  "[data-component=article-content-processing]"
-);
-const articleId = containerEl.getAttribute("data-article-id");
-render(
-  html`<${ArticleContentProcessing} articleId=${articleId} />`,
-  containerEl
-);
+const Tag = ({ label = "", color = false, className = "fadein" }) =>
+  html`<div
+    class="tag ${className}"
+    style="${color ? `background-color: ${color}` : ""}"
+  >
+    ${label}
+  </div>`;

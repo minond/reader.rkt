@@ -3,17 +3,7 @@ import { Component, html, render } from "/public/preact.js";
 import { SpinningRing } from "/public/component.js";
 import { debounce } from "/public/common.js";
 
-const renderer = markdownIt({ breaks: true });
-
-const Message = ({ role, time, content }) =>
-  html`<div class="message ${role}">
-    <span
-      dangerouslySetInnerHTML=${{ __html: renderer.render(content) }}
-    ></span>
-    <time>${new Date(time).toLocaleString()}</time>
-  </div>`;
-
-class ArticleAIChat extends Component {
+export default class ArticleChat extends Component {
   constructor() {
     super();
 
@@ -244,10 +234,11 @@ class ArticleAIChat extends Component {
   }
 }
 
-const containerEl = document.querySelector("[data-component=article-ai-chat]");
-const articleId = containerEl.getAttribute("data-article-id");
-render(
-  html`<${ArticleAIChat} articleId=${articleId} />`,
-  containerEl.parentNode,
-  containerEl
-);
+const renderer = markdownIt({ breaks: true });
+const Message = ({ role, time, content }) =>
+  html`<div class="message ${role}">
+    <span
+      dangerouslySetInnerHTML=${{ __html: renderer.render(content) }}
+    ></span>
+    <time>${new Date(time).toLocaleString()}</time>
+  </div>`;

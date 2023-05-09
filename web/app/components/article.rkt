@@ -2,7 +2,6 @@
 
 (require racket/string
 
-         db
          gregor
          (prefix-in : scribble/html/xml)
          (prefix-in : scribble/html/html)
@@ -11,6 +10,7 @@
          reader/app/models/article
          reader/app/models/feed
 
+         reader/lib/app/components/script
          reader/lib/app/components/spacer
          reader/lib/app/components/spinner
          reader/lib/app/components/pagination)
@@ -43,23 +43,15 @@
                   'value: (article-id article))
           (:div 'class: "container"
                 (:article/content article)
-                (:aside (:article/content-processing-component article)
+                (:aside (:script/component 'ArticleProcessing
+                                           'data-article-id: (article-id article))
                         (:spacer #:direction horizontal #:size small)
-                        (:article/ai-chat-component article))))))
+                        (:script/component 'ArticleChat
+                                           'data-article-id: (article-id article)))))))
 
 (define (:article/content article)
   (:article
    (:literal (article-extracted-content-html article))))
-
-(define (:article/content-processing-component article)
-  (:div 'data-component: "article-content-processing"
-        'data-article-id: (article-id article)
-        (:script 'type: 'module 'src: "/public/article-content-processing.js")))
-
-(define (:article/ai-chat-component article)
-  (:div 'data-component: "article-ai-chat"
-        'data-article-id: (article-id article)
-        (:script 'type: 'module 'src: "/public/article-ai-chat.js")))
 
 (define (:article/list feed articles current-page page-count)
   (list
