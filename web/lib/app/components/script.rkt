@@ -1,6 +1,9 @@
 #lang racket/base
 
-(require casemate
+(require racket/string
+
+         threading
+         casemate
          (prefix-in : scribble/html/html))
 
 (provide :script/component)
@@ -18,9 +21,15 @@ if (el) {
   console.warn('unable to locate [data-component=~a]')
 }")
 
+(define minified-template
+  (~> template
+      (regexp-replace* #px"\n" _ " ")
+      (regexp-replace* #px"\\s+" _ " ")
+      (string-trim)))
+
 (define (code name)
   (:script/inline 'type: 'module
-                  (format template
+                  (format minified-template
                           (->kebab-case name)
                           name name)))
 
