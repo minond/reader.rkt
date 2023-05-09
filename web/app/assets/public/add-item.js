@@ -12,7 +12,7 @@ export default class AddItem extends Component {
 
     this.state = {
       state: IDLE,
-      suggestions: null,
+      suggestions: [],
       value: "",
     };
 
@@ -53,6 +53,7 @@ export default class AddItem extends Component {
     this.setState({ state: LOADING }, () => {
       fetch(url, { signal: this.controller.signal })
         .then((res) => res.json())
+        .then((body) => body.suggestions)
         .then((suggestions) =>
           this.setState({
             state: IDLE,
@@ -64,8 +65,8 @@ export default class AddItem extends Component {
             return;
           }
 
-          console.error("error making suggestings", err);
-          this.setState({ state: ERROR });
+          console.error("error making suggestions", err);
+          this.setState({ suggestions: [], state: ERROR });
         });
     });
   }
@@ -75,11 +76,6 @@ export default class AddItem extends Component {
     if (this.state.state === LOADING) {
       inputContainerClasses.push("loading");
     }
-
-    const suggestions =
-      this.state.state !== LOADING && this.state.suggestions
-        ? JSON.stringify(this.state.suggestions, null, "    ")
-        : null;
 
     return html`<form
       class="add-item-form"
@@ -100,7 +96,71 @@ export default class AddItem extends Component {
         />
         <${SpinningRing} size="30" />
       </div>
-      <pre>${suggestions}</pre>
+      <div
+        class="suggestions"
+        style=${{
+          border: "1px solid rgb(207, 207, 207)",
+          padding: ".5em",
+          borderRadius: "3px",
+        }}
+      >
+        ${this.state.suggestions.map(
+          (suggestion) => html`<${Suggestion} ...${suggestion} />`
+        )}
+      </div>
     </form>`;
   }
 }
+
+const Suggestion = ({ kind, title, url }) =>
+  html`<div
+    class="suggestion"
+    style=${{
+      display: "grid",
+      gridGap: "0px",
+      gridTemplateColumns: "90% 10%",
+    }}
+  >
+    <div
+      class="suggestion-title"
+      style=${{
+        gridColumn: "1",
+        fontWeight: "bold",
+      }}
+    >
+      ${title}
+    </div>
+    <div
+      class="suggestion-url"
+      style=${{
+        gridColumn: "1",
+        color: "gray",
+      }}
+    >
+      ${url}
+    </div>
+    <div
+      class="suggestion-kind"
+      style=${{
+        gridColumn: "2",
+        gridRow: "1 / span 2",
+        alignSelf: "center",
+      }}
+    >
+      <div
+        class="suggestion-kind-container"
+        style=${{
+          border: "1px solid rgb(245, 223, 70)",
+          display: "inline-block",
+          padding: "1px 6px",
+          margin: "0",
+          fontSize: ".8em",
+          backgroundColor: "rgba(255, 249, 208, 1)",
+          fontWeight: "bold",
+          textTransform: "lowercase",
+        }}
+      >
+        ${kind}
+      </div>
+    </div>
+  </div>`;
