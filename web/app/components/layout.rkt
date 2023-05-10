@@ -518,6 +518,59 @@
            #:margin (0 .5em .5em 0)]
      [.tag.loading #:background-color ,loading-placeholder-color]]
 
+    [.add-item-form
+     [.input-container
+      #:margin (0 2em)]
+     [.suggestions
+      #:margin-top .5em
+      #:padding (1.75em 1.25em)
+      #:transition (opacity .2s)
+      #:opacity 1
+      #:border (1px solid (apply rgb 207 207 207))
+      #:border-radius 3px
+      #:box-shadow (-5px 5px 13px (apply rgb 232 232 232))
+      #:background-color white
+      [.suggestion
+       #:padding .75em
+       #:display grid
+       #:grid-gap 0px
+       #:transition (background-color .1s)
+       #:grid-template-columns (90% 10%)]
+      [(: .suggestion (apply not (: first-child)))
+       #:border-top (1px solid ,separator-color-light)]
+      [.suggestion:first-child
+       #:padding-top 0]
+      [.suggestion:last-child
+       #:padding-bottom 0]
+      [.suggestion:hover
+       #:cursor pointer
+       #:background-color ,code-color-background
+       [.suggestion-title
+        #:text-decoration underline]]
+      [.suggestion-title
+       #:grid-column 1
+       #:font-weight bold]
+      [.suggestion-url
+       #:grid-column 1
+       #:color ,text-color-light]
+      [.suggestion-kind
+       #:text-align right
+       #:grid-column 2
+       #:grid-row (1 / span 2)
+       #:align-self center]
+      [.suggestion-kind-container
+       #:border (1px solid (apply rgb 245 223 70))
+       #:display inline-block
+       #:padding (1px 6px)
+       #:margin 0
+       #:font-size .8em
+       #:background-color (apply rgba 255 249 208 1)
+       #:font-weight bold
+       #:text-transform lowercase]]]
+    [.add-item-form.loading
+     [.suggestions
+      #:opacity .6]]
+
     [.image
      #:transition (fill .2s)
      #:fill ,image-color-idle]

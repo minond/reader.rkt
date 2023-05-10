@@ -72,13 +72,15 @@ export default class AddItem extends Component {
   }
 
   render() {
+    const formClasses = ["add-item-form"];
     const inputContainerClasses = ["input-container"];
     if (this.state.state === LOADING) {
+      formClasses.push("loading");
       inputContainerClasses.push("loading");
     }
 
     return html`<form
-      class="add-item-form"
+      class=${formClasses.join(" ")}
       onSubmit=${(ev) => this.handleFormSubmit(ev)}
     >
       <div class=${inputContainerClasses.join(" ")}>
@@ -96,14 +98,7 @@ export default class AddItem extends Component {
         />
         <${SpinningRing} size="30" />
       </div>
-      <div
-        class="suggestions"
-        style=${{
-          border: "1px solid rgb(207, 207, 207)",
-          padding: ".5em",
-          borderRadius: "3px",
-        }}
-      >
+      <div class="suggestions">
         ${this.state.suggestions.map(
           (suggestion) => html`<${Suggestion} ...${suggestion} />`
         )}
@@ -112,55 +107,11 @@ export default class AddItem extends Component {
   }
 }
 
-const Suggestion = ({ kind, title, url }) =>
-  html`<div
-    class="suggestion"
-    style=${{
-      display: "grid",
-      gridGap: "0px",
-      gridTemplateColumns: "90% 10%",
-    }}
-  >
-    <div
-      class="suggestion-title"
-      style=${{
-        gridColumn: "1",
-        fontWeight: "bold",
-      }}
-    >
-      ${title}
-    </div>
-    <div
-      class="suggestion-url"
-      style=${{
-        gridColumn: "1",
-        color: "gray",
-      }}
-    >
-      ${url}
-    </div>
-    <div
-      class="suggestion-kind"
-      style=${{
-        gridColumn: "2",
-        gridRow: "1 / span 2",
-        alignSelf: "center",
-      }}
-    >
-      <div
-        class="suggestion-kind-container"
-        style=${{
-          border: "1px solid rgb(245, 223, 70)",
-          display: "inline-block",
-          padding: "1px 6px",
-          margin: "0",
-          fontSize: ".8em",
-          backgroundColor: "rgba(255, 249, 208, 1)",
-          fontWeight: "bold",
-          textTransform: "lowercase",
-        }}
-      >
-        ${kind}
-      </div>
+const Suggestion = ({ kind, title, url, firstChild }) =>
+  html`<div class="suggestion" style=${{}}>
+    <div class="suggestion-title">${title}</div>
+    <div class="suggestion-url">${url}</div>
+    <div class="suggestion-kind">
+      <div class="suggestion-kind-container">${kind}</div>
     </div>
   </div>`;
