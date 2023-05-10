@@ -62,6 +62,7 @@
 (define image-color-active (css-expr (apply rgb 53 50 252)))
 (define loading-placeholder-color (css-expr (apply rgb 226 232 240)))
 
+(define selection-hover-color(css-expr (apply rgb 244 247 255)))
 (define code-color-border (css-expr (apply rgb 215 215 215)))
 (define code-color-background (css-expr (apply rgb 250 250 250)))
 
@@ -224,7 +225,7 @@
 
               [.container #:display grid
                           #:max-width (apply calc (,article-max-width * 2))
-                          #:grid-template-columns (50% 50%)]
+                          #:grid-template-columns (60% 40%)]
               [@media (and screen (#:min-width (apply calc (,article-max-width * 2))))
                       [.container
                        [article #:padding-right 2.5em]
@@ -523,7 +524,7 @@
       #:margin (0 2em)]
      [.suggestions
       #:margin-top .5em
-      #:padding (1.75em 1.25em)
+      #:padding (1.75em 0)
       #:transition (opacity .2s)
       #:opacity 1
       #:border (1px solid (apply rgb 207 207 207))
@@ -531,20 +532,16 @@
       #:box-shadow (-5px 5px 13px (apply rgb 232 232 232))
       #:background-color white
       [.suggestion
-       #:padding .75em
+       #:padding (.75em 2em)
        #:display grid
        #:grid-gap 0px
        #:transition (background-color .1s)
        #:grid-template-columns (90% 10%)]
       [(: .suggestion (apply not (: first-child)))
        #:border-top (1px solid ,separator-color-light)]
-      [.suggestion:first-child
-       #:padding-top 0]
-      [.suggestion:last-child
-       #:padding-bottom 0]
       [.suggestion:hover
        #:cursor pointer
-       #:background-color ,code-color-background
+       #:background-color ,selection-hover-color
        [.suggestion-title
         #:text-decoration underline]]
       [.suggestion-title
