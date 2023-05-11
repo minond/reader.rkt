@@ -279,7 +279,7 @@
      #:position relative
      #:border-width 1px
      #:border-style solid
-     #:border-color ,border-color-light
+     #:border-color ,border-color-lighter
      #:overflow hidden
      [input #:margin 0
             #:padding 0.75em
@@ -546,7 +546,7 @@
      [.suggestions
       #:transition (opacity .2s)
       #:opacity 1
-      #:border (1px solid ,border-color-light)
+      #:border (1px solid ,border-color-lighter)
       #:background-color white
       [.suggestion
        #:padding (.75em 1em)
