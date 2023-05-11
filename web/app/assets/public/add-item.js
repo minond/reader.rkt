@@ -98,6 +98,23 @@ class Modal extends Component {
     this.cancelFetchSuggestions();
   }
 
+  handleKeyPress(ev) {
+    switch (ev.keyCode) {
+      case 27:
+        this.cancelFetchSuggestions();
+        this.setState({ value: "", suggestions: null, inputState: INPUT_IDLE });
+
+        if (!ev.target.value) {
+          this.props.controller.hide();
+        } else {
+          ev.target.value = "";
+        }
+
+        ev.preventDefault();
+        return false;
+    }
+  }
+
   cancelFetchSuggestions() {
     if (this.requestAbortController) {
       this.requestAbortController.abort();
@@ -105,6 +122,10 @@ class Modal extends Component {
   }
 
   fetchSuggestions() {
+    if (!this.state.value.trim()) {
+      return;
+    }
+
     this.requestAbortController = new AbortController();
 
     const url = `/suggestions?url=${encodeURIComponent(
@@ -126,7 +147,7 @@ class Modal extends Component {
           }
 
           console.error("error making suggestions", err);
-          this.setState({ suggestions: [], inputState: INPUT_ERROR });
+          this.setState({ suggestions: null, inputState: INPUT_ERROR });
         });
     });
   }
@@ -190,6 +211,7 @@ class Modal extends Component {
               autofocus="yes"
               name="value"
               onInput=${(ev) => this.handleInput(ev)}
+              onKeyPress=${(ev) => this.handleKeyPress(ev)}
               placeholder="Search by name or RSS link"
               spellcheck="false"
               type="text"
