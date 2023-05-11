@@ -3,7 +3,6 @@
 (require net/url-string
 
          reader/app/commands/suggestions
-         reader/app/components/item
 
          reader/lib/web)
 
