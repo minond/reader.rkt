@@ -55,7 +55,7 @@ class Modal extends Component {
     this.state = {
       inputState: INPUT_IDLE,
       showState: SHOW_OFF,
-      suggestions: [],
+      suggestions: null,
       value: "",
     };
 
@@ -91,7 +91,10 @@ class Modal extends Component {
       return;
     }
 
-    this.setState({ value: newValue }, this.fetchSuggestionsDebounced);
+    this.setState(
+      { value: newValue, inputState: INPUT_LOADING },
+      this.fetchSuggestionsDebounced
+    );
     this.cancelFetchSuggestions();
   }
 
@@ -145,13 +148,28 @@ class Modal extends Component {
       styles.opacity = 0;
     }
 
-    const suggestions = !!this.state.suggestions.length
-      ? html`<div class="suggestions">
-          ${this.state.suggestions.map(
-            (suggestion) => html`<${Suggestion} ...${suggestion} />`
-          )}
-        </div>`
-      : null;
+    let suggestions = null;
+    if (
+      (!!this.state.suggestions &&
+        !this.state.suggestions.length &&
+        this.state.inputState !== INPUT_LOADING) ||
+      this.state.inputState === INPUT_ERROR
+    ) {
+      suggestions = html`<div class="suggestions">
+        <div class="suggestion">
+          <div class="suggestion-message">
+            Nothing found for <b>“${this.state.value.trim()}”</b>. Please try
+            again.
+          </div>
+        </div>
+      </div>`;
+    } else if (!!this.state.suggestions && !!this.state.suggestions.length) {
+      suggestions = html`<div class="suggestions">
+        ${this.state.suggestions.map(
+          (suggestion) => html`<${Suggestion} ...${suggestion} />`
+        )}
+      </div>`;
+    }
 
     return html`<div
       class="backdrop"
@@ -186,8 +204,8 @@ class Modal extends Component {
   }
 }
 
-const Suggestion = ({ kind, title, url, firstChild }) =>
-  html`<div class="suggestion" style=${{}}>
+const Suggestion = ({ kind, title, url }) =>
+  html`<div class="suggestion">
     <div class="suggestion-title">${title}</div>
     <div class="suggestion-url">${url}</div>
     <div class="suggestion-kind">
