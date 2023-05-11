@@ -44,7 +44,7 @@ export default class AddItem extends Component {
   }
 
   render() {
-    return html`<a href="#" onClick=${() => this.showModal()}>Add feed</a>`;
+    return html`<a onClick=${() => this.showModal()}>Add feed</a>`;
   }
 }
 
