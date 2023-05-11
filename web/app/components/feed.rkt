@@ -18,17 +18,17 @@
   (list
    (:spacer #:direction vertical #:size small)
    (:table 'class: "table-content with-indicator"
-    (:thead
-     (:th)
-     (:th "Title")
-     (:th "Articles")
-     (:th "Archived")
-     (:th 'class: "wsnw" "Subscribed on")
-     (:th 'class: "wsnw" "Last update")
-     (:th "")
-     (:th ""))
-    (:tbody (for/list ([feed-stat feed-stats])
-              (:feed/row feed-stat))))))
+           (:thead
+            (:th)
+            (:th "Title")
+            (:th "Articles")
+            (:th "Archived")
+            (:th 'class: "wsnw" "Subscribed on")
+            (:th 'class: "wsnw" "Last update")
+            (:th "")
+            (:th ""))
+           (:tbody (for/list ([feed-stat feed-stats])
+                     (:feed/row feed-stat))))))
 
 (define (:feed/row feed)
   (let-values ([(route class) (if (feed-stats-subscribed feed)

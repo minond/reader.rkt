@@ -15,8 +15,8 @@
 
 (define (schedule-feed-syncs)
   (let ([feeds (sequence->list
-                 (in-entities (current-database-connection)
-                              (select-feeds-in-need-of-sync)))])
+                (in-entities (current-database-connection)
+                             (select-feeds-in-need-of-sync)))])
     (for/list ([feed feeds])
       (update-one! (current-database-connection)
                    (set-feed-last-sync-attempted-at feed (now/utc)))
