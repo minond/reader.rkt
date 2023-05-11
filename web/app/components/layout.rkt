@@ -6,6 +6,7 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
+         reader/lib/app/components/script
          reader/lib/app/components/flash
          reader/lib/parameters
          reader/lib/web/session)
@@ -32,7 +33,7 @@
                      (:flash))
                     (:td 'class: "actions"
                          (if (authenticated?)
-                             (list (:a 'href: "/feeds/new" "Add feed")
+                             (list (:script/component 'AddItem)
                                    (:a 'href: "/feeds" "Manage feeds")
                                    (:a 'href: "/sessions/destroy" "Sign out"))
                              null))))
@@ -168,10 +169,9 @@
         #:color initial
         [a #:color initial]]
 
-    [form.session-create-form
-     form.user-registration-form
-     form.add-feed-form
-     form.add-item-form
+    [.session-create-form
+     .user-registration-form
+     .add-feed-form
      #:margin (3em auto)
      #:max-width ,@article-max-width
      [(attribute input (= type "url"))
@@ -277,6 +277,17 @@
 
     [.input-container
      #:position relative
+     #:border-width 1px
+     #:border-style solid
+     #:border-color ,border-color-light
+     #:overflow hidden
+     [input #:margin 0
+            #:padding 0.75em
+            #:width (apply calc (100% - 30px))
+            #:font-size 1.1em
+            #:box-sizing border-box
+            #:outline none
+            #:border none]
      [.spinning-ring #:display none
                      #:position absolute
                      #:top 5px
@@ -520,19 +531,25 @@
      [.tag.loading #:background-color ,loading-placeholder-color]]
 
     [.add-item-form
-     [.input-container
-      #:margin (0 2em)]
+     #:margin (22vh auto)
+     #:max-width ,@article-max-width
+     #:text-align left
+     #:padding 1em
+     [.add-item-form-content
+      #:background-color white
+      #:position relative
+      #:box-shadow
+      ((apply rgb 255 255 255) 0px 0px 0px 0px)
+      ((apply rgba 24 24 27 0.075) 0px 0px 0px 1px)
+      ((apply rgba 0 0 0 0.1) 0px 20px 25px -5px)
+      ((apply rgba 0 0 0 0.1) 0px 8px 10px -6px)]
      [.suggestions
-      #:margin-top .5em
-      #:padding (1.75em 0)
       #:transition (opacity .2s)
       #:opacity 1
-      #:border (1px solid (apply rgb 207 207 207))
-      #:border-radius 3px
-      #:box-shadow (-5px 5px 13px (apply rgb 232 232 232))
+      #:border (1px solid ,border-color-light)
       #:background-color white
       [.suggestion
-       #:padding (.75em 2em)
+       #:padding (.75em 1em)
        #:display grid
        #:grid-gap 0px
        #:transition (background-color .1s)
@@ -567,6 +584,19 @@
     [.add-item-form.loading
      [.suggestions
       #:opacity .6]]
+
+    [.backdrop
+     #:animation (fadein .1s linear 0s)
+     #:transition (opacity .1s)
+     #:position fixed
+     #:background-color (apply hsla 240 4.83% 65.33% 0.07)
+     #:width 100%
+     #:left 0
+     #:top 0
+     #:height 100%
+     #:z-index 1
+     #:-webkit-backdrop-filter (apply blur 4px)
+     #:-webkit-font-smoothing antialiased]
 
     [.image
      #:transition (fill .2s)
