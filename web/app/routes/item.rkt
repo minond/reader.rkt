@@ -7,11 +7,7 @@
 
          reader/lib/web)
 
-(provide /add
-         /suggestions)
-
-(define (/add req)
-  (render (:item/add)))
+(provide /suggestions)
 
 (define (/suggestions req)
   (define suggestions (make-suggestions (parameter 'url req)))
