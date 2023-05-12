@@ -6,7 +6,7 @@
          gregor
 
          reader/entities/feed
-         reader/tasks/fetch-feed-articles
+         reader/jobs/fetch-feed-articles
 
          reader/lib/job
          reader/lib/parameters)

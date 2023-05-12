@@ -7,8 +7,8 @@
          reader/web/components/feed
          reader/entities/article
          reader/entities/feed
-         reader/tasks/save-new-feed
-         reader/tasks/fetch-feed-articles
+         reader/jobs/save-new-feed
+         reader/jobs/fetch-feed-articles
 
          reader/lib/parameters
          reader/lib/job

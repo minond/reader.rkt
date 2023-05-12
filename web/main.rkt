@@ -1,8 +1,8 @@
 #lang racket/base
 
-(require reader/tasks/fetch-feed-articles
-         reader/tasks/save-new-feed
-         reader/tasks/crontab
+(require reader/jobs/fetch-feed-articles
+         reader/jobs/save-new-feed
+         reader/jobs/crontab
          reader/entities/article
          reader/entities/feed
          reader/entities/feedback

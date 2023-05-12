@@ -1,7 +1,6 @@
 #lang racket/base
 
-(require reader/tasks/schedule-feed-syncs
-
+(require reader/jobs/schedule-feed-syncs
          reader/lib/crontab)
 
 (provide start-crontab)
