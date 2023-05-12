@@ -587,7 +587,7 @@
 
     [.backdrop
      #:animation (fadein .1s linear 0s)
-     #:transition (opacity .1s)
+     #:transition (opacity .15s)
      #:position fixed
      #:background-color (apply hsla 240 4.83% 65.33% 0.07)
      #:width 100%

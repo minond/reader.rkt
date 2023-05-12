@@ -27,24 +27,13 @@ export default class AddItem extends Component {
 
   componentWillMount() {
     render(
-      html`<${Modal}
-        controller=${this.modalController}
-        onClose=${() => this.hideModal()}
-      />`,
+      html`<${Modal} controller=${this.modalController} />`,
       this.modalContainer
     );
   }
 
-  hideModal() {
-    this.modalController.hide();
-  }
-
-  showModal() {
-    this.modalController.show();
-  }
-
   render() {
-    return html`<a onClick=${() => this.showModal()}>Add feed</a>`;
+    return html`<a onClick=${() => this.modalController.show()}>Add feed</a>`;
   }
 }
 
@@ -67,17 +56,20 @@ class Modal extends Component {
   }
 
   componentWillMount() {
-    this.props.controller.show = () => {
-      if (this.state.showState !== SHOW_HIDING) {
-        this.setState({ showState: SHOW_ON });
-      }
-    };
+    this.props.controller.show = () => this.show();
+    this.props.controller.hide = () => this.hide();
+  }
 
-    this.props.controller.hide = () => {
-      this.setState({ showState: SHOW_HIDING }, () =>
-        setTimeout(() => this.setState({ showState: SHOW_OFF }), 100)
-      );
-    };
+  hide() {
+    this.setState({ showState: SHOW_HIDING }, () =>
+      setTimeout(() => this.setState({ showState: SHOW_OFF }), 150)
+    );
+  }
+
+  show() {
+    if (this.state.showState !== SHOW_HIDING) {
+      this.setState({ showState: SHOW_ON });
+    }
   }
 
   handleFormSubmit(ev) {
@@ -105,7 +97,7 @@ class Modal extends Component {
         this.setState({ value: "", suggestions: null, inputState: INPUT_IDLE });
 
         if (!ev.target.value) {
-          this.props.controller.hide();
+          this.hide();
         } else {
           ev.target.value = "";
         }
@@ -195,7 +187,7 @@ class Modal extends Component {
     return html`<div
       class="backdrop"
       style=${styles}
-      onClick=${this.props.onClose}
+      onClick=${() => this.hide()}
     >
       <form
         class=${formClasses.join(" ")}
