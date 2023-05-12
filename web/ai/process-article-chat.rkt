@@ -1,7 +1,7 @@
 #lang racket/base
 
 (require reader/entities/article
-         reader/openai/client)
+         reader/ai/openai/client)
 
 (provide process-article-chat)
 

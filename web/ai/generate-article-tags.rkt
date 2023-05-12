@@ -1,11 +1,9 @@
 #lang racket/base
 
 (require racket/string
-
          threading
-
          reader/entities/article
-         reader/openai/client)
+         reader/ai/openai/client)
 
 (provide generate-article-tags)
 

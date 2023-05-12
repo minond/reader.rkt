@@ -7,7 +7,7 @@
          first-message-content
          trim-prompt-text)
 
-(openapi openai "openai/openapi.yaml"
+(openapi openai "ai/openai/openapi.yaml"
          #:only (create-chat-completion)
          #:bearer (getenv "OPENAI_API_KEY"))
 

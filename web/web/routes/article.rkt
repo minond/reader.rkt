@@ -15,9 +15,9 @@
          reader/web/components/article
          reader/web/components/reader
          reader/web/components/layout
-         reader/tasks/generate-article-summary
-         reader/tasks/generate-article-tags
-         reader/tasks/process-article-chat
+         reader/ai/generate-article-summary
+         reader/ai/generate-article-tags
+         reader/ai/process-article-chat
 
          reader/lib/parameters
          reader/lib/web)
