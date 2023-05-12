@@ -8,7 +8,6 @@
 
          reader/entities/article
          reader/entities/feed
-         reader/tasks/errors
 
          reader/lib/html
          reader/lib/parameters
@@ -34,17 +33,16 @@
             (find-feed-by-id #:id feed-id
                              #:user-id user-id)))
   (unless feed-record
-    (raise (unable-to-find-feed "failed"
-                                (current-continuation-marks)
-                                feed-id)))
+    (error 'fetch-feed-articles
+           "unable to find feed ~a for ~a"
+           feed-url user-id))
 
   (define feed-url (feed-feed-url feed-record))
   (define feed-data (rss-fetch feed-url))
   (unless feed-data
-    (raise (unable-to-download-feed "failed"
-                                    (current-continuation-marks)
-                                    feed-url
-                                    user-id)))
+    (error 'fetch-feed-articles
+           "unable to download feed at ~a for ~a"
+           feed-url user-id))
 
   (update-one! (current-database-connection)
                (update-feed-last-sync-attempted-at
