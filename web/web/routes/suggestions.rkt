@@ -1,9 +1,7 @@
 #lang racket/base
 
 (require net/url-string
-
-         reader/tasks/suggestions
-
+         reader/entities/suggestions
          reader/lib/web)
 
 (provide /suggestions)
