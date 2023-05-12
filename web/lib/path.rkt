@@ -2,8 +2,8 @@
 
 (require racket/runtime-path)
 
-(provide app-root
-         lib-app-root)
+(provide app-web-root
+         lib-web-root)
 
-(define-runtime-path app-root "../app")
-(define-runtime-path lib-app-root "./app")
+(define-runtime-path app-web-root "../web")
+(define-runtime-path lib-web-root "./app/web")

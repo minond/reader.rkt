@@ -9,8 +9,8 @@
 (define (start-servlet)
   (serve/servlet (servlet-app-dispatch)
                  #:launch-browser? #f
-                 #:extra-files-paths (list (build-path app-root "assets")
-                                           (build-path lib-app-root "assets"))
+                 #:extra-files-paths (list (build-path app-web-root "assets")
+                                           (build-path lib-web-root "assets"))
                  #:servlet-path "/"
                  #:listen-ip (getenv "SERVER_LISTEN_IP")
                  #:port (or (and (getenv "SERVER_LISTEN_PORT")

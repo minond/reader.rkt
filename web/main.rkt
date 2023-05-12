@@ -1,17 +1,17 @@
 #lang racket/base
 
-(require reader/app/commands/fetch-feed-articles
-         reader/app/commands/save-new-feed
-         reader/app/routes/user
-         reader/app/models/article
-         reader/app/models/feed
-         reader/app/models/feedback
-         reader/app/models/registration-invitation
-         reader/app/models/user
-         reader/app/components/layout
-         reader/app/components/user
-         reader/app/dispatch
-         reader/app/crontab
+(require reader/tasks/fetch-feed-articles
+         reader/tasks/save-new-feed
+         reader/tasks/crontab
+         reader/entities/article
+         reader/entities/feed
+         reader/entities/feedback
+         reader/entities/registration-invitation
+         reader/entities/user
+         reader/web/routes/user
+         reader/web/components/layout
+         reader/web/components/user
+         reader/web/routes/dispatch
 
          reader/lib/app/models/job
          reader/lib/parameters
