@@ -5,7 +5,7 @@
 
          reader/lib/app/components/user
          reader/lib/parameters
-         reader/lib/web
+         reader/lib/server
          reader/lib/crypto)
 
 (provide /users/new

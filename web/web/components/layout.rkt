@@ -9,7 +9,7 @@
          reader/lib/app/components/script
          reader/lib/app/components/flash
          reader/lib/parameters
-         reader/lib/web/session)
+         reader/lib/server/session)
 
 (provide layout)
 

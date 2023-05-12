@@ -12,7 +12,7 @@
 
          reader/lib/parameters
          reader/lib/job
-         reader/lib/web)
+         reader/lib/server)
 
 (provide /feeds
          /feeds/new

@@ -11,7 +11,7 @@
 
          reader/lib/app/web/routes/session
          reader/lib/app/web/routes/user
-         reader/lib/web/routes)
+         reader/lib/server/routes)
 
 (provide app-dispatch app-url)
 

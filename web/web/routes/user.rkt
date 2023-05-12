@@ -7,7 +7,7 @@
          reader/entities/registration-invitation
          reader/entities/user
          reader/lib/parameters
-         reader/lib/web)
+         reader/lib/server)
 
 (provide user-registration/validate+override
          user-registration/registered+override)

@@ -2,7 +2,7 @@
 
 (require net/url-string
          reader/entities/suggestions
-         reader/lib/web)
+         reader/lib/server)
 
 (provide /suggestions)
 

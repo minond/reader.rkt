@@ -20,7 +20,7 @@
          reader/ai/process-article-chat
 
          reader/lib/parameters
-         reader/lib/web)
+         reader/lib/server)
 
 (provide /articles
          /articles/<id>/show

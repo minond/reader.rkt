@@ -12,7 +12,7 @@
 
          reader/lib/net
          reader/lib/url
-         reader/lib/web
+         reader/lib/server
          reader/lib/task)
 
 (provide deduce-kind)

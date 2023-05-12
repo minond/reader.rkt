@@ -4,10 +4,10 @@
          net/cookies/server
          web-server/http/request-structs
 
-         reader/lib/web/session)
+         reader/lib/server/session)
 
 (provide lookup-ws-session
-         (all-from-out reader/lib/web/session))
+         (all-from-out reader/lib/server/session))
 
 (define (lookup-ws-session ws-conn)
   (lookup-session (ws-conn-session-key ws-conn)))

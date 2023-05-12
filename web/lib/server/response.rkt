@@ -10,7 +10,7 @@
          (prefix-in : scribble/html/extra)
 
          reader/lib/parameters
-         reader/lib/web/session)
+         reader/lib/server/session)
 
 (provide json
          render

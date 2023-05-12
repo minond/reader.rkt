@@ -7,7 +7,7 @@
          (prefix-in : scribble/html/extra)
 
          reader/lib/string
-         reader/lib/web
+         reader/lib/server
          reader/lib/parameters)
 
 (provide :user/form)

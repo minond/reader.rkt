@@ -4,7 +4,7 @@
 
          reader/entities/feedback
          reader/lib/parameters
-         reader/lib/web)
+         reader/lib/server)
 
 (provide /feedback/create)
 

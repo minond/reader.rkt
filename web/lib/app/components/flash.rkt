@@ -4,7 +4,7 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
-         reader/lib/web/flash)
+         reader/lib/server/flash)
 
 (provide :flash
          :flash-message)

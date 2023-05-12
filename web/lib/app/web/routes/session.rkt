@@ -6,7 +6,7 @@
          reader/lib/app/components/session
          reader/lib/app/models/user
          reader/lib/parameters
-         reader/lib/web
+         reader/lib/server
          reader/lib/crypto)
 
 (provide /sessions/new
