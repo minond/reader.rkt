@@ -292,7 +292,8 @@
                      #:position absolute
                      #:top 5px
                      #:right 5px]]
-    [.input-container.loading
+    [.input-container-parent.loading
+     .input-container.loading
      [.spinning-ring #:display block]]
 
     [.chat
@@ -534,15 +535,12 @@
      #:margin (22vh auto)
      #:max-width ,@article-max-width
      #:text-align left
-     #:padding 1em
-     [.add-item-form-content
-      #:background-color white
-      #:position relative
-      #:box-shadow
-      ((apply rgb 255 255 255) 0px 0px 0px 0px)
-      ((apply rgba 24 24 27 0.075) 0px 0px 0px 1px)
-      ((apply rgba 0 0 0 0.1) 0px 20px 25px -5px)
-      ((apply rgba 0 0 0 0.1) 0px 8px 10px -6px)]
+     #:background-color white
+     #:position relative
+     #:box-shadow ((apply rgb 255 255 255) 0px 0px 0px 0px)
+                  ((apply rgba 24 24 27 0.075) 0px 0px 0px 1px)
+                  ((apply rgba 0 0 0 0.1) 0px 20px 25px -5px)
+                  ((apply rgba 0 0 0 0.1) 0px 8px 10px -6px)
      [.suggestions
       #:transition (opacity .2s)
       #:opacity 1

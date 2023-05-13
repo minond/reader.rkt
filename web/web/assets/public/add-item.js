@@ -1,35 +1,15 @@
-import { Component, html, render } from "/public/preact.js";
+import { Component, html } from "/public/preact.js";
 import { SpinningRing } from "/public/component.js";
+import Modal from "/public/modal.js";
 import { debounce } from "/public/common.js";
 
 const INPUT_IDLE = 0;
 const INPUT_LOADING = 1;
 const INPUT_ERROR = 2;
 
-const SHOW_OFF = 0;
-const SHOW_ON = 1;
-const SHOW_HIDING = 2;
-
 export default class AddItem extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      showState: SHOW_OFF,
-    };
-
-    this.modalController = {};
-    this.modalContainer = document.body.appendChild(
-      document.createElement("div")
-    );
-    this.modalContainer.dataset.modalContainer = true;
-  }
-
   componentWillMount() {
-    render(
-      html`<${Modal} controller=${this.modalController} />`,
-      this.modalContainer
-    );
+    this.modalController = Modal.render(AddItemForm).controller;
   }
 
   render() {
@@ -37,13 +17,12 @@ export default class AddItem extends Component {
   }
 }
 
-class Modal extends Component {
+class AddItemForm extends Component {
   constructor() {
     super();
 
     this.state = {
       inputState: INPUT_IDLE,
-      showState: SHOW_OFF,
       suggestions: null,
       value: "",
     };
@@ -55,31 +34,9 @@ class Modal extends Component {
     );
   }
 
-  componentWillMount() {
-    this.props.controller.show = () => this.show();
-    this.props.controller.hide = () => this.hide();
-  }
-
-  hide() {
-    this.setState({ showState: SHOW_HIDING }, () =>
-      setTimeout(() => this.setState({ showState: SHOW_OFF }), 150)
-    );
-  }
-
-  show() {
-    if (this.state.showState !== SHOW_HIDING) {
-      this.setState({ showState: SHOW_ON });
-    }
-  }
-
-  handleFormSubmit(ev) {
-    ev.preventDefault();
-    return false;
-  }
-
   handleInput(ev) {
-    const newValue = ev.target.value;
-    if (newValue.trim() === this.state.value.trim()) {
+    const newValue = (ev.target.value || "").trim();
+    if (newValue === this.state.value) {
       return;
     }
 
@@ -97,7 +54,7 @@ class Modal extends Component {
         this.setState({ value: "", suggestions: null, inputState: INPUT_IDLE });
 
         if (!ev.target.value) {
-          this.hide();
+          this.props.controller.hide();
         } else {
           ev.target.value = "";
         }
@@ -114,15 +71,13 @@ class Modal extends Component {
   }
 
   fetchSuggestions() {
-    if (!this.state.value.trim()) {
+    if (!this.state.value) {
       return;
     }
 
     this.requestAbortController = new AbortController();
 
-    const url = `/suggestions?url=${encodeURIComponent(
-      this.state.value.trim()
-    )}`;
+    const url = `/suggestions?url=${encodeURIComponent(this.state.value)}`;
     this.setState({ inputState: INPUT_LOADING }, () => {
       fetch(url, { signal: this.requestAbortController.signal })
         .then((res) => res.json())
@@ -145,78 +100,69 @@ class Modal extends Component {
   }
 
   render() {
-    if (this.state.showState === SHOW_OFF) {
-      return null;
-    }
-
-    const formClasses = ["add-item-form"];
-    const inputContainerClasses = ["input-container"];
+    const formClasses = ["add-item-form", "input-container-parent"];
     if (this.state.inputState === INPUT_LOADING) {
       formClasses.push("loading");
-      inputContainerClasses.push("loading");
-    }
-
-    const styles = {};
-    if (this.state.showState === SHOW_HIDING) {
-      styles.opacity = 0;
-    }
-
-    let suggestions = null;
-    if (
-      (!!this.state.suggestions &&
-        !this.state.suggestions.length &&
-        this.state.inputState !== INPUT_LOADING) ||
-      this.state.inputState === INPUT_ERROR
-    ) {
-      suggestions = html`<div class="suggestions">
-        <div class="suggestion">
-          <div class="suggestion-message">
-            Nothing found for <b>“${this.state.value.trim()}”</b>. Please try
-            again.
-          </div>
-        </div>
-      </div>`;
-    } else if (!!this.state.suggestions && !!this.state.suggestions.length) {
-      suggestions = html`<div class="suggestions">
-        ${this.state.suggestions.map(
-          (suggestion) => html`<${Suggestion} ...${suggestion} />`
-        )}
-      </div>`;
     }
 
     return html`<div
-      class="backdrop"
-      style=${styles}
-      onClick=${() => this.hide()}
+      class=${formClasses.join(" ")}
+      onClick=${(ev) => ev.stopPropagation()}
     >
-      <form
-        class=${formClasses.join(" ")}
-        onSubmit=${(ev) => this.handleFormSubmit(ev)}
-        onClick=${(ev) => ev.stopPropagation()}
-      >
-        <div class="add-item-form-content">
-          <div class=${inputContainerClasses.join(" ")}>
-            <input
-              autocapitalize="off"
-              autocomplete="off"
-              autocorrect="off"
-              autofocus="yes"
-              name="value"
-              onInput=${(ev) => this.handleInput(ev)}
-              onKeyPress=${(ev) => this.handleKeyPress(ev)}
-              placeholder="Search by name or RSS link"
-              spellcheck="false"
-              type="text"
-              value=${this.state.value}
-            />
-            <${SpinningRing} size="30" />
-          </div>
-          ${suggestions}
-        </div>
-      </form>
-    </div> `;
+      <${Input}
+        onInput=${(ev) => this.handleInput(ev)}
+        onKeyPress=${(ev) => this.handleKeyPress(ev)}
+        value=${this.state.value}
+      />
+      <${Suggestions}
+        suggestions=${this.state.suggestions}
+        inputState=${this.state.inputState}
+        value=${this.state.value}
+      />
+    </div>`;
   }
 }
+
+const Input = ({ value, onInput, onKeyPress }) =>
+  html`<div class="input-container">
+    <input
+      autocapitalize="off"
+      autocomplete="off"
+      autocorrect="off"
+      autofocus="yes"
+      name="value"
+      onInput=${onInput}
+      onKeyPress=${onKeyPress}
+      placeholder="Search by name or RSS link"
+      spellcheck="false"
+      type="text"
+      value=${value}
+    />
+    <${SpinningRing} size="30" />
+  </div>`;
+
+const Suggestions = ({ suggestions, inputState, value }) => {
+  if (
+    (!!suggestions && !suggestions.length && inputState !== INPUT_LOADING) ||
+    inputState === INPUT_ERROR
+  ) {
+    return html`<div class="suggestions">
+      <div class="suggestion">
+        <div class="suggestion-message">
+          Nothing found for <b>“${value}”</b>. Please try again.
+        </div>
+      </div>
+    </div>`;
+  } else if (!!suggestions && !!suggestions.length) {
+    return html`<div class="suggestions">
+      ${suggestions.map(
+        (suggestion) => html`<${Suggestion} ...${suggestion} />`
+      )}
+    </div>`;
+  } else {
+    return null;
+  }
+};
 
 const Suggestion = ({ kind, title, url }) =>
   html`<div class="suggestion">
