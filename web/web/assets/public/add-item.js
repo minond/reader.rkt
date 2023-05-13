@@ -13,7 +13,8 @@ export default class AddItem extends Component {
   }
 
   render() {
-    return html`<a onClick=${() => this.modalController.show()}>Add feed</a>`;
+    // return html`<a onClick=${() => this.modalController.show()}>Add feed</a>`;
+    return html`<a href="/feeds/new">Add feed</a>`;
   }
 }
 
@@ -118,6 +119,7 @@ class AddItemForm extends Component {
         suggestions=${this.state.suggestions}
         inputState=${this.state.inputState}
         value=${this.state.value}
+        onSuggestionClick=${(args) => console.log(args)}
       />
     </div>`;
   }
@@ -141,7 +143,7 @@ const Input = ({ value, onInput, onKeyPress }) =>
     <${SpinningRing} size="30" />
   </div>`;
 
-const Suggestions = ({ suggestions, inputState, value }) => {
+const Suggestions = ({ suggestions, inputState, value, onSuggestionClick }) => {
   if (
     (!!suggestions && !suggestions.length && inputState !== INPUT_LOADING) ||
     inputState === INPUT_ERROR
@@ -156,7 +158,8 @@ const Suggestions = ({ suggestions, inputState, value }) => {
   } else if (!!suggestions && !!suggestions.length) {
     return html`<div class="suggestions">
       ${suggestions.map(
-        (suggestion) => html`<${Suggestion} ...${suggestion} />`
+        (suggestion) =>
+          html`<${Suggestion} ...${suggestion} onClick=${onSuggestionClick} />`
       )}
     </div>`;
   } else {
@@ -164,8 +167,8 @@ const Suggestions = ({ suggestions, inputState, value }) => {
   }
 };
 
-const Suggestion = ({ kind, title, url }) =>
-  html`<div class="suggestion">
+const Suggestion = ({ kind, title, url, onClick }) =>
+  html`<div class="suggestion" onClick=${() => onClick({ kind, title, url })}>
     <div class="suggestion-title">${title}</div>
     <div class="suggestion-url">${url}</div>
     <div class="suggestion-kind">
