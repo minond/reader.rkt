@@ -81,10 +81,10 @@
   (let* ([article (lookup (current-database-connection)
                           (find-article-by-id #:id id
                                               #:user-id (current-user-id)))]
-         [summary (article-generated-summary-html article)])
+         [summary (article-generated-summary-text article)])
     (when (sql-null? summary)
       (define-values (text html) (generate-article-summary article))
-      (set! summary html)
+      (set! summary text)
       (update-one! (current-database-connection)
                    (~> article
                        (set-article-generated-summary-html html)

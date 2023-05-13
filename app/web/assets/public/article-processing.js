@@ -1,4 +1,7 @@
+import markdownIt from "https://cdn.jsdelivr.net/npm/markdown-it@13.0.1/+esm";
 import { Component, html, render } from "/public/preact.js";
+
+const renderer = markdownIt({ breaks: true });
 
 export default class ArticleProcessing extends Component {
   constructor() {
@@ -60,11 +63,15 @@ export default class ArticleProcessing extends Component {
         <div class="line pulse"></div>
         <div class="line pulse"></div>
       </div>`;
-    } else {
+    } else if (this.state.summary) {
       return html`<div
         class="summary fadein"
-        dangerouslySetInnerHTML=${{ __html: this.state.summary }}
+        dangerouslySetInnerHTML=${{
+          __html: renderer.render(`**Summary:** ${this.state.summary}`),
+        }}
       ></div>`;
+    } else {
+      return null;
     }
   }
 
