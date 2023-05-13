@@ -1,9 +1,9 @@
 name: reader
 
 services:
-  web:
-    image: registry.digitalocean.com/minond/reader-web
-    build: web
+  app:
+    image: registry.digitalocean.com/minond/reader-app
+    build: app
     stop_signal: SIGINT
     ports:
       - 8000:8000
@@ -20,7 +20,7 @@ services:
     ports:
       - 80:80
     depends_on:
-      - web
+      - app
     networks:
       - frontnet
 
