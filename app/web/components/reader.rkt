@@ -2,6 +2,7 @@
 
 (require racket/match
 
+         db
          gregor
          (prefix-in : scribble/html/xml)
          (prefix-in : scribble/html/html)
@@ -116,7 +117,10 @@
               (:a 'href: (format "/articles/~a/archive" (article-summary-id article-summary))
                   'class: "vc"
                   (:image/archive)))
-        (and (not (zero? (string-length (article-summary-description article-summary))))
-             (:a 'href: (format "/articles/~a" (article-summary-id article-summary))
-                 'class: "reader-article-description"
-                 (:p (string-chop (article-summary-description article-summary) 300 #:end "…"))))))
+        (:a 'href: (format "/articles/~a" (article-summary-id article-summary))
+            'class: "reader-article-description"
+            (and (not (zero? (string-length (article-summary-description article-summary))))
+                 (:p (string-chop (article-summary-description article-summary) 300 #:end "…")))
+            (and (not (sql-null? (article-summary-generated-summary-text article-summary)))
+                 (:p (:b "Summary: ")
+                     (string-chop (article-summary-generated-summary-text article-summary) 300 #:end "…"))))))
