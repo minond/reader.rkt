@@ -28,11 +28,16 @@ class AddItemForm extends Component {
       value: "",
     };
 
+    this.inputRef = { current: null };
     this.requestAbortController = null;
     this.fetchSuggestionsDebounced = debounce(
       this.fetchSuggestions.bind(this),
       500
     );
+  }
+
+  componentDidMount() {
+    this.focusOnInput();
   }
 
   handleInput(ev) {
@@ -101,6 +106,10 @@ class AddItemForm extends Component {
     });
   }
 
+  focusOnInput() {
+    this.inputRef?.current?.base?.querySelector("input")?.focus();
+  }
+
   render() {
     const formClasses = ["add-item-form", "input-container-parent"];
     if (this.state.inputState === INPUT_LOADING) {
@@ -115,6 +124,7 @@ class AddItemForm extends Component {
         onInput=${(ev) => this.handleInput(ev)}
         onKeyPress=${(ev) => this.handleKeyPress(ev)}
         value=${this.state.value}
+        ref=${this.inputRef}
       />
       <${Suggestions}
         suggestions=${this.state.suggestions}
@@ -126,13 +136,13 @@ class AddItemForm extends Component {
   }
 }
 
-const Input = ({ value, onInput, onKeyPress }) =>
+const Input = ({ value, ref, onInput, onKeyPress }) =>
   html`<div class="input-container">
     <input
       autocapitalize="off"
       autocomplete="off"
       autocorrect="off"
-      autofocus="yes"
+      ref=${ref}
       name="value"
       onInput=${onInput}
       onKeyPress=${onKeyPress}
