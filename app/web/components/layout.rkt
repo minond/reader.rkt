@@ -593,6 +593,7 @@
      #:top 0
      #:height 100%
      #:z-index 1
+     #:backdrop-filter (apply blur 4px)
      #:-webkit-backdrop-filter (apply blur 4px)
      #:-webkit-font-smoothing antialiased]
 
