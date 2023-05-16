@@ -40,7 +40,7 @@
     ['html
      (define feed-urls
        (dedupe
-        (filter string?
+        (filter url?
                 (cons (locate-feed-url url
                                        known-feed-paths)
                       (map (lambda~> (locate-feed-url known-feed-paths))
