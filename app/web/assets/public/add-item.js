@@ -36,8 +36,8 @@ class AddItemForm extends Component {
   }
 
   handleInput(ev) {
-    const newValue = (ev.target.value || "").trim();
-    if (newValue === this.state.value) {
+    const newValue = ev.target.value || "";
+    if (newValue.trim() === this.state.value.trim()) {
       return;
     }
 
@@ -72,13 +72,14 @@ class AddItemForm extends Component {
   }
 
   fetchSuggestions() {
-    if (!this.state.value) {
+    const input = this.state.value.trim();
+    if (!input) {
       return;
     }
 
     this.requestAbortController = new AbortController();
 
-    const url = `/suggestions?url=${encodeURIComponent(this.state.value)}`;
+    const url = `/suggestions?url=${encodeURIComponent(input)}`;
     this.setState({ inputState: INPUT_LOADING }, () => {
       fetch(url, { signal: this.requestAbortController.signal })
         .then((res) => res.json())
