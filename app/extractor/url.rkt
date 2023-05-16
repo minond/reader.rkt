@@ -86,7 +86,8 @@
                             href)))
                    link-els)))
     (when (not (null? alternative-links))
-      (return (map (lambda~> (absolute-url base-url _ #:convert #f)) alternative-links)))
+      (return (map (lambda~> (absolute-url base-url _ #:convert #f))
+                   alternative-links)))
 
     (define anchor-els (find*/list doc #:tag 'a))
     (define rss-links
@@ -99,6 +100,7 @@
                           href))
                    anchor-els)))
     (when (not (null? rss-links))
-      (return (map (lambda~> (absolute-url base-url _ #:convert #f)) alternative-links)))
+      (return (map (lambda~> (absolute-url base-url _ #:convert #f))
+                   rss-links)))
 
     #f))
