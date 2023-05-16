@@ -39,10 +39,12 @@ class AddItemForm extends Component {
 
   componentDidMount() {
     this.focusOnInput();
+    document.body.classList.add("no-scroll");
     document.addEventListener("keydown", this.handleEscapeBound, false);
   }
 
   componentWillUnmount() {
+    document.body.classList.remove("no-scroll");
     document.removeEventListener("keydown", this.handleEscapeBound, false);
   }
 

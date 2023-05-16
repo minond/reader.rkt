@@ -599,6 +599,10 @@
      #:-webkit-backdrop-filter (apply blur 4px)
      #:-webkit-font-smoothing antialiased]
 
+    [.no-scroll
+     #:height 100%
+     #:overflow hidden]
+
     [.image
      #:transition (fill .2s)
      #:fill ,image-color-idle]
