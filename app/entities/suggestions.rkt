@@ -4,6 +4,7 @@
          racket/match
          racket/string
          racket/function
+         racket/list
 
          threading
          net/url-string
@@ -38,11 +39,12 @@
   (match (deduce-kind url)
     ['html
      (define feed-urls
-       (filter identity
-               (cons (locate-feed-url url
-                                      known-feed-paths)
-                     (map (lambda~> (locate-feed-url known-feed-paths))
-                          (extract-feed-urls (download url) url)))))
+       (dedupe
+        (filter string?
+                (cons (locate-feed-url url
+                                       known-feed-paths)
+                      (map (lambda~> (locate-feed-url known-feed-paths))
+                           (extract-feed-urls (download url) url))))))
      (map (lambda (feed-url)
             (suggestion 'feed feed-url (title-for feed-url)))
           feed-urls)]
@@ -63,3 +65,12 @@
 (define (title-for url)
   (or (safe (rss-feed-title (rss-fetch url)))
       (url-host url)))
+
+(define (dedupe urls)
+  (define (strip-slashes url)
+    (regexp-replace #px"/+$" (url->string url) ""))
+  (remove-duplicates
+   urls
+   (lambda (a b)
+     (equal? (strip-slashes a)
+             (strip-slashes b)))))
