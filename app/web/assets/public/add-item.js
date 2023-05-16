@@ -30,6 +30,7 @@ class AddItemForm extends Component {
 
     this.inputRef = { current: null };
     this.requestAbortController = null;
+    this.handleEscapeBound = this.handleEscape.bind(this);
     this.fetchSuggestionsDebounced = debounce(
       this.fetchSuggestions.bind(this),
       500
@@ -38,6 +39,11 @@ class AddItemForm extends Component {
 
   componentDidMount() {
     this.focusOnInput();
+    document.addEventListener("keydown", this.handleEscapeBound, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleEscapeBound, false);
   }
 
   handleInput(ev) {
@@ -53,7 +59,7 @@ class AddItemForm extends Component {
     this.cancelFetchSuggestions();
   }
 
-  handleKeyPress(ev) {
+  handleEscape(ev) {
     switch (ev.keyCode) {
       case 27:
         this.cancelFetchSuggestions();
@@ -122,7 +128,6 @@ class AddItemForm extends Component {
     >
       <${Input}
         onInput=${(ev) => this.handleInput(ev)}
-        onKeyPress=${(ev) => this.handleKeyPress(ev)}
         value=${this.state.value}
         ref=${this.inputRef}
       />
