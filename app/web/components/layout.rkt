@@ -282,7 +282,7 @@
      #:border-color ,border-color-lighter
      #:overflow hidden
      [input #:margin 0
-            #:padding 0.75em
+            #:padding (.75em 1em)
             #:width (apply calc (100% - 30px))
             #:font-size 1.1em
             #:box-sizing border-box
@@ -291,7 +291,7 @@
      [.spinning-ring #:display none
                      #:position absolute
                      #:top 5px
-                     #:right 5px]]
+                     #:right .75em]]
     [.input-container-parent.loading
      .input-container.loading
      [.spinning-ring #:display block]]
@@ -538,11 +538,13 @@
      #:background-color white
      #:position relative
      #:box-shadow ((apply rgb 255 255 255) 0px 0px 0px 0px)
-                  ((apply rgba 24 24 27 0.075) 0px 0px 0px 1px)
-                  ((apply rgba 0 0 0 0.1) 0px 20px 25px -5px)
-                  ((apply rgba 0 0 0 0.1) 0px 8px 10px -6px)
+     ((apply rgba 24 24 27 0.075) 0px 0px 0px 1px)
+     ((apply rgba 0 0 0 0.1) 0px 20px 25px -5px)
+     ((apply rgba 0 0 0 0.1) 0px 8px 10px -6px)
      [.suggestions
       #:transition (opacity .2s)
+      #:max-height 60vh
+      #:overflow scroll
       #:opacity 1
       #:border (1px solid ,border-color-lighter)
       #:background-color white
