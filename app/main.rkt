@@ -3,17 +3,11 @@
 (require reader/jobs/fetch-feed-articles
          reader/jobs/save-new-feed
          reader/jobs/crontab
-         reader/entities/article
-         reader/entities/feed
-         reader/entities/feedback
-         reader/entities/registration-invitation
-         reader/entities/user
          reader/web/routes/user
          reader/web/components/layout
          reader/web/components/user
          reader/web/routes/dispatch
 
-         reader/lib/app/models/job
          reader/lib/parameters
          reader/lib/logger
          reader/lib/job
