@@ -32,7 +32,7 @@
         (string-replace "<?xml encoding=\"UTF-8\">" "")
         (string-append " " _ " ")))
 
-  (define tree (cddr (html->xexp prepared)))
+  (define tree (cdr (html->xexp prepared)))
 
   (define (walk el)
     (match el
