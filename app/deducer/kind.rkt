@@ -48,8 +48,8 @@
              [code (and res (http-response-code res))])
         (and res
              (and (>= code 200) (< code 300))
-             (or (mime-type-from-headers res)
-                 (mime-type-from-content res))))))
+             (or (mime-type-from-content res)
+                 (mime-type-from-headers res))))))
 
 (define (mime-type-from-path url)
   (define mime-type (path-mime-type (url->path url)))
