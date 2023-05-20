@@ -29,9 +29,9 @@ jobs:
       #       ~/.local/share/racket
       #     key: ${{ runner.os }}-racket
 
-      - run: raco pyffi configure
-        working-directory: app
       - run: raco pkg install --no-docs --skip-installed --auto --name reader
+        working-directory: app
+      - run: raco pyffi configure
         working-directory: app
       - run: raco test -x -p reader
         working-directory: app
