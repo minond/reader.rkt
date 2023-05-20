@@ -1,14 +1,17 @@
 #lang racket/base
 
 (require gregor
-         reader/ffi/python
-         reader/rss/data)
+         reader/ffi/python)
 
 (import feedparser)
 
 (provide valid?
          fetch
-         (all-from-out reader/rss/data))
+         (struct-out feed)
+         (struct-out article))
+
+(struct feed (link title articles) #:transparent)
+(struct article (link title date content) #:transparent)
 
 (define (valid? content-or-url)
   (define raw (feedparser.parse content-or-url))
