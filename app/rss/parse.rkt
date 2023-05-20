@@ -15,7 +15,7 @@
 
 (define (valid? content-or-url)
   (define raw (feedparser.parse content-or-url))
-  (not (pydict-ref raw "bozo_exception" #f)))
+  (pydict-contains? raw.feed "title"))
 
 ; (define feed-url "https://jvns.ca/atom.xml")
 ; (define f (fetch feed-url))
