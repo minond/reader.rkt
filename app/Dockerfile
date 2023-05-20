@@ -24,6 +24,7 @@ CMD ["./main"]
 
 COPY scripts scripts
 COPY info.rkt info.rkt
+COPY requirements.txt requirements.txt
 RUN cd /reader && ./scripts/install
 RUN raco pyffi configure
 
