@@ -23,16 +23,21 @@
   (define raw (feedparser.parse feed-url))
   (define articles
     (for/list ([entry (pylist->list raw.entries)])
-      (article entry.link
-               entry.title
-               (datetime entry.updated_parsed.tm_year
-                         entry.updated_parsed.tm_mon
-                         entry.updated_parsed.tm_mday
-                         entry.updated_parsed.tm_hour
-                         entry.updated_parsed.tm_min
-                         entry.updated_parsed.tm_sec
-                         0)
-               entry.summary)))
+      (define date
+        (if (pydict-contains? entry "updated_parsed")
+            (datetime entry.updated_parsed.tm_year
+                      entry.updated_parsed.tm_mon
+                      entry.updated_parsed.tm_mday
+                      entry.updated_parsed.tm_hour
+                      entry.updated_parsed.tm_min
+                      entry.updated_parsed.tm_sec
+                      0)
+            (now/utc)))
+      (define summary
+        (if (pydict-contains? entry "summary")
+            entry.summary
+            ""))
+      (article entry.link entry.title date summary)))
   (feed raw.feed.link
         raw.feed.title
         articles))
