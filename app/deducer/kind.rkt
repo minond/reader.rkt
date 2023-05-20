@@ -61,9 +61,8 @@
 
 (define (mime-type-from-content res)
   (or (safe (~> res
-                (rss-read)
-                (rss-parse)
-                (rss-feed?)
+                (http-response-body)
+                (rss-valid?)
                 (and _ "application/xml")))
       (safe (~> res
                 (http-response-body)
