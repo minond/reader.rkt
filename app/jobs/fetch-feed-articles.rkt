@@ -4,6 +4,7 @@
 
          deta
          gregor
+         net/url-string
          (prefix-in : scribble/html/xml)
 
          reader/entities/article
@@ -58,7 +59,7 @@
 
 (define (save-new-articles user-id feed-id feed-data)
   (for ([article-data (rss-feed-articles feed-data)])
-    (define link (rss-article-link article-data))
+    (define link (url->string (rss-article-link article-data)))
     (unless (lookup (current-database-connection)
                     (find-article-by-feed-and-link #:user-id user-id
                                                    #:feed-id feed-id

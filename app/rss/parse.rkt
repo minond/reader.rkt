@@ -1,6 +1,7 @@
 #lang racket/base
 
 (require gregor
+         net/url-string
          reader/ffi/python)
 
 (import feedparser)
@@ -21,7 +22,7 @@
   (define raw (feedparser.parse content-or-url))
   (define articles
     (for/list ([entry (pylist->list raw.entries)])
-      (article entry.link
+      (article (string->url entry.link)
                entry.title
                (entry-date entry)
                (entry-content entry))))
