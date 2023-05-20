@@ -5,10 +5,10 @@
 
 (import feedparser)
 
-(provide valid?
-         fetch
-         (struct-out feed)
-         (struct-out article))
+(provide (struct-out feed)
+         (struct-out article)
+         valid?
+         fetch)
 
 (struct feed (link title articles) #:transparent)
 (struct article (link title date content) #:transparent)
@@ -17,27 +17,29 @@
   (define raw (feedparser.parse content-or-url))
   (pydict-contains? raw.feed "title"))
 
-; (define feed-url "https://jvns.ca/atom.xml")
-; (define f (fetch feed-url))
-(define (fetch feed-url)
-  (define raw (feedparser.parse feed-url))
+(define (fetch content-or-url)
+  (define raw (feedparser.parse content-or-url))
   (define articles
     (for/list ([entry (pylist->list raw.entries)])
-      (define date
-        (if (pydict-contains? entry "updated_parsed")
-            (datetime entry.updated_parsed.tm_year
-                      entry.updated_parsed.tm_mon
-                      entry.updated_parsed.tm_mday
-                      entry.updated_parsed.tm_hour
-                      entry.updated_parsed.tm_min
-                      entry.updated_parsed.tm_sec
-                      0)
-            (now/utc)))
-      (define summary
-        (if (pydict-contains? entry "summary")
-            entry.summary
-            ""))
-      (article entry.link entry.title date summary)))
+      (article entry.link
+               entry.title
+               (entry-date entry)
+               (entry-content entry))))
   (feed raw.feed.link
         raw.feed.title
         articles))
+
+(define (entry-content entry)
+  (cond [(pydict-contains? entry "summary") entry.summary]
+        [(pydict-contains? entry "content") entry.content]
+        [else #f]))
+
+(define (entry-date entry)
+  (cond [(pydict-contains? entry "published_parsed")
+         (pydatetime->datetime entry.published_parsed)]
+        [(pydict-contains? entry "created_parsed")
+         (pydatetime->datetime entry.created_parsed)]
+        [(pydict-contains? entry "updated_parsed")
+         (pydatetime->datetime entry.updated_parsed)]
+        [else
+         (now/utc)]))
