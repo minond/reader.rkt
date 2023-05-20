@@ -13,6 +13,7 @@
          (prefix-in html- reader/extractor/html))
 
 (provide extract-content
+         normalize-content
          (struct-out childless-element)
          (struct-out container-element)
          (struct-out heading)
@@ -108,6 +109,13 @@
 (struct scored-element (tag children score percentage ref)
   #:transparent
   #:mutable)
+
+(define (normalize-content html-or-doc base-url)
+  (define doc (if (string? html-or-doc)
+                  (html-parse html-or-doc)
+                  html-or-doc))
+  (define scored (map score-element doc))
+  (element-content/* scored base-url))
 
 (define (find-article-root doc)
   (find-highest-score/list
@@ -243,6 +251,11 @@
          (and (not (member tag ignorable-tags))
               (element-content/list children base-url))]
         [else #f])))
+
+(define (element-content/* elem-or-lst base-url)
+  (if (list? elem-or-lst)
+      (element-content/list elem-or-lst base-url)
+      (element-content elem-or-lst base-url)))
 
 (define (element-content/list lst base-url)
   (flatten
