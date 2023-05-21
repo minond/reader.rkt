@@ -3,7 +3,9 @@
 (require gregor
          net/url-string
          reader/ffi/python
-         reader/extractor/text
+         reader/lib/html
+         (only-in reader/extractor/text extract-text)
+         (only-in reader/extractor/render render-html)
          (only-in reader/extractor/content normalize-content))
 
 (import feedparser)
@@ -14,7 +16,7 @@
          fetch)
 
 (struct feed (link title articles) #:transparent)
-(struct article (link title date content) #:transparent)
+(struct article (link title date content-html content-text) #:transparent)
 
 (define (valid? content-or-url)
   (define raw (feedparser.parse content-or-url))
@@ -25,22 +27,28 @@
   (define articles
     (for/list ([entry (pylist->list raw.entries)])
       (define url (string->url entry.link))
+      (define content (entry-content entry url))
       (article url
                (entry-title entry url)
                (entry-date entry)
-               (entry-content entry))))
+               (render-html content)
+               (extract-text content))))
   (feed raw.feed.link
         raw.feed.title
         articles))
 
 (define (entry-title entry base-url)
-  (extract-text
-   (normalize-content entry.title base-url)))
+  (string-replace-html-entities
+   (extract-text
+    (normalize-content entry.title base-url))))
 
-(define (entry-content entry)
-  (cond [(pydict-contains? entry "summary") entry.summary]
-        [(pydict-contains? entry "content") entry.content]
-        [else #f]))
+(define (entry-content entry base-url)
+  (define content
+    (cond [(pydict-contains? entry "summary") entry.summary]
+          [(pydict-contains? entry "content") entry.content]
+          [else #f]))
+  (and content
+       (normalize-content content base-url)))
 
 (define (entry-date entry)
   (cond [(pydict-contains? entry "published_parsed")

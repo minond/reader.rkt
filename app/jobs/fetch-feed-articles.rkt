@@ -70,8 +70,8 @@
         (define-values (content metadata media document) (extract link))
         (define extracted-content-text (extract-text content))
         (define extracted-content-html (:xml->string (render-content content)))
-        (define title (string-replace-html-entities
-                       (or (rss-article-title article-data)
+        (define title (or (rss-article-title article-data)
+                          (string-replace-html-entities
                            (metadata-title metadata))))
         (define description (string-replace-html-entities
                              (or (document-summary document) "")))
