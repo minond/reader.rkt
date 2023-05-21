@@ -8,7 +8,8 @@
 
          reader/extractor/content)
 
-(provide render-content)
+(provide render-content
+         render-html)
 
 (define headings-by-level
   (hash
@@ -34,6 +35,10 @@
 (define (render-element tagf attributes content)
   (apply tagf (append (attributes-arguments attributes)
                       (list (render-content content)))))
+
+(define (render-html elem-or-lst)
+  (:xml->string
+   (render-content elem-or-lst)))
 
 (define (render-content elem-or-lst)
   (if (list? elem-or-lst)
