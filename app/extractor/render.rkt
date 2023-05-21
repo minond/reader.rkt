@@ -1,6 +1,7 @@
 #lang racket/base
 
 (require racket/list
+         racket/string
          racket/match
 
          (prefix-in : scribble/html/xml)
@@ -37,8 +38,9 @@
                       (list (render-content content)))))
 
 (define (render-html elem-or-lst)
-  (:xml->string
-   (render-content elem-or-lst)))
+  (string-trim
+   (:xml->string
+    (render-content elem-or-lst))))
 
 (define (render-content elem-or-lst)
   (if (list? elem-or-lst)
