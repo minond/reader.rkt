@@ -2,7 +2,9 @@
 
 (require gregor
          net/url-string
-         reader/ffi/python)
+         reader/ffi/python
+         reader/extractor/text
+         (only-in reader/extractor/content normalize-content))
 
 (import feedparser)
 
@@ -22,13 +24,18 @@
   (define raw (feedparser.parse content-or-url))
   (define articles
     (for/list ([entry (pylist->list raw.entries)])
-      (article (string->url entry.link)
-               entry.title
+      (define url (string->url entry.link))
+      (article url
+               (entry-title entry url)
                (entry-date entry)
                (entry-content entry))))
   (feed raw.feed.link
         raw.feed.title
         articles))
+
+(define (entry-title entry base-url)
+  (extract-text
+   (normalize-content entry.title base-url)))
 
 (define (entry-content entry)
   (cond [(pydict-contains? entry "summary") entry.summary]
