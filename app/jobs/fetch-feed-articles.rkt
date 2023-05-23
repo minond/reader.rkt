@@ -76,7 +76,6 @@
                            (metadata-title metadata))))
         (define description (string-replace-html-entities
                              (or (document-summary document) "")))
-        (define type (or (metadata-type metadata) ""))
         (define date (rss-article-date article-data))
 
         (define article-record
@@ -84,10 +83,9 @@
                        (make-article #:user-id user-id
                                      #:feed-id feed-id
                                      #:link link
+                                     #:date date
                                      #:title title
                                      #:description description
-                                     #:type type
-                                     #:date date
                                      #:extracted-content-text extracted-content-text
                                      #:extracted-content-html extracted-content-html)))
 

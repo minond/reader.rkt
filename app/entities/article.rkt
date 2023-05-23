@@ -29,7 +29,7 @@
    [link string/f #:contract non-empty-string?]
    [title string/f #:contract non-empty-string?]
    [description string/f]
-   [type string/f]
+   [type string/f #:nullable] ; Deprecated
    [date datetime/f]
    [extracted-content-html string/f #:nullable]
    [extracted-content-text string/f #:nullable]
@@ -45,7 +45,6 @@
    [title string/f #:contract non-empty-string?]
    [description string/f]
    [generated-summary-text string/f #:nullable]
-   [type string/f]
    [date datetime/f]
    [archived boolean/f]
    [created-at datetime/f]
@@ -79,7 +78,7 @@
                                   #:conn [conn (current-database-connection)])
   (in-entities conn
                (~> (from article #:as a)
-                   (select a.id a.link a.title a.description a.generated-summary-text a.type a.date a.archived a.created-at
+                   (select a.id a.link a.title a.description a.generated-summary-text a.date a.archived a.created-at
                            f.id f.link f.title)
                    (join #:left feed #:as f #:on (= f.id a.feed-id))
                    (where (and (= a.user-id ,user-id)
