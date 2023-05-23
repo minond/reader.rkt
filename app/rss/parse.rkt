@@ -27,13 +27,14 @@
   (define raw (feedparser.parse content-or-url))
   (define articles
     (for/list ([entry (pylist->list raw.entries)])
+      (log-info "rss-parse article: ~a" entry.link)
       (define url (string->url entry.link))
       (define content (entry-content entry url))
       (article url
                (entry-title entry url)
                (entry-date entry)
-               (render-html content)
-               (extract-text content))))
+               (and content (render-html content))
+               (and content (extract-text content)))))
   (feed raw.feed.link
         raw.feed.title
         articles))

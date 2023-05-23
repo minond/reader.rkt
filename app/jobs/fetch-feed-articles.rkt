@@ -2,6 +2,7 @@
 
 (require racket/function
 
+         db
          deta
          gregor
          net/url-string
@@ -29,16 +30,21 @@
   (define user-id (fetch-feed-articles-user-id cmd))
   (define feed-id (fetch-feed-articles-feed-id cmd))
 
+  (log-info "user-id: ~a" user-id)
+  (log-info "feed-id: ~a" feed-id)
+
   (define feed-record
     (lookup (current-database-connection)
             (find-feed-by-id #:id feed-id
                              #:user-id user-id)))
   (unless feed-record
     (error 'fetch-feed-articles
-           "unable to find feed ~a for ~a"
-           feed-url user-id))
+           "unable to find feed ~a for user ~a"
+           feed-id user-id))
 
   (define feed-url (feed-feed-url feed-record))
+  (log-info "feed-url: ~a" feed-url)
+
   (define feed-data (rss-fetch feed-url))
   (unless feed-data
     (error 'fetch-feed-articles
@@ -71,6 +77,9 @@
         (define-values (content metadata media document) (extract link))
         (define extracted-content-text (extract-text content))
         (define extracted-content-html (:xml->string (render-content content)))
+
+        (define original-content-text (or (rss-article-content-text article-data) sql-null))
+        (define original-content-html (or (rss-article-content-html article-data) sql-null))
         (define title (or (rss-article-title article-data)
                           (string-replace-html-entities
                            (metadata-title metadata))))
@@ -86,6 +95,8 @@
                                      #:date date
                                      #:title title
                                      #:description description
+                                     #:original-content-text original-content-text
+                                     #:original-content-html original-content-html
                                      #:extracted-content-text extracted-content-text
                                      #:extracted-content-html extracted-content-html)))
 

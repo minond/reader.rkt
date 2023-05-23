@@ -31,6 +31,8 @@
    [description string/f]
    [type string/f #:nullable] ; Deprecated
    [date datetime/f]
+   [original-content-html string/f #:nullable]
+   [original-content-text string/f #:nullable]
    [extracted-content-html string/f #:nullable]
    [extracted-content-text string/f #:nullable]
    [generated-summary-html string/f #:nullable]
