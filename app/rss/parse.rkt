@@ -1,6 +1,7 @@
 #lang racket/base
 
-(require gregor
+(require racket/string
+         gregor
          net/url-string
          reader/ffi/python
          reader/lib/html
@@ -38,14 +39,19 @@
         articles))
 
 (define (entry-title entry base-url)
-  (string-replace-html-entities
-   (extract-text
-    (normalize-content entry.title base-url))))
+  (define text
+    (string-trim
+     (string-replace-html-entities
+      (extract-text
+       (normalize-content entry.title base-url)))))
+  (if (zero? (string-length text))
+      (url->string base-url)
+      text))
 
 (define (entry-content entry base-url)
   (define content
-    (cond [(pydict-contains? entry "summary") entry.summary]
-          [(pydict-contains? entry "content") entry.content]
+    (cond [(pydict-contains? entry "content") entry.content]
+          [(pydict-contains? entry "summary") entry.summary]
           [else #f]))
   (and content
        (normalize-content content base-url)))

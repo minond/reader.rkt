@@ -59,7 +59,8 @@
 
 (define (save-new-articles user-id feed-id feed-data)
   (for ([article-data (rss-feed-articles feed-data)])
-    (define link (url->string (rss-article-link article-data)))
+    (define url (rss-article-link article-data))
+    (define link (url->string url))
     (unless (lookup (current-database-connection)
                     (find-article-by-feed-and-link #:user-id user-id
                                                    #:feed-id feed-id
@@ -75,10 +76,9 @@
                            (metadata-title metadata))))
         (define description (string-replace-html-entities
                              (or (document-summary document) "")))
-        (define type (or (metadata-type metadata)
-                         ""))
-        (define date (or (rss-article-date article-data)
-                         (now/utc)))
+        (define type (or (metadata-type metadata) ""))
+        (define date (rss-article-date article-data))
+
         (define article-record
           (insert-one! (current-database-connection)
                        (make-article #:user-id user-id
