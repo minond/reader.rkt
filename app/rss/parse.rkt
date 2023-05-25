@@ -23,8 +23,8 @@
   (define raw (feedparser.parse content-or-url))
   (pydict-contains? raw.feed "title"))
 
-(define (fetch content-or-url)
-  (define raw (feedparser.parse content-or-url))
+(define (fetch feed-url)
+  (define raw (feedparser.parse feed-url))
   (define articles
     (for/list ([entry (pylist->list raw.entries)])
       (log-info "rss-parse article: ~a" entry.link)
@@ -35,9 +35,13 @@
                (entry-date entry)
                (and content (render-html content))
                (and content (extract-text content)))))
-  (feed raw.feed.link
-        raw.feed.title
-        articles))
+  (define link
+    (or (and (pydict-contains? raw.feed "link") raw.feed.link)
+        feed-url))
+  (define title
+    (or (and (pydict-contains? raw.feed "title") raw.feed.title)
+        feed-url))
+  (feed link title articles))
 
 (define (entry-title entry base-url)
   (define text
@@ -54,7 +58,8 @@
     (and (pydict-contains? entry "content")
          (pylist->list entry.content)))
   (define raw-content-obj
-    (and (not (null? raw-content-objs))
+    (and (list? raw-content-objs)
+         (not (null? raw-content-objs))
          (car raw-content-objs)))
   (define content
     (cond [(and (pydict? raw-content-obj)
