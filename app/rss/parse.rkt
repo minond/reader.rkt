@@ -50,9 +50,18 @@
       text))
 
 (define (entry-content entry base-url)
+  (define raw-content-objs
+    (and (pydict-contains? entry "content")
+         (pylist->list entry.content)))
+  (define raw-content-obj
+    (and (not (null? raw-content-objs))
+         (car raw-content-objs)))
   (define content
-    (cond [(pydict-contains? entry "content") entry.content]
-          [(pydict-contains? entry "summary") entry.summary]
+    (cond [(and (pydict? raw-content-obj)
+                (pydict-contains? raw-content-obj "value"))
+           raw-content-obj.value]
+          [(pydict-contains? entry "summary")
+           entry.summary]
           [else #f]))
   (and content
        (normalize-content content base-url)))
