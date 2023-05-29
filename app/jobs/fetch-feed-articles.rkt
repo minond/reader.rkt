@@ -14,11 +14,7 @@
          reader/lib/html
          reader/lib/parameters
          reader/lib/websocket/message
-         reader/extractor/easy
-         reader/extractor/text
-         reader/extractor/render
-         reader/extractor/metadata
-         reader/extractor/document
+         reader/extractor/goose
          (prefix-in rss- reader/rss/parse))
 
 (provide fetch-feed-articles
@@ -74,17 +70,14 @@
       (with-handlers ([exn:fail? (lambda (e)
                                    (log-error (exn-message e)))])
         (log-info "extracting content for ~a" link)
-        (define-values (content metadata media document) (extract link))
-        (define extracted-content-text (extract-text content))
-        (define extracted-content-html (:xml->string (render-content content)))
+        (define content (extract link))
+        (define extracted-content-text (article-info-content-text content))
+        (define extracted-content-html (article-info-content-html content))
 
         (define original-content-text (or (rss-article-content-text article-data) sql-null))
         (define original-content-html (or (rss-article-content-html article-data) sql-null))
-        (define title (or (rss-article-title article-data)
-                          (string-replace-html-entities
-                           (metadata-title metadata))))
-        (define description (string-replace-html-entities
-                             (or (document-summary document) "")))
+        (define title (rss-article-title article-data))
+        (define description (article-info-description content))
         (define date (rss-article-date article-data))
 
         (define article-record
