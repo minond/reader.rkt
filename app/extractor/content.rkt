@@ -152,10 +152,12 @@
         [(scored-element 'img _ _ _ (html-element _ attributes _))
          (let* ([data (read-attribute attributes 'data-src)]
                 [src- (read-attribute attributes 'src)]
+                [src-not-svg+xml (and src- (not (string-prefix? src- "data:image/svg+xml")))]
+                [data-not-svg+xml (and data (not (string-prefix? data "data:image/svg+xml")))]
                 [alt (read-attribute attributes 'alt)]
-                [src (or (and src- (absolute-url base-url src-)) data)]
-                [not-svg+xml (and src (not (string-prefix? src "data:image/svg+xml")))])
-           (and not-svg+xml
+                [src (or (and src-not-svg+xml (absolute-url base-url src-))
+                         (and data-not-svg+xml data))])
+           (and src
                 (image (extract-attributes attributes)
                        src
                        alt)))]
