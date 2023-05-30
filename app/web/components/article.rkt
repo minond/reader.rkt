@@ -51,7 +51,7 @@
 
 (define (:article/content article)
   (:article
-   (:literal (article-extracted-content-html article))))
+   (:literal (article-content-html article))))
 
 (define (:article/list feed articles current-page page-count)
   (list

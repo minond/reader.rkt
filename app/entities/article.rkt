@@ -12,6 +12,8 @@
 (provide (schema-out article)
          (schema-out article-summary)
          make-article
+         article-content-html
+         article-content-text
          count-articles
          count-articles-by-feed
          select-article-summaries
@@ -53,6 +55,25 @@
    [feed-id string/f]
    [feed-link string/f #:contract non-empty-string?]
    [feed-title string/f #:contract non-empty-string?]))
+
+(define (article-content-html a)
+  (article-content-one-of (article-original-content-html a)
+                          (article-extracted-content-html a)))
+
+(define (article-content-text a)
+  (article-content-one-of (article-original-content-text a)
+                          (article-extracted-content-text a)))
+
+(define (article-content-one-of a b)
+  (let* ([has-a? (and (string? a) (non-empty-string? a))]
+         [has-b? (and (string? b) (non-empty-string? b))]
+         [a-length (or (and has-a? (string-length a)) 1)]
+         [b-length (or (and has-b? (string-length b)) 1)])
+    (if (or (and has-a?
+                 (> (/ a-length b-length)
+                    0.5))
+            (not has-b?))
+        a b)))
 
 (define (count-articles #:user-id user-id
                         #:archived [archived #f]
