@@ -111,11 +111,14 @@
   #:mutable)
 
 (define (normalize-content html-or-doc base-url)
-  (define doc (if (string? html-or-doc)
-                  (html-parse html-or-doc)
-                  html-or-doc))
-  (define scored (map score-element doc))
-  (element-content/* scored base-url))
+  (let/cc return
+    (when (void? html-or-doc)
+      (return null))
+    (define doc (if (string? html-or-doc)
+                    (html-parse html-or-doc)
+                    html-or-doc))
+    (define scored (map score-element doc))
+    (element-content/* scored base-url)))
 
 (define (find-article-root doc)
   (find-highest-score/list
