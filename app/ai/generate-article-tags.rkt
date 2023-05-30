@@ -9,7 +9,7 @@
 
 (define (p article)
   (format "Generate a maximum of 10 comma separated tags for the following article: \"\"\"~a\"\"\""
-          (trim-prompt-text (article-extracted-content-text article))))
+          (trim-prompt-text (article-content-text article))))
 
 (define (generate-article-tags article)
   (define response

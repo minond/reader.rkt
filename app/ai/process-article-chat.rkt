@@ -12,6 +12,6 @@
      #:user (format "user-~a" (article-user-id article))
      #:messages (cons (hash 'role "user"
                             'content (format "This conversation is about the following artucle \"\"\"~a\"\"\""
-                                             (trim-prompt-text (article-extracted-content-text article))))
+                                             (trim-prompt-text (article-content-text article))))
                       messages)))
   (first-message-content response))
