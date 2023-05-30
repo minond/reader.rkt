@@ -25,6 +25,7 @@
                               (vector-ref rec 0)
                               (vector-ref rec 1))
                       out)
+                     (flush-output out)
                      (loop))))))
 
   (define thd
