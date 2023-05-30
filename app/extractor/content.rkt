@@ -326,7 +326,7 @@
       0)))
 
 (define ignorable-tags
-  '(aside header form footer nav script style))
+  '(aside header form footer nav script style noscript))
 (define (ignorable-element? elem)
   (let* ([el (if (scored-element? elem) (scored-element-ref elem) elem)]
          [tag (if (html-element? el) (html-element-tag el) #f)]
