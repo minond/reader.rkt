@@ -17,9 +17,10 @@
          redirect
          redirect-back)
 
-(define (json . args)
+(define (json #:code [code 200] . args)
   (define obj (apply hash args))
   (respond-with #:data (jsexpr->string obj)
+                #:code code
                 #:content-type APPLICATION/JSON-MIME-TYPE))
 
 (define (render content
