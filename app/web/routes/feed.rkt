@@ -12,6 +12,7 @@
 
          reader/lib/parameters
          reader/lib/job
+         reader/lib/task
          reader/lib/server)
 
 (provide /feeds
@@ -38,12 +39,19 @@
                          (find-feed-by-feed-url #:user-id (current-user-id)
                                                 #:feed-url url))])
 
-    (if exists
-        (with-flash #:notice (and exists "This feed already exists.")
-          (redirect "/articles"))
-        (with-flash #:alert "Downloading feed data and articles."
-          (schedule-job! (save-new-feed (current-user-id) url))
-          (redirect "/articles?scheduled=1")))))
+    (cond
+      [exists
+       (with-flash #:notice (and exists "This feed already exists.")
+         (redirect "/articles"))]
+      [else
+       (define result
+         (task (save-new-feed/handler
+                 (save-new-feed (current-user-id) url))))
+       (if (err? result)
+           (with-flash #:notice "There was an error fetching this feed, please try again."
+             (redirect "/articles"))
+           (with-flash #:alert "Downloading feed data and articles."
+             (redirect "/articles")))])))
 
 (define (/feeds/<id>/subscribe req id)
   (query (current-database-connection) (subscribe-to-feed #:id id

@@ -52,7 +52,7 @@
   (parameterize ([current-output-port buf]
                  [current-error-port buf]
                  [current-logger worker-logger])
-    (with-handlers ([exn:fail?
+    (with-handlers ([exn?
                      (lambda (e)
                        (set! errored? #t)
                        (displayln (exn-message e)))])
