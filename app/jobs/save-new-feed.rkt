@@ -25,6 +25,12 @@
 (define (save-new-feed/handler cmd)
   (define user-id (save-new-feed-user-id cmd))
   (define feed-url (save-new-feed-feed-url cmd))
+  (log-info "handling save-new-feed ~a, ~a" user-id feed-url)
+
+  (unless (rss-valid? feed-url)
+    (error 'save-new-feed
+           "not a valid feed ~a for ~a"
+           feed-url user-id))
 
   (log-info "downloading feed, ~a" feed-url)
   (define feed-data (rss-fetch feed-url))
@@ -49,7 +55,9 @@
               (hash 'id record-id))
 
   (log-info "saved feed record, fetching articles")
-  (schedule-job! (fetch-feed-articles user-id record-id)))
+  (schedule-job! (fetch-feed-articles user-id record-id))
+
+  feed-record)
 
 (define (find-feed-logo-url+description link)
   (with-handlers ([exn:fail? (lambda (e)
