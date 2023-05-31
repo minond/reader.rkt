@@ -71,36 +71,30 @@
 ;; Extracts an RSS or atom feed URL by (1) checking link tags that specify the
 ;; feed URL, or (2) anchor tags that link to the feed.
 (define (extract-feed-urls doc base-url)
-  (let/cc return
-    (define link-els (find*/list doc #:tag 'link))
-    (define alternative-links
-      (filter string?
-              (map (lambda (el)
-                     (let* ([attributes (html-element-attributes el)]
-                            [rel (read-attribute attributes 'rel)]
-                            [type (read-attribute attributes 'type)]
-                            [href (read-attribute attributes 'href)])
-                       (and rel type href
-                            (or (string-contains? type "rss")
-                                (string-contains? type "atom"))
-                            href)))
-                   link-els)))
-    (when (not (null? alternative-links))
-      (return (map (lambda~> (absolute-url base-url _ #:convert #f))
-                   alternative-links)))
+  (define link-els (find*/list doc #:tag 'link))
+  (define alternative-links
+    (filter string?
+            (map (lambda (el)
+                   (let* ([attributes (html-element-attributes el)]
+                          [rel (read-attribute attributes 'rel)]
+                          [type (read-attribute attributes 'type)]
+                          [href (read-attribute attributes 'href)])
+                     (and rel type href
+                          (or (string-contains? type "rss")
+                              (string-contains? type "atom"))
+                          href)))
+                 link-els)))
 
-    (define anchor-els (find*/list doc #:tag 'a))
-    (define rss-links
-      (filter string?
-              (map (lambda (el)
-                     (define href (read-attribute (html-element-attributes el) 'href ))
-                     (and (string? href)
-                          (or (string-contains? href "rss")
-                              (string-contains? href "atom"))
-                          href))
-                   anchor-els)))
-    (when (not (null? rss-links))
-      (return (map (lambda~> (absolute-url base-url _ #:convert #f))
-                   rss-links)))
+  (define anchor-els (find*/list doc #:tag 'a))
+  (define rss-links
+    (filter string?
+            (map (lambda (el)
+                   (define href (read-attribute (html-element-attributes el) 'href ))
+                   (and (string? href)
+                        (or (string-contains? href "rss")
+                            (string-contains? href "atom"))
+                        href))
+                 anchor-els)))
 
-    #f))
+  (map (lambda~> (absolute-url base-url _ #:convert #f))
+       (append alternative-links rss-links)))

@@ -548,7 +548,7 @@
       #:opacity 1
       #:border (1px solid ,border-color-lighter)
       #:background-color white
-      [.suggestion
+      [.suggestion-row
        #:padding (.75em 1em)
        #:display grid
        #:grid-gap 0px

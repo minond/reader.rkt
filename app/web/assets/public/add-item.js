@@ -13,8 +13,15 @@ export default class AddItem extends Component {
   }
 
   render() {
-    // return html`<a onClick=${() => this.modalController.show()}>Add feed</a>`;
     return html`<a href="/feeds/new">Add feed</a>`;
+    // return html`<a
+    //   href="/feeds/new"
+    //   onClick=${(ev) => {
+    //     ev.preventDefault();
+    //     this.modalController.show();
+    //   }}
+    //   >Add feed</a
+    // >`;
   }
 }
 
@@ -167,7 +174,7 @@ const Suggestions = ({ suggestions, inputState, value, onSuggestionClick }) => {
     inputState === INPUT_ERROR
   ) {
     return html`<div class="suggestions">
-      <div class="suggestion">
+      <div class="suggestion-row">
         <div class="suggestion-message">
           Nothing found for <b>“${value}”</b>. Please try again.
         </div>
@@ -186,7 +193,10 @@ const Suggestions = ({ suggestions, inputState, value, onSuggestionClick }) => {
 };
 
 const Suggestion = ({ kind, title, url, onClick }) =>
-  html`<div class="suggestion" onClick=${() => onClick({ kind, title, url })}>
+  html`<div
+    class="suggestion-row suggestion"
+    onClick=${() => onClick({ kind, title, url })}
+  >
     <div class="suggestion-title">${title}</div>
     <div class="suggestion-url">${url}</div>
     <div class="suggestion-kind">
