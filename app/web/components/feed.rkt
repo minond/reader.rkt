@@ -31,13 +31,14 @@
                      (:feed/row feed-stat))))))
 
 (define (:feed/row feed)
-  (let-values ([(route class) (if (feed-stats-subscribed feed)
-                                  (values "/feeds/~a/unsubscribe" "subscribed")
-                                  (values "/feeds/~a/subscribe" "unsubscribed"))])
-    (:tr 'class: (string-join (list "feed/row" class))
+  (let-values ([(route action class) (if (feed-stats-subscribed feed)
+                                         (values "/feeds/~a/unsubscribe" "unsubscribe" "subscribed")
+                                         (values "/feeds/~a/subscribe" "subscribe" "unsubscribed"))])
+    (:tr 'class: (string-join (list "feed-row" class))
          (:td 'class: "tc"
               (:a 'href: (format route (feed-stats-id feed))
-                  'class: (format "feed-subscription-toggle ~a" class)))
+                  'data-fancy-link: "true"
+                  action))
          (:td (:a 'href: (format "/feeds/~a/articles" (feed-stats-id feed))
                   (feed-stats-title feed)))
          (:td (feed-stats-total-count feed))

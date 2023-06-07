@@ -68,13 +68,14 @@
    (:pagination current-page page-count)))
 
 (define (:article/row article)
-  (let-values ([(route class) (if (article-archived article)
-                                  (values "/articles/~a/unarchive" "archived")
-                                  (values "/articles/~a/archive" "unarchived"))])
+  (let-values ([(route action class) (if (article-archived article)
+                                         (values "/articles/~a/unarchive" "unarchivd" "archived")
+                                         (values "/articles/~a/archive" "archive" "unarchived"))])
     (:tr 'class: (string-join (list "article-row" class))
          (:td 'class: "tc"
               (:a 'href: (format route (article-id article))
-                  'class: (format "article-archive-toggle ~a" class)))
+                  'data-fancy-link: "true"
+                  action))
          (:td (:a 'href: (format "/articles/~a" (article-id article))
                   (article-title article)))
          (:td 'class: "wsnw" (~t (article-date article) "M/d/y"))

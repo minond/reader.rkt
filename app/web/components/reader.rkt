@@ -115,6 +115,7 @@
               (:span (~t (article-summary-date article-summary) "MMMM d, yyyy")))
         (:div 'class: "reader-article-actions vc-container"
               (:a 'href: (format "/articles/~a/archive" (article-summary-id article-summary))
+                  'data-fancy-link: "true"
                   'class: "vc"
                   (:image/archive)))
         (:a 'href: (format "/articles/~a" (article-summary-id article-summary))
