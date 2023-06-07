@@ -38,7 +38,8 @@
                                    (:a 'href: "/sessions/destroy" "Sign out"))
                              null))))
                   (:div 'class: "separator"))
-                 (:main content))))))
+                 (:main content))
+          (:script 'type: 'module 'src: "/public/fancy-links.js")))))
 
 (define font-styles-url
   "https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Nunito:wght@200;400;700&display=swap")
@@ -424,24 +425,6 @@
                         #:padding-top 2em
                         [p #:font-size 1.25em]
                         [form #:margin-top 0]]
-
-    [.feed-subscription-toggle .article-archive-toggle
-                               #:height .9em
-                               #:width .9em
-                               #:border-radius .9em
-                               #:border (1px solid ,@border-color-normal)
-                               #:margin (0 auto)
-                               #:padding 0
-                               #:display block
-                               #:transition (background-color 100ms)]
-    [.feed-subscription-toggle.subscribed .article-archive-toggle.unarchived
-                                          #:background-color ,@success-color-normal]
-    [.feed-subscription-toggle.unsubscribed .article-archive-toggle.archived
-                                            #:background-color ,@failure-color-normal]
-    [.feed-subscription-toggle.subscribed:hover .article-archive-toggle.unarchived:hover
-                                                #:background-color ,@failure-color-normal]
-    [.feed-subscription-toggle.unsubscribed:hover .article-archive-toggle.archived:hover
-                                                  #:background-color ,@success-color-normal]
 
     [.feed-row.unsubscribed .article-row.archived
                             [* #:color ,@text-color-lighter]]
