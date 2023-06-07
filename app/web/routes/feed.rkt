@@ -17,6 +17,7 @@
 
 (provide /feeds
          /feeds/new
+         /feeds/create/v0
          /feeds/create
          /feeds/<id>/subscribe
          /feeds/<id>/unsubscribe
@@ -33,7 +34,7 @@
 (define (/feeds/new req)
   (render (:feed/form)))
 
-(define (/feeds/create req)
+(define (/feeds/create/v0 req)
   (let* ([url (parameter 'url req)]
          [exists (lookup (current-database-connection)
                          (find-feed-by-feed-url #:user-id (current-user-id)
@@ -52,6 +53,25 @@
              (redirect "/articles"))
            (with-flash #:alert "Downloading feed data and articles."
              (redirect "/articles")))])))
+
+(define (/feeds/create req)
+  (sleep 2)
+  (json 'ok #t 'feed-id "fake"))
+  ; (define data (request-json req))
+  ; (define url (hash-ref data 'url))
+  ;
+  ; (let/cc return
+  ;   (define exists (lookup (current-database-connection)
+  ;                          (find-feed-by-feed-url #:user-id (current-user-id)
+  ;                                                 #:feed-url url)))
+  ;   (when exists
+  ;     (return (json 'ok #f 'duplicate #t #:code 409)))
+  ;   (define result
+  ;     (task (save-new-feed/handler
+  ;            (save-new-feed (current-user-id) url))))
+  ;   (when (err? result)
+  ;     (return (json 'ok #f #:code 422)))
+  ;   (json 'ok #t 'feed-id (feed-id result))))
 
 (define (/feeds/<id>/subscribe req id)
   (query (current-database-connection) (subscribe-to-feed #:id id

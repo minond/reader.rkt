@@ -53,7 +53,7 @@
                   "Visit")))))
 
 (define (:feed/form)
-  (:form 'action: "/feeds/create"
+  (:form 'action: "/feeds/create/v0"
          'method: "post"
          'class: "add-feed-form"
          (:input 'type: "url"

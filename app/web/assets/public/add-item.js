@@ -7,6 +7,15 @@ const INPUT_IDLE = 0;
 const INPUT_LOADING = 1;
 const INPUT_ERROR = 2;
 
+const ACTION_IDLE = 0;
+const ACTION_ADDING = 1;
+const ACTION_SUCCESS = 2;
+const ACTION_ERROR = 3;
+
+const URLS = {
+  feed: "/feeds/create",
+};
+
 export default class AddItem extends Component {
   componentWillMount() {
     this.modalController = Modal.render(AddItemForm).controller;
@@ -107,7 +116,7 @@ class AddItemForm extends Component {
         .then((suggestions) =>
           this.setState({
             inputState: INPUT_IDLE,
-            suggestions,
+            suggestions: setSuggestionsStates(suggestions, ACTION_IDLE),
           })
         )
         .catch((err) => {
@@ -123,6 +132,50 @@ class AddItemForm extends Component {
 
   focusOnInput() {
     this.inputRef?.current?.base?.querySelector("input")?.focus();
+  }
+
+  addItem({ kind, url }) {
+    if (!(kind in URLS)) {
+      console.error("invalid kind:", kind, url);
+      return;
+    }
+
+    this.setState(
+      {
+        suggestions: setSuggestionState(
+          this.state.suggestions,
+          url,
+          ACTION_ADDING
+        ),
+      },
+      () => {
+        fetch(URLS[kind], {
+          method: "POST",
+          body: JSON.stringify({ kind, url }),
+        })
+          .then((res) => res.json())
+          .then((body) => {
+            this.setState({
+              suggestions: setSuggestionState(
+                this.state.suggestions,
+                url,
+                ACTION_SUCCESS
+              ),
+            });
+            console.log("created feed", body);
+          })
+          .catch((err) => {
+            this.setState({
+              suggestions: setSuggestionState(
+                this.state.suggestions,
+                url,
+                ACTION_ERROR
+              ),
+            });
+            console.error("error creating feed", err);
+          });
+      }
+    );
   }
 
   render() {
@@ -144,7 +197,7 @@ class AddItemForm extends Component {
         suggestions=${this.state.suggestions}
         inputState=${this.state.inputState}
         value=${this.state.value}
-        onSuggestionClick=${(args) => console.log(args)}
+        onSuggestionClick=${(suggestion) => this.addItem(suggestion)}
       />
     </div>`;
   }
@@ -192,7 +245,7 @@ const Suggestions = ({ suggestions, inputState, value, onSuggestionClick }) => {
   }
 };
 
-const Suggestion = ({ kind, title, url, onClick }) =>
+const Suggestion = ({ kind, title, url, state, onClick }) =>
   html`<div
     class="suggestion-row suggestion"
     onClick=${() => onClick({ kind, title, url })}
@@ -203,3 +256,15 @@ const Suggestion = ({ kind, title, url, onClick }) =>
       <div class="suggestion-kind-container">${kind}</div>
     </div>
   </div>`;
+
+const setSuggestionsStates = (suggestions, newState) =>
+  suggestions.map((suggestion) => ({
+    ...suggestion,
+    state: newState,
+  }));
+
+const setSuggestionState = (suggestions, url, newState) =>
+  suggestions.map((suggestion) => ({
+    ...suggestion,
+    state: suggestion.url === url ? newState : suggestion.state,
+  }));

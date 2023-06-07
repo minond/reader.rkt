@@ -29,6 +29,7 @@
 
    [("feeds") (authenticated-route /feeds)]
    [("feeds" "new") (authenticated-route /feeds/new)]
+   [("feeds" "create" "v0") #:method "post" (authenticated-route /feeds/create/v0)]
    [("feeds" "create") #:method "post" (authenticated-route /feeds/create)]
    [("feeds" (string-arg) "unsubscribe") #:method "put" (authenticated-route /feeds/<id>/unsubscribe)]
    [("feeds" (string-arg) "unsubscribe") (authenticated-route /feeds/<id>/unsubscribe)]
