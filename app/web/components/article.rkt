@@ -69,7 +69,7 @@
 
 (define (:article/row article)
   (let-values ([(route action class) (if (article-archived article)
-                                         (values "/articles/~a/unarchive" "unarchivd" "archived")
+                                         (values "/articles/~a/unarchive" "unarchive" "archived")
                                          (values "/articles/~a/archive" "archive" "unarchived"))])
     (:tr 'class: (string-join (list "article-row" class))
          (:td 'class: "tc"
