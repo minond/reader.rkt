@@ -2,8 +2,8 @@
 
 (require racket/string
          rackunit
-         "extractor/text.rkt"
-         "tests/extractor/data/load.rkt")
+         "../../extractor/text.rkt"
+         "../../tests/extractor/data/load.rkt")
 
 (module+ test
   (require rackunit/text-ui)

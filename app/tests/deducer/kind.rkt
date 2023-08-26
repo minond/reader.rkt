@@ -1,7 +1,7 @@
 #lang racket/base
 
 (require rackunit
-         "deducer/kind.rkt")
+         "../../deducer/kind.rkt")
 
 (module+ test
   (require rackunit/text-ui)
