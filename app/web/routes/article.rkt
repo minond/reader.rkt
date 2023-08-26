@@ -9,18 +9,18 @@
          db
          json
 
-         reader/entities/article
-         reader/entities/feed
-         reader/entities/tag
-         reader/web/components/article
-         reader/web/components/reader
-         reader/web/components/layout
-         reader/ai/generate-article-summary
-         reader/ai/generate-article-tags
-         reader/ai/process-article-chat
+         "../../entities/article.rkt"
+         "../../entities/feed.rkt"
+         "../../entities/tag.rkt"
+         "../../web/components/article.rkt"
+         "../../web/components/reader.rkt"
+         "../../web/components/layout.rkt"
+         "../../ai/generate-article-summary.rkt"
+         "../../ai/generate-article-tags.rkt"
+         "../../ai/process-article-chat.rkt"
 
-         reader/lib/parameters
-         reader/lib/server)
+         "../../lib/parameters.rkt"
+         "../../lib/server.rkt")
 
 (provide /articles
          /articles/<id>/show

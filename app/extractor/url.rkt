@@ -7,10 +7,10 @@
          threading
          net/url-string
 
-         reader/lib/string
-         reader/extractor/attribute
-         reader/extractor/query
-         (prefix-in html- reader/extractor/html))
+         "../lib/string.rkt"
+         "../extractor/attribute.rkt"
+         "../extractor/query.rkt"
+         (prefix-in html- "../extractor/html.rkt"))
 
 (provide absolute-url
          extract-base-url

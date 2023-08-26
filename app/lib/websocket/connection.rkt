@@ -2,7 +2,7 @@
 
 (require racket/list
          net/rfc6455
-         reader/lib/lock)
+         "../../lib/lock.rkt")
 
 (provide lookup-connections
          clear-connections!

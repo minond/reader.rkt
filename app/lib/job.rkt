@@ -1,13 +1,13 @@
 #lang racket/base
 
-(require reader/lib/random
-         reader/lib/logger
-         reader/lib/parameters
-         reader/lib/app/models/job)
+(require "random.rkt"
+         "logger.rkt"
+         "parameters.rkt"
+         "app/models/job.rkt")
 
 (provide make-job-manager
          register-job-handler!
-         (all-from-out reader/lib/app/models/job))
+         (all-from-out "app/models/job.rkt"))
 
 (define handlers (make-hash))
 (define (register-job-handler! name f)

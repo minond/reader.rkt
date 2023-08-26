@@ -4,11 +4,11 @@
 
          net/url-string
 
-         reader/extractor/content
-         reader/extractor/document
-         reader/extractor/metadata
-         reader/extractor/media
-         (prefix-in html- reader/extractor/html))
+         "../extractor/content.rkt"
+         "../extractor/document.rkt"
+         "../extractor/metadata.rkt"
+         "../extractor/media.rkt"
+         (prefix-in html- "../extractor/html.rkt"))
 
 (provide extract
          download)

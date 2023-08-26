@@ -2,9 +2,9 @@
 
 (require deta
 
-         reader/entities/feedback
-         reader/lib/parameters
-         reader/lib/server)
+         "../../entities/feedback.rkt"
+         "../../lib/parameters.rkt"
+         "../../lib/server.rkt")
 
 (provide /feedback/create)
 

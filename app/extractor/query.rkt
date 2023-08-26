@@ -3,8 +3,8 @@
 (require racket/match
          racket/list
 
-         (prefix-in html- reader/extractor/html)
-         reader/extractor/attribute)
+         (prefix-in html- "../extractor/html.rkt")
+         "../extractor/attribute.rkt")
 
 (provide find*
          find*/list)

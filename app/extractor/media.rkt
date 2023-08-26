@@ -6,10 +6,10 @@
          threading
          net/url-string
 
-         reader/extractor/attribute
-         reader/extractor/url
-         reader/extractor/query
-         (prefix-in html- reader/extractor/html))
+         "../extractor/attribute.rkt"
+         "../extractor/url.rkt"
+         "../extractor/query.rkt"
+         (prefix-in html- "../extractor/html.rkt"))
 
 (provide extract-media
          (struct-out media)

@@ -9,8 +9,8 @@
          uuid
          deta
 
-         reader/entities/article
-         reader/lib/parameters)
+         "../entities/article.rkt"
+         "../lib/parameters.rkt")
 
 (provide (except-out (schema-out tag)
                      make-tag)

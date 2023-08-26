@@ -7,7 +7,7 @@
          uuid
          deta
 
-         reader/lib/parameters)
+         "../lib/parameters.rkt")
 
 (provide (schema-out article)
          (schema-out article-summary)

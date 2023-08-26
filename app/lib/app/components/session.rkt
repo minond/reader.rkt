@@ -4,7 +4,7 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
-         reader/lib/parameters)
+         "../../../lib/parameters.rkt")
 
 (provide :session/form)
 

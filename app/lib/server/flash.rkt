@@ -6,8 +6,8 @@
 
 (require racket/match
          gregor
-         reader/lib/parameters
-         reader/lib/server/session)
+         "../../lib/parameters.rkt"
+         "../../lib/server/session.rkt")
 
 (provide current-flash
          read-flash

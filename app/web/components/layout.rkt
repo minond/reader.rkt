@@ -6,10 +6,10 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
-         reader/lib/app/components/script
-         reader/lib/app/components/flash
-         reader/lib/parameters
-         reader/lib/server/session)
+         "../../lib/app/components/script.rkt"
+         "../../lib/app/components/flash.rkt"
+         "../../lib/parameters.rkt"
+         "../../lib/server/session.rkt")
 
 (provide layout)
 

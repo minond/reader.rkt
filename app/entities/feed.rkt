@@ -7,7 +7,7 @@
          uuid
          deta
 
-         reader/lib/database/type)
+         "../lib/database/type.rkt")
 
 (provide (schema-out feed)
          (schema-out feed-stats)

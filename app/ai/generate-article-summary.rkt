@@ -1,8 +1,8 @@
 #lang racket/base
 
-(require reader/entities/article
-         reader/ai/openai/client
-         reader/lib/html)
+(require "../entities/article.rkt"
+         "../ai/openai/client.rkt"
+         "../lib/html.rkt")
 
 (provide generate-article-summary)
 

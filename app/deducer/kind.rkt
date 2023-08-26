@@ -8,12 +8,12 @@
          net/url-string
          net/mime-type
 
-         (prefix-in rss- reader/rss/parse)
+         (prefix-in rss- "../rss/parse.rkt")
 
-         reader/lib/net
-         reader/lib/url
-         reader/lib/server
-         reader/lib/task)
+         "../lib/net.rkt"
+         "../lib/url.rkt"
+         "../lib/server.rkt"
+         "../lib/task.rkt")
 
 (provide deduce-kind)
 

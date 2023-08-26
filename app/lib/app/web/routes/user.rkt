@@ -3,10 +3,10 @@
 (require deta
          web-server/servlet
 
-         reader/lib/app/components/user
-         reader/lib/parameters
-         reader/lib/server
-         reader/lib/crypto)
+         "../../../../lib/app/components/user.rkt"
+         "../../../../lib/parameters.rkt"
+         "../../../../lib/server.rkt"
+         "../../../../lib/crypto.rkt")
 
 (provide /users/new
          /users/create)

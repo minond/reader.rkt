@@ -3,17 +3,17 @@
 (require deta
          db
 
-         reader/web/components/article
-         reader/web/components/feed
-         reader/entities/article
-         reader/entities/feed
-         reader/jobs/save-new-feed
-         reader/jobs/fetch-feed-articles
+         "../../web/components/article.rkt"
+         "../../web/components/feed.rkt"
+         "../../entities/article.rkt"
+         "../../entities/feed.rkt"
+         "../../jobs/save-new-feed.rkt"
+         "../../jobs/fetch-feed-articles.rkt"
 
-         reader/lib/parameters
-         reader/lib/job
-         reader/lib/task
-         reader/lib/server)
+         "../../lib/parameters.rkt"
+         "../../lib/job.rkt"
+         "../../lib/task.rkt"
+         "../../lib/server.rkt")
 
 (provide /feeds
          /feeds/new

@@ -6,16 +6,16 @@
          deta
          net/url-string
 
-         reader/entities/feed
-         reader/jobs/fetch-feed-articles
+         "../entities/feed.rkt"
+         "../jobs/fetch-feed-articles.rkt"
 
-         reader/lib/job
-         reader/lib/parameters
-         reader/lib/websocket/message
-         reader/extractor/easy
-         reader/extractor/media
-         reader/extractor/metadata
-         (prefix-in rss- reader/rss/parse))
+         "../lib/job.rkt"
+         "../lib/parameters.rkt"
+         "../lib/websocket/message.rkt"
+         "../extractor/easy.rkt"
+         "../extractor/media.rkt"
+         "../extractor/metadata.rkt"
+         (prefix-in rss- "../rss/parse.rkt"))
 
 (provide save-new-feed
          save-new-feed/handler)

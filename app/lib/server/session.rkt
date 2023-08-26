@@ -6,9 +6,9 @@
          web-server/servlet
          web-server/http/id-cookie
 
-         reader/lib/parameters
-         reader/lib/format
-         reader/lib/random)
+         "../../lib/parameters.rkt"
+         "../../lib/format.rkt"
+         "../../lib/random.rkt")
 
 (provide lookup-session
          create-session+cookie

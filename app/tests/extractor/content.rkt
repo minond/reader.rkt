@@ -1,8 +1,8 @@
 #lang racket/base
 
 (require rackunit
-         reader/extractor/content
-         reader/tests/extractor/data/load)
+         "extractor/content.rkt"
+         "tests/extractor/data/load.rkt")
 
 (module+ test
   (require rackunit/text-ui)

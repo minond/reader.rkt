@@ -5,11 +5,11 @@
          deta
          gregor
 
-         reader/entities/feed
-         reader/jobs/fetch-feed-articles
+         "../entities/feed.rkt"
+         "../jobs/fetch-feed-articles.rkt"
 
-         reader/lib/job
-         reader/lib/parameters)
+         "../lib/job.rkt"
+         "../lib/parameters.rkt")
 
 (provide schedule-feed-syncs)
 

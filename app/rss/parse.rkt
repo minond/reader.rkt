@@ -3,11 +3,11 @@
 (require racket/string
          gregor
          net/url-string
-         reader/ffi/python
-         reader/lib/html
-         (only-in reader/extractor/text extract-text)
-         (only-in reader/extractor/render render-html)
-         (only-in reader/extractor/content normalize-content))
+         "../ffi/python.rkt"
+         "../lib/html.rkt"
+         (only-in "../extractor/text.rkt" extract-text)
+         (only-in "../extractor/render.rkt" render-html)
+         (only-in "../extractor/content.rkt" normalize-content))
 
 (import feedparser)
 

@@ -1,7 +1,7 @@
 #lang racket/base
 
 (require rackunit
-         reader/lib/html)
+         "lib/html.rkt")
 
 (module+ test
   (require rackunit/text-ui)

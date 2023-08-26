@@ -8,14 +8,14 @@
          net/url-string
          (prefix-in : scribble/html/xml)
 
-         reader/entities/article
-         reader/entities/feed
+         "../entities/article.rkt"
+         "../entities/feed.rkt"
 
-         reader/lib/html
-         reader/lib/parameters
-         reader/lib/websocket/message
-         reader/extractor/goose
-         (prefix-in rss- reader/rss/parse))
+         "../lib/html.rkt"
+         "../lib/parameters.rkt"
+         "../lib/websocket/message.rkt"
+         "../extractor/goose.rkt"
+         (prefix-in rss- "../rss/parse.rkt"))
 
 (provide fetch-feed-articles
          fetch-feed-articles/handler)

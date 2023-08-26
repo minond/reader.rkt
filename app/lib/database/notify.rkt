@@ -5,8 +5,8 @@
 
          db
 
-         reader/lib/crypto
-         reader/lib/parameters)
+         "../../lib/crypto.rkt"
+         "../../lib/parameters.rkt")
 
 (provide (struct-out message)
          gen-channel-id

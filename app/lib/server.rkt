@@ -1,13 +1,13 @@
 #lang racket/base
 
-(require reader/lib/server/flash
-         reader/lib/server/routes
-         reader/lib/server/request
-         reader/lib/server/response
-         reader/lib/server/session)
+(require "server/flash.rkt"
+         "server/routes.rkt"
+         "server/request.rkt"
+         "server/response.rkt"
+         "server/session.rkt")
 
-(provide (all-from-out reader/lib/server/flash)
-         (all-from-out reader/lib/server/routes)
-         (all-from-out reader/lib/server/request)
-         (all-from-out reader/lib/server/response)
-         (all-from-out reader/lib/server/session))
+(provide (all-from-out "server/flash.rkt")
+         (all-from-out "server/routes.rkt")
+         (all-from-out "server/request.rkt")
+         (all-from-out "server/response.rkt")
+         (all-from-out "server/session.rkt"))

@@ -3,9 +3,9 @@
 (require racket/match
          racket/string
 
-         reader/lib/html
-         reader/lib/string
-         reader/extractor/content)
+         "../lib/html.rkt"
+         "../lib/string.rkt"
+         "../extractor/content.rkt")
 
 (provide extract-text)
 

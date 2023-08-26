@@ -11,8 +11,8 @@
          deta
          uuid
 
-         reader/lib/database/type
-         reader/lib/parameters)
+         "../../../lib/database/type.rkt"
+         "../../../lib/parameters.rkt")
 
 (provide (except-out (schema-out job)
                      make-job

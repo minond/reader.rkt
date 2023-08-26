@@ -6,8 +6,8 @@
          db
          deta/reflect
 
-         reader/lib/database/notify
-         reader/lib/parameters)
+         "database/notify.rkt"
+         "parameters.rkt")
 
 (provide database-connect!)
 

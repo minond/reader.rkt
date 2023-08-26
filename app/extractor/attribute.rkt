@@ -1,6 +1,6 @@
 #lang racket/base
 
-(require (prefix-in html- reader/extractor/html))
+(require (prefix-in html- "../extractor/html.rkt"))
 
 (provide find-attribute
          read-attribute)

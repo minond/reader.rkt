@@ -2,7 +2,7 @@
 
 (require crontab
 
-         reader/lib/logger)
+         "logger.rkt")
 
 (provide run
          @every-minute

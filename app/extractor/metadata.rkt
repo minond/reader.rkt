@@ -5,11 +5,11 @@
 
          net/url-string
 
-         reader/lib/string
-         reader/lib/html
-         reader/extractor/attribute
-         reader/extractor/query
-         (prefix-in html- reader/extractor/html))
+         "../lib/string.rkt"
+         "../lib/html.rkt"
+         "../extractor/attribute.rkt"
+         "../extractor/query.rkt"
+         (prefix-in html- "../extractor/html.rkt"))
 
 (provide extract-metadata
          (struct-out metadata))

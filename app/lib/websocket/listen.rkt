@@ -2,8 +2,8 @@
 
 (require json
 
-         reader/lib/database/notify
-         reader/lib/websocket/message)
+         "../../lib/database/notify.rkt"
+         "../../lib/websocket/message.rkt")
 
 (provide listen)
 

@@ -4,10 +4,10 @@
          deta
          gregor
 
-         reader/entities/registration-invitation
-         reader/entities/user
-         reader/lib/parameters
-         reader/lib/server)
+         "../../entities/registration-invitation.rkt"
+         "../../entities/user.rkt"
+         "../../lib/parameters.rkt"
+         "../../lib/server.rkt")
 
 (provide user-registration/validate+override
          user-registration/registered+override)

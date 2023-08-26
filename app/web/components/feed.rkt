@@ -8,8 +8,8 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
-         reader/entities/feed
-         reader/lib/app/components/spacer)
+         "../../entities/feed.rkt"
+         "../../lib/app/components/spacer.rkt")
 
 (provide :feed/list
          :feed/form)

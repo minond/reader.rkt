@@ -5,9 +5,9 @@
 
          net/rfc6455
 
-         reader/lib/database/notify
-         reader/lib/websocket/connection
-         reader/lib/websocket/session)
+         "../../lib/database/notify.rkt"
+         "../../lib/websocket/connection.rkt"
+         "../../lib/websocket/session.rkt")
 
 (provide start-authenticated-websocket-server
          authenticated-websocket-server)

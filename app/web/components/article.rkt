@@ -7,13 +7,13 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
-         reader/entities/article
-         reader/entities/feed
+         "../../entities/article.rkt"
+         "../../entities/feed.rkt"
 
-         reader/lib/app/components/script
-         reader/lib/app/components/spacer
-         reader/lib/app/components/spinner
-         reader/lib/app/components/pagination)
+         "../../lib/app/components/script.rkt"
+         "../../lib/app/components/spacer.rkt"
+         "../../lib/app/components/spinner.rkt"
+         "../../lib/app/components/pagination.rkt")
 
 (provide :article/full
          :article/list)

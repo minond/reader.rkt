@@ -8,14 +8,14 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
-         reader/entities/article
-         reader/entities/feed
-         reader/web/components/feed
-         reader/web/components/image
+         "../../entities/article.rkt"
+         "../../entities/feed.rkt"
+         "../../web/components/feed.rkt"
+         "../../web/components/image.rkt"
 
-         reader/lib/app/components/pagination
-         reader/lib/app/components/spacer
-         reader/lib/string)
+         "../../lib/app/components/pagination.rkt"
+         "../../lib/app/components/spacer.rkt"
+         "../../lib/string.rkt")
 
 (provide :reader)
 

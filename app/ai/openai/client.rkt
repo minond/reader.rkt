@@ -1,7 +1,7 @@
 #lang racket/base
 
 (require threading
-         reader/thirdparty/openapi/client)
+         "../../thirdparty/openapi/client.rkt")
 
 (provide create-chat-completion
          first-message-content

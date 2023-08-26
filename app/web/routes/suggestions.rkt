@@ -1,8 +1,8 @@
 #lang racket/base
 
 (require net/url-string
-         reader/entities/suggestions
-         reader/lib/server)
+         "../../entities/suggestions.rkt"
+         "../../lib/server.rkt")
 
 (provide /suggestions)
 

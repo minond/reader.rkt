@@ -9,12 +9,12 @@
          threading
          net/url-string
 
-         (prefix-in rss- reader/rss/parse)
-         reader/deducer/kind
-         reader/extractor/easy
-         reader/extractor/url
-         reader/lib/task
-         reader/lib/url)
+         (prefix-in rss- "../rss/parse.rkt")
+         "../deducer/kind.rkt"
+         "../extractor/easy.rkt"
+         "../extractor/url.rkt"
+         "../lib/task.rkt"
+         "../lib/url.rkt")
 
 (provide (struct-out suggestion)
          make-suggestions

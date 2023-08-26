@@ -5,13 +5,13 @@
          web-server/servlet
          web-server/dispatchers/dispatch
 
-         reader/web/routes/article
-         reader/web/routes/feed
-         reader/web/routes/suggestions
+         "../../web/routes/article.rkt"
+         "../../web/routes/feed.rkt"
+         "../../web/routes/suggestions.rkt"
 
-         reader/lib/app/web/routes/session
-         reader/lib/app/web/routes/user
-         reader/lib/server/routes)
+         "../../lib/app/web/routes/session.rkt"
+         "../../lib/app/web/routes/user.rkt"
+         "../../lib/server/routes.rkt")
 
 (provide app-dispatch app-url)
 

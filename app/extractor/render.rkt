@@ -7,7 +7,7 @@
          (prefix-in : scribble/html/xml)
          (prefix-in : scribble/html/html)
 
-         reader/extractor/content)
+         "../extractor/content.rkt")
 
 (provide render-content
          render-html)

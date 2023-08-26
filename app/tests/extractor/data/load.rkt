@@ -4,10 +4,10 @@
 
          net/url-string
 
-         reader/extractor/content
-         (prefix-in html- reader/extractor/html)
+         "extractor/content.rkt"
+         (prefix-in html- "extractor/html.rkt")
 
-         reader/tests/setup)
+         "tests/setup.rkt")
 
 (provide extract-test-data
          data/minond-xyz-same-adt)

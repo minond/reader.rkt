@@ -4,7 +4,7 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
-         reader/lib/server/flash)
+         "../../../lib/server/flash.rkt")
 
 (provide :flash
          :flash-message)

@@ -2,8 +2,8 @@
 
 (require racket/string
          threading
-         reader/entities/article
-         reader/ai/openai/client)
+         "../entities/article.rkt"
+         "../ai/openai/client.rkt")
 
 (provide generate-article-tags)
 

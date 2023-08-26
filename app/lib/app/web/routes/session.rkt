@@ -3,11 +3,11 @@
 (require deta
          web-server/servlet
 
-         reader/lib/app/components/session
-         reader/lib/app/models/user
-         reader/lib/parameters
-         reader/lib/server
-         reader/lib/crypto)
+         "../../../../lib/app/components/session.rkt"
+         "../../../../lib/app/models/user.rkt"
+         "../../../../lib/parameters.rkt"
+         "../../../../lib/server.rkt"
+         "../../../../lib/crypto.rkt")
 
 (provide /sessions/new
          /sessions/create

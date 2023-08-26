@@ -1,11 +1,11 @@
 #lang racket/base
 
 (require net/url-string
-         reader/lib/html
-         reader/ffi/python
-         (only-in reader/extractor/text extract-text)
-         (only-in reader/extractor/render render-html)
-         (only-in reader/extractor/content normalize-content))
+         "../lib/html.rkt"
+         "../ffi/python.rkt"
+         (only-in "../extractor/text.rkt" extract-text)
+         (only-in "../extractor/render.rkt" render-html)
+         (only-in "../extractor/content.rkt" normalize-content))
 
 (import goose3)
 

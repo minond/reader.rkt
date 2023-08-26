@@ -1,7 +1,7 @@
 #lang racket/base
 
 (require gregor
-         reader/lib/format)
+         "format.rkt")
 
 (provide application-logger
          start-logger)

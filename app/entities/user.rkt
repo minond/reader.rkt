@@ -6,7 +6,7 @@
          uuid
          deta
 
-         reader/lib/parameters)
+         "../lib/parameters.rkt")
 
 (provide (struct-out user)
          make-user)

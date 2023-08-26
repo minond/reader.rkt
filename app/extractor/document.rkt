@@ -4,9 +4,9 @@
          racket/match
          racket/string
 
-         reader/lib/html
-         reader/extractor/content
-         reader/extractor/metadata)
+         "../lib/html.rkt"
+         "../extractor/content.rkt"
+         "../extractor/metadata.rkt")
 
 (provide extract-document
          (struct-out document))

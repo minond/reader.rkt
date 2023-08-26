@@ -7,7 +7,7 @@
          (prefix-in : scribble/html/html)
          (prefix-in : scribble/html/extra)
 
-         reader/lib/pair)
+         "../../../lib/pair.rkt")
 
 (provide :pagination)
 

@@ -1,20 +1,20 @@
 #lang racket/base
 
-(require reader/jobs/fetch-feed-articles
-         reader/jobs/save-new-feed
-         reader/jobs/crontab
-         reader/web/routes/user
-         reader/web/components/layout
-         reader/web/components/user
-         reader/web/routes/dispatch
+(require "jobs/fetch-feed-articles.rkt"
+         "jobs/save-new-feed.rkt"
+         "jobs/crontab.rkt"
+         "web/routes/user.rkt"
+         "web/components/layout.rkt"
+         "web/components/user.rkt"
+         "web/routes/dispatch.rkt"
 
-         reader/lib/parameters
-         reader/lib/logger
-         reader/lib/job
-         reader/lib/database
-         reader/lib/websocket
-         reader/lib/websocket/listen
-         reader/lib/servlet)
+         "lib/parameters.rkt"
+         "lib/logger.rkt"
+         "lib/job.rkt"
+         "lib/database.rkt"
+         "lib/websocket.rkt"
+         "lib/websocket/listen.rkt"
+         "lib/servlet.rkt")
 
 (define ch (database-connect! #:notify-ch #t))
 

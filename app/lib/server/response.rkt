@@ -9,8 +9,8 @@
          (prefix-in : scribble/html/xml)
          (prefix-in : scribble/html/extra)
 
-         reader/lib/parameters
-         reader/lib/server/session)
+         "../../lib/parameters.rkt"
+         "../../lib/server/session.rkt")
 
 (provide json
          render

@@ -3,8 +3,8 @@
 (require net/rfc6455
          json
 
-         reader/lib/database/notify
-         reader/lib/websocket/connection)
+         "../../lib/database/notify.rkt"
+         "../../lib/websocket/connection.rkt")
 
 (provide ws-publish
          ws-send)
